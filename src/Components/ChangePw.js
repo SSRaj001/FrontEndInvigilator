@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { auth } from "../firebase";
 
 export default function ChangePw() {
   const [open, setOpen] = React.useState(false);
@@ -30,18 +31,11 @@ export default function ChangePw() {
             This will Change your Password
           </DialogContentText>
           <TextField
-            autoFocus
-            margin="dense"
-            id="oldPW"
-            label="Old Password"
-            type="password"
-            fullWidth
-          />
-          <TextField
             margin="dense"
             id="newPW"
             label="New Password"
             type="password"
+            name = "newPW"
             fullWidth
           />
           <TextField
@@ -49,6 +43,7 @@ export default function ChangePw() {
             id="cnfPW"
             label="Confirm Password"
             type="password"
+            name = "cnfPW"
             fullWidth
           />
         </DialogContent>

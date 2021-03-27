@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,6 +19,7 @@ import { mainListItems, secondaryListItems } from './listItems';
 import { createMuiTheme } from '@material-ui/core/styles';
 import UpcomingTeacher from './UpcomingTeacher';
 import Profile from "./Profile";
+import {auth} from "../firebase";
 
 const theme = createMuiTheme({
     palette: {
@@ -136,7 +137,7 @@ export default function FacultyDashBoard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
               <ExitToAppIcon />
           </IconButton>
         </Toolbar>

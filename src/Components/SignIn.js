@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,6 +15,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Link } from "@reach/router";
+import {signInWithGoogle} from "../firebase";
+import {auth} from "../firebase";
+import Application from "./Application";
+import { UserContext } from "../providers/UserProvider";
 
 const theme = createMuiTheme({
     palette: {
@@ -43,6 +48,51 @@ const useStyles = makeStyles((theme) => ({
   }));
   
   export default function SignIn() {
+
+    const [emailHasBeenSent, setEmailHasBeenSent] = useState(false);
+    const [email, setEmail] = useState('');
+    const [resetEmail, setResetEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
+    const signInWithEmailAndPasswordHandler = (event, email, password) => {
+      console.log(email,password)
+      event.preventDefault();
+      auth.signInWithEmailAndPassword(email, password).catch(error => {
+        setError("Error signing in with password and email!");
+        console.error("Error signing in with password and email", error);
+      });
+    };
+
+    const onChangeHandler = (event) => {
+      console.log(event.currentTarget+"here")
+      const {name, value} = event.currentTarget;
+
+      if(name === 'userEmail') {
+          setEmail(value);
+      }
+      if(name ==  'resetEmail') {
+        setResetEmail(value);
+      }
+      else if(name === 'userPassword'){
+      setPassword(value);
+      }
+    };
+
+    const sendResetEmail = event => {
+      event.preventDefault();
+      auth.sendPasswordResetEmail(resetEmail)
+        .then(() => {
+          console.log("inside reset");
+          setOpen(false);
+          setEmailHasBeenSent(true);
+          setTimeout(() => {setEmailHasBeenSent(false)}, 3000);
+        })
+        .catch((error) => {
+          console.log(error);
+          setError("Error resetting password");
+        });
+    };
+
     const classes = useStyles(theme);
 
     const [open, setOpen] = React.useState(false);
@@ -71,10 +121,12 @@ const useStyles = makeStyles((theme) => ({
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="userEmail"
               label="Email Address"
-              name="email"
-              autoComplete="email"
+              name="userEmail"
+              value = {email}
+              autoComplete="userEmail"
+              onChange = {(event) => onChangeHandler(event)}
               autoFocus
             />
             <TextField
@@ -82,10 +134,12 @@ const useStyles = makeStyles((theme) => ({
               margin="normal"
               required
               fullWidth
-              name="password"
+              name="userPassword"
               label="Password"
               type="password"
-              id="password"
+              id="userPassword"
+              value = {password}
+              onChange = {(event) => onChangeHandler(event)}
               autoComplete="current-password"
             />
             <FormControlLabel
@@ -98,6 +152,7 @@ const useStyles = makeStyles((theme) => ({
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick = {(event) => {signInWithEmailAndPasswordHandler(event, email, password)}}
             >
               Sign In
             </Button>
@@ -111,19 +166,22 @@ const useStyles = makeStyles((theme) => ({
                       <DialogContentText>
                         Reset Password
                       </DialogContentText>
-                      <TextField
+                       <TextField
                         margin="dense"
-                        id="email"
+                        id="resetEmail"
                         label="Enter Email"
                         type="email"
+                        value = {resetEmail}
+                        name = "resetEmail"
+                        onChange = {(event) => onChangeHandler(event)}
                         fullWidth
                       />
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={handleClose} color="primary">
-                        Cancel
+                        Close
                       </Button>
-                      <Button onClick={handleClose} color="primary">
+                      <Button onClick = {sendResetEmail} color="primary">
                         Reset
                       </Button>
                     </DialogActions>

@@ -20,6 +20,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import UpcomingExams from './UpcomingExams';
 import ChangeRequests from './ChangeRequests'
 import Profile from "./Profile";
+import {auth} from "../firebase"
 
 const theme = createMuiTheme({
     palette: {
@@ -137,7 +138,7 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
               <ExitToAppIcon />
           </IconButton>
         </Toolbar>
