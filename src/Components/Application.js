@@ -1,12 +1,12 @@
 import React,{ useContext} from "react";
-import { Router } from "@reach/router";
 import SignIn from "./SignIn.js";
 import AdminDashBoard from "./AdminDashBoard";
 import FacultyDashBoard from "./FacultyDashBoard";
+import StudentDashBoard from "./StudentDashBoard.js";
 import { UserContext } from "../providers/UserProvider";
+
 function Application() {
-  var user = null;
-  var user = useContext(UserContext);
+  let user = useContext(UserContext);
   console.log(user);
   //const {displayName, email} = user;
   if (!user){
@@ -18,22 +18,15 @@ function Application() {
     if(usertype === 'T'){
         return <FacultyDashBoard />;
     }
-    if(usertype === 'S'){
+    if(usertype === 'A'){
         return <AdminDashBoard />;
+    }
+    if(usertype === 'S'){
+      return <StudentDashBoard />
     }
     else{
         return <SignIn />;
     }
   }
-//   return (
-//         user ?
-//         <reqPage />
-//       :
-//         <Router>
-//           <SignIn path="/" />
-//           <PasswordReset path = "passwordReset" />
-//         </Router>
-
-//   );
 }
 export default Application;

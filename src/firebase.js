@@ -4,7 +4,7 @@ import "firebase/firestore";
 
 //const db = firebase.firestore();
 
-//var userRef = db.collection("users").doc("users");
+//let userRef = db.collection("users").doc("users");
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -48,16 +48,16 @@ const getUserDocument = async (uid,userType) => {
   }
 };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCZIqOiRukBHhhX9fM7mvFoD8wdLjxxIVU",
-  authDomain: "invigilator-82e71.firebaseapp.com",
-  projectId: "invigilator-82e71",
-  storageBucket: "invigilator-82e71.appspot.com",
-  messagingSenderId: "492381439153",
-  appId: "1:492381439153:web:11142a78601b195dc4ce90",
-  measurementId: "G-Q94DPT1TMW"
-}
+firebase.initializeApp({
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID
+})
 
-firebase.initializeApp(firebaseConfig);
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();

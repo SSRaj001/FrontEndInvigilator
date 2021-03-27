@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,11 +15,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Link } from "@reach/router";
-import {signInWithGoogle} from "../firebase";
 import {auth} from "../firebase";
-import Application from "./Application";
-import { UserContext } from "../providers/UserProvider";
 
 const theme = createMuiTheme({
     palette: {
@@ -57,9 +53,9 @@ const useStyles = makeStyles((theme) => ({
     const signInWithEmailAndPasswordHandler = (event, email, password) => {
       console.log(email,password)
       event.preventDefault();
-      auth.signInWithEmailAndPassword(email, password).catch(error => {
-        setError("Error signing in with password and email!");
-        console.error("Error signing in with password and email", error);
+      auth.signInWithEmailAndPassword(email, password).catch(err => {
+        setError(err);
+        console.error(error);
       });
     };
 
@@ -70,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
       if(name === 'userEmail') {
           setEmail(value);
       }
-      if(name ==  'resetEmail') {
+      if(name ===  'resetEmail') {
         setResetEmail(value);
       }
       else if(name === 'userPassword'){
@@ -85,6 +81,7 @@ const useStyles = makeStyles((theme) => ({
           console.log("inside reset");
           setOpen(false);
           setEmailHasBeenSent(true);
+          console.log(emailHasBeenSent);
           setTimeout(() => {setEmailHasBeenSent(false)}, 3000);
         })
         .catch((error) => {

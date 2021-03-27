@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 
 export default function Deposits() {
   const user = useContext(UserContext);
-  const {email, displayName, uid, usertype} = user;
+  const {email, displayName, usertype} = user;
   const classes = useStyles();
   let currUser = null;
   if(usertype === 'S'){
@@ -21,6 +21,9 @@ export default function Deposits() {
   }
   if(usertype === 'T'){
     currUser = "Teacher";
+  }
+  if(usertype === 'A'){
+    currUser = "Admin";
   }
   return (
     <React.Fragment>
