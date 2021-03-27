@@ -20,7 +20,7 @@ export default function Deposits() {
     currUser = "Student";
   }
   if(usertype === 'T'){
-    currUser = "Teacher";
+    currUser = "Faculty";
   }
   if(usertype === 'A'){
     currUser = "Admin";

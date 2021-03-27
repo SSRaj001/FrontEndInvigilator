@@ -163,12 +163,12 @@ export default function FacultyDashBoard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={8} lg={9}>
+            <Grid item xs={12} md={6} lg={6}>
               <Paper className={fixedHeightPaper}>
                 <UpcomingTeacher />
               </Paper>
             </Grid>
-            <Grid item xs={12} md={4} lg={3}>
+            <Grid item xs={12} md={6} lg={6}>
               <Paper className={fixedHeightPaper}>
                 <Profile />
               </Paper>
