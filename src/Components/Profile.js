@@ -15,9 +15,16 @@ export default function Deposits() {
   const user = useContext(UserContext);
   const {email, displayName, uid, usertype} = user;
   const classes = useStyles();
+  let currUser = null;
+  if(usertype === 'S'){
+    currUser = "Student";
+  }
+  if(usertype === 'T'){
+    currUser = "Teacher";
+  }
   return (
     <React.Fragment>
-      <Title>Profile</Title>
+      <Title>{currUser}   Profile</Title>
       <Typography component="p" variant="h4">
         {displayName}
       </Typography>
