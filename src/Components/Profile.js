@@ -13,6 +13,12 @@ const useStyles = makeStyles({
   depositContext: {
     flex: 1,
   },
+  img: {
+    borderRadius: '50%',
+    height: '250px',
+    width:'250px',
+    align: 'center',
+  },
 });
 
 export default function Deposits() {
@@ -71,7 +77,7 @@ export default function Deposits() {
       </Typography>
       {/* PP TIME */}
       <div align="center">
-         <img src = {url} className = "img-fluid" height="300px" width = "300px" alt = "WHY" align = "center"/>
+         <img src = {url} className = {classes.img} alt='why'/>
       </div>
       <Typography component="p" align='center' variant="h6">Change Profile Picture </Typography>
       <Button> <input type = "file" onChange = {handleChange}/> </Button>

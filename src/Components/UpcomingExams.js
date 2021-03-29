@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
+import Box from '@material-ui/core/Box';
 import NewExam from './NewExam'
 
 function createData(id, date, fac, subject, room) {
@@ -59,6 +60,7 @@ export default function UpComingExams() {
           ))}
         </TableBody>
       </Table>
+      <Box flex={1} />
       <div className={classes.extra}>
         <div className={classes.seeMore}>
             <Link color="primary" href="#" onClick={preventDefault}>
