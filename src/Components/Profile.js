@@ -63,10 +63,10 @@ export default function Deposits() {
   return (
     <React.Fragment>
       <Title>{currUser}   Profile</Title>
-      <Typography component="p" variant="h4">
+      <Typography component="p" align='center' variant="h4">
         {displayName}
       </Typography>
-      <Typography color="textSecondary" className={classes.depositContext}>
+      <Typography color="textSecondary" align='center' className={classes.depositContext}>
         {email}
       </Typography>
       {/* PP TIME */}
