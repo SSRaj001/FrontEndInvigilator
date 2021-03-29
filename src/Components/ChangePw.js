@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,14 +7,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import firebase from "firebase/app";
+import 'firebase/firestore';
+import 'firebase/functions';
+import { UserContext } from "../providers/UserProvider";
 
 export default function ChangePw() {
+  const user = useContext(UserContext);
+  const {email} = user;
   const [open, setOpen] = React.useState(false);
   const [newPass, setNewPass] = useState('');
   const [cnfPass, setCnfPass] = useState('');
+  //const db=firebase.firestore();
 
   const onChangeHandler = (event) => {
-    console.log(event.currentTarget+"here")
     const {name, value} = event.currentTarget;
 
     if(name === 'newPW') {
@@ -25,15 +30,26 @@ export default function ChangePw() {
     }
   };
 
+  const sendConfirmationEmail = () => {
+    var addMessage = firebase.functions().httpsCallable('sendPassChangeEmail'); 
+    addMessage({ toEmail : email })
+    .then((result) => {
+      // Read result of the Cloud Function.
+      console.log("function called successfully");
+    });
+  };
+
   const updatePassword = () =>{
     let user = firebase.auth().currentUser;
-    user.updatePassword(newPass).then(() => {
-      console.log("Password updated!");
-    }).catch((error) => { console.log(error); });
+    // user.updatePassword(newPass).then(() => {
+    //   console.log("Password updated!");
+    // }).catch((error) => { console.log(error); });
     if(newPass === cnfPass){
       console.log(user);
       user.updatePassword(newPass).then(() => {
         console.log("Password updated!");
+        sendConfirmationEmail();
+        setOpen(false);
       }).catch((error) => { console.log(error); });
     }
     else{
