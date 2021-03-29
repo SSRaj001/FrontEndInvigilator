@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import LockOutlinedIcon from '@material-ui/icons/LocalLibrary';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -15,7 +15,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {auth} from "../firebase";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import { auth } from "../firebase";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const theme = createMuiTheme({
     palette: {
@@ -41,26 +47,37 @@ const useStyles = makeStyles((theme) => ({
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
   }));
   
   export default function SignIn() {
 
-    const [emailHasBeenSent, setEmailHasBeenSent] = useState(false);
     const [email, setEmail] = useState('');
     const [resetEmail, setResetEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const [snackOpen, setSnackOpen] = useState(false);
+    const [alert, setAlert] = useState("info")
+
     const signInWithEmailAndPasswordHandler = (event, email, password) => {
-      console.log(email,password)
       event.preventDefault();
-      auth.signInWithEmailAndPassword(email, password).catch(err => {
-        setError(err);
-        console.error(error);
+      auth.signInWithEmailAndPassword(email, password).then(result =>{
+        setError("Welcome")
+        setAlert("success")
+        setSnackOpen(true)
+      }).catch(err => {
+        setError("Incorrect Credentials")
+        setAlert("error")
+        setSnackOpen(true)
       });
     };
 
     const onChangeHandler = (event) => {
-      console.log(event.currentTarget+"here")
       const {name, value} = event.currentTarget;
 
       if(name === 'userEmail') {
@@ -78,16 +95,17 @@ const useStyles = makeStyles((theme) => ({
       event.preventDefault();
       auth.sendPasswordResetEmail(resetEmail)
         .then(() => {
-          console.log("inside reset");
           setOpen(false);
-          setEmailHasBeenSent(true);
-          console.log(emailHasBeenSent);
-          setTimeout(() => {setEmailHasBeenSent(false)}, 3000);
+          setError("Check you inbox for further details")
+          setAlert("info")
+          setSnackOpen(true)
         })
         .catch((error) => {
-          console.log(error);
-          setError("Error resetting password");
+          setError("Email doesn't Exist");
+          setAlert("error")
+          setSnackOpen(true)
         });
+        setResetEmail("")
     };
 
     const classes = useStyles(theme);
@@ -100,6 +118,14 @@ const useStyles = makeStyles((theme) => ({
 
     const handleClose = () => {
       setOpen(false);
+      setResetEmail("")
+    };
+
+    const handleSnackClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setSnackOpen(false);
     };
     
     return (
@@ -109,7 +135,10 @@ const useStyles = makeStyles((theme) => ({
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h4">
+            The Invigilator
+          </Typography>
+          <Typography component="h2" variant="h6">
             Sign in
           </Typography>
           <form className={classes.form} noValidate>
@@ -186,6 +215,11 @@ const useStyles = makeStyles((theme) => ({
               </div>
           </form>
         </div>
+        <Snackbar open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
+          <Alert onClose={handleSnackClose} severity={alert}>
+            {error}
+          </Alert>
+        </Snackbar>
       </Container>
     );
   }

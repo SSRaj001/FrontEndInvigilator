@@ -6,6 +6,7 @@ import Title from './Title';
 import { UserContext } from "../providers/UserProvider";
 import {storage} from '../firebase';
 import {useState} from "react";
+import Button from '@material-ui/core/Button';
 // import ReactFirebaseFileUpload from './ReactImageUpload';
 
 const useStyles = makeStyles({
@@ -16,7 +17,7 @@ const useStyles = makeStyles({
 
 export default function Deposits() {
   const user = useContext(UserContext);
-  const {email, displayName, usertype} = user;
+  const {email, displayName, usertype, profileLink} = user;
   const classes = useStyles();
   const [image,setImage] = useState(null);
   const [url,setUrl] = useState(String);
@@ -25,20 +26,25 @@ export default function Deposits() {
       setImage(e.target.files[0]);
     }
   };
+
+  const loadImage = () => {
+    storage.ref("images")
+    .child(user.uid)
+    .getDownloadURL()
+    .then(url => {
+      console.log(url);
+      setUrl(url);
+    }).catch(err => {
+      setUrl(profileLink)
+    });
+  }
+
   const handleUpload = () => {
     const uploadTask = storage.ref(`images/${user.uid}`).put(image);
     uploadTask.on("state_changed",
     snapshot => {},
     error => {console.log(error);},
-    () => {
-      storage.ref("images")
-      .child(image.name)
-      .getDownloadURL()
-      .then(url => {
-        console.log(url);
-        setUrl(url);
-      });
-    }
+    loadImage()
     );
   };
   console.log(url);
@@ -53,6 +59,7 @@ export default function Deposits() {
   if(usertype === 'A'){
     currUser = "Admin";
   }
+  loadImage()
   return (
     <React.Fragment>
       <Title>{currUser}   Profile</Title>
@@ -63,12 +70,12 @@ export default function Deposits() {
         {email}
       </Typography>
       {/* PP TIME */}
-      <Typography component="p" variant="h4">Change Profile Picture </Typography>
-      <button><input type = "file" onChange = {handleChange}/></button>
-      <button onClick = {handleUpload}>Upload</button>
       <div align="center">
          <img src = {url} className = "img-fluid" height="300px" width = "300px" alt = "WHY" align = "center"/>
       </div>
+      <Typography component="p" align='center' variant="h6">Change Profile Picture </Typography>
+      <Button> <input type = "file" onChange = {handleChange}/> </Button>
+      <Button onClick = {handleUpload}> Upload </Button>
       {/* NO MORE PP TIME */}
       <div>
         <ChangePw />
