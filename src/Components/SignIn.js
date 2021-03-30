@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-//import FormControlLabel from '@material-ui/core/FormControlLabel';
-//import Checkbox from '@material-ui/core/Checkbox';
 import LockOutlinedIcon from '@material-ui/icons/LocalLibrary';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,6 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Box from '@material-ui/core/Box';
 import { auth } from "../firebase";
 
 function Alert(props) {
@@ -63,18 +62,31 @@ const useStyles = makeStyles((theme) => ({
     const [error, setError] = useState(null);
     const [snackOpen, setSnackOpen] = useState(false);
     const [alert, setAlert] = useState("info")
-
+    const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const signInWithEmailAndPasswordHandler = (event, email, password) => {
       event.preventDefault();
-      auth.signInWithEmailAndPassword(email, password).then(result =>{
-        setError("Welcome")
-        setAlert("success")
+      if(!emailRegexp.test(email)){
+        setError("Enter Valid Email address")
+        if(password.length <6){
+          setError("Invalid Email address & Min password Length is 6")
+        }
+        setAlert("info")
         setSnackOpen(true)
-      }).catch(err => {
-        setError("Incorrect Credentials")
-        setAlert("error")
-        setSnackOpen(true)
-      });
+      }
+      else if(password.length <6){
+        setError("Minimum password Length : 6")
+      }
+      else{
+        auth.signInWithEmailAndPassword(email, password).then(result =>{
+          setError("Welcome")
+          setAlert("success")
+          setSnackOpen(true)
+        }).catch(err => {
+          setError("Incorrect Credentials")
+          setAlert("error")
+          setSnackOpen(true)
+        });
+      }
     };
 
     const onChangeHandler = (event) => {
@@ -93,24 +105,31 @@ const useStyles = makeStyles((theme) => ({
 
     const sendResetEmail = event => {
       event.preventDefault();
-      auth.sendPasswordResetEmail(resetEmail)
-        .then(() => {
-          setOpen(false);
-          setError("Check you inbox for further details")
-          setAlert("info")
-          setSnackOpen(true)
-        })
-        .catch((error) => {
-          setError("Email doesn't Exist");
-          setAlert("error")
-          setSnackOpen(true)
-        });
-        setResetEmail("")
+      if(!emailRegexp.test(resetEmail)){
+        setError("Enter Valid Email address")
+        setAlert("info")
+        setSnackOpen(true)
+      }
+      else{
+        auth.sendPasswordResetEmail(resetEmail)
+          .then(() => {
+            setOpen(false);
+            setError("Check you inbox for further details")
+            setAlert("info")
+            setSnackOpen(true)
+          })
+          .catch((error) => {
+            setError("Email doesn't Exist");
+            setAlert("error")
+            setSnackOpen(true)
+          });
+          setResetEmail("")
+        }
     };
 
     const classes = useStyles(theme);
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
       setOpen(true);
@@ -131,6 +150,7 @@ const useStyles = makeStyles((theme) => ({
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+        <Box height={100}/>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -146,6 +166,7 @@ const useStyles = makeStyles((theme) => ({
               variant="outlined"
               margin="normal"
               required
+              type="email"
               fullWidth
               id="userEmail"
               label="Email Address"
@@ -178,37 +199,38 @@ const useStyles = makeStyles((theme) => ({
             >
               Sign In
             </Button>
-                <div>
-                  <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                    Forgot Password
+            <Box flex={1}/>
+            <div>
+              <Button variant="outlined" fullWidth color="primary" onClick={handleClickOpen}>
+                Forgot Password
+              </Button>
+              <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth="sm">
+                <DialogTitle id="form-dialog-title">Forgot Password</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Reset Password
+                  </DialogContentText>
+                  <TextField
+                    margin="dense"
+                    id="resetEmail"
+                    label="Enter Email"
+                    type="email"
+                    value = {resetEmail}
+                    name = "resetEmail"
+                    onChange = {(event) => onChangeHandler(event)}
+                    fullWidth
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Close
                   </Button>
-                  <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth="sm">
-                    <DialogTitle id="form-dialog-title">Forgot Password</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                        Reset Password
-                      </DialogContentText>
-                       <TextField
-                        margin="dense"
-                        id="resetEmail"
-                        label="Enter Email"
-                        type="email"
-                        value = {resetEmail}
-                        name = "resetEmail"
-                        onChange = {(event) => onChangeHandler(event)}
-                        fullWidth
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose} color="primary">
-                        Close
-                      </Button>
-                      <Button onClick = {sendResetEmail} color="primary">
-                        Reset
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-              </div>
+                  <Button onClick = {sendResetEmail} color="primary">
+                    Reset
+                  </Button>
+                </DialogActions>
+              </Dialog>
+          </div>
           </form>
         </div>
         <Snackbar open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
