@@ -52,6 +52,7 @@ export default function Deposits() {
     error => {console.log(error);},
     loadImage(),
     );
+    loadImage();
   };
   console.log(url);
   console.log("image: ", image);
