@@ -10,6 +10,12 @@ import firebase from "firebase/app";
 import 'firebase/firestore';
 import 'firebase/functions';
 import { UserContext } from "../providers/UserProvider";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function ChangePw() {
   const user = useContext(UserContext);
@@ -17,6 +23,9 @@ export default function ChangePw() {
   const [open, setOpen] = React.useState(false);
   const [newPass, setNewPass] = useState('');
   const [cnfPass, setCnfPass] = useState('');
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [alert, setAlert] = useState("info");
+  const [error, setError] = useState(null);
   //const db=firebase.firestore();
 
   const onChangeHandler = (event) => {
@@ -31,29 +40,37 @@ export default function ChangePw() {
   };
 
   const sendConfirmationEmail = () => {
-    var addMessage = firebase.functions().httpsCallable('sendPassChangeEmail'); 
+    let addMessage = firebase.functions().httpsCallable('sendPassChangeEmail');
     addMessage({ toEmail : email })
     .then((result) => {
       // Read result of the Cloud Function.
-      console.log("function called successfully");
     });
   };
 
   const updatePassword = () =>{
     let user = firebase.auth().currentUser;
-    // user.updatePassword(newPass).then(() => {
-    //   console.log("Password updated!");
-    // }).catch((error) => { console.log(error); });
-    if(newPass === cnfPass){
-      console.log(user);
+    if(newPass.length < 6){
+      setError("Minimum Password Length : 6");
+      setAlert("warning");
+      setSnackOpen(true);
+    }
+    else if(newPass === cnfPass){
       user.updatePassword(newPass).then(() => {
-        console.log("Password updated!");
         sendConfirmationEmail();
-        setOpen(false);
-      }).catch((error) => { console.log(error); });
+        setError("Password Updated and Email Sent");
+        setAlert("success");
+        setSnackOpen(true);
+        handleClose();
+      }).catch((error) => {
+        setError("Error pls try again later");
+        setAlert("error");
+        setSnackOpen(true);
+      });
     }
     else{
-      console.log("newPass and confirmed pass dont match");
+      setError("Password and confirm Password doesnt Match");
+      setAlert("warning");
+      setSnackOpen(true);
     }
   }
 
@@ -62,7 +79,16 @@ export default function ChangePw() {
   };
 
   const handleClose = () => {
+    setNewPass("");
+    setCnfPass("");
     setOpen(false);
+  };
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackOpen(false);
   };
 
   return (
@@ -106,6 +132,11 @@ export default function ChangePw() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
+        <Alert onClose={handleSnackClose} severity={alert}>
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

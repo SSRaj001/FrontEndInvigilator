@@ -70,10 +70,11 @@ const useStyles = makeStyles((theme) => ({
         if(password.length <6){
           setError("Invalid Email address & Min password Length is 6")
         }
-        setAlert("info")
+        setAlert("warning")
         setSnackOpen(true)
       }
       else if(password.length <6){
+        setAlert("warning");
         setError("Minimum password Length : 6")
       }
       else{
@@ -120,8 +121,8 @@ const useStyles = makeStyles((theme) => ({
           })
           .catch((error) => {
             setError("Email doesn't Exist");
-            setAlert("error")
-            setSnackOpen(true)
+            setAlert("error");
+            setSnackOpen(true);
           });
           setResetEmail("")
         }
