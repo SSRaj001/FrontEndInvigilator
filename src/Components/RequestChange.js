@@ -58,7 +58,7 @@ switch (step) {
 }
 }
 
-export default function RequestChage() {
+export default function RequestChange() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();

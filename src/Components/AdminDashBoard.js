@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { mainListItems, secondaryListItems } from './listItemsAdmin';
+import { mainListItems, secondaryListItems } from './ListItemsAdmin';
 import { createMuiTheme } from '@material-ui/core/styles';
 import UpcomingExams from './UpcomingExams';
 import ChangeRequests from './ChangeRequests'
@@ -110,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function AdminDashBoard() {
   const classes = useStyles(theme);
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {

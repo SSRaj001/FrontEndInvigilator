@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UpComingExams() {
+export default function UpcomingTeacher() {
   const classes = useStyles();
   return (
     <React.Fragment>

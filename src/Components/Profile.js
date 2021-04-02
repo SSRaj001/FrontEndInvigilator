@@ -50,7 +50,6 @@ export default function Deposits() {
     uploadTask.on("state_changed",
     snapshot => {},
     error => {console.log(error);},
-    loadImage(),
     );
     loadImage();
   };
