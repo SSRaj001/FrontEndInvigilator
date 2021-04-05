@@ -7,14 +7,14 @@ import { UserContext } from "../providers/UserProvider";
 
 function Application() {
   let user = useContext(UserContext);
-  console.log(user);
+  // console.log(user);
   //const {displayName, email} = user;
   if (!user){
     return <SignIn />
   }
   else{
     const { usertype } = user;
-    console.log(usertype);
+    // console.log(usertype);
     if(usertype === 'T'){
         return <FacultyDashBoard />;
     }

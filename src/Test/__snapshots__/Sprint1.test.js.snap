@@ -1,0 +1,1510 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdminDashboard Proper details must be rendered 1`] = `
+Array [
+  <div
+    className="makeStyles-root-1"
+  >
+    <WithStyles(CssBaseline) />
+    <WithStyles(ForwardRef(AppBar))
+      className="makeStyles-appBar-4"
+      position="absolute"
+    >
+      <WithStyles(ForwardRef(Toolbar))
+        className="makeStyles-toolbar-2"
+      >
+        <WithStyles(ForwardRef(IconButton))
+          aria-label="open drawer"
+          className="makeStyles-menuButton-6"
+          color="inherit"
+          edge="start"
+          onClick={[Function]}
+        >
+          <Memo />
+        </WithStyles(ForwardRef(IconButton))>
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-title-8"
+          color="inherit"
+          component="h1"
+          noWrap={true}
+          variant="h6"
+        >
+          Dashboard
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(IconButton))
+          color="inherit"
+          onClick={[Function]}
+        >
+          <Memo />
+        </WithStyles(ForwardRef(IconButton))>
+      </WithStyles(ForwardRef(Toolbar))>
+    </WithStyles(ForwardRef(AppBar))>
+    <WithStyles(ForwardRef(Drawer))
+      classes={
+        Object {
+          "paper": "makeStyles-drawerPaper-9 makeStyles-drawerPaperClose-10",
+        }
+      }
+      open={false}
+      variant="permanent"
+    >
+      <div
+        className="makeStyles-toolbarIcon-3"
+      >
+        <WithStyles(ForwardRef(IconButton))
+          onClick={[Function]}
+        >
+          <Memo />
+        </WithStyles(ForwardRef(IconButton))>
+      </div>
+      <WithStyles(ForwardRef(Divider)) />
+      <WithStyles(ForwardRef(List))>
+        <div>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Dashboard"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Schedule Exam"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Faculty Requests"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Previous Exams"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Profile"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+        </div>
+      </WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(Divider)) />
+      <WithStyles(ForwardRef(List))>
+        <div />
+      </WithStyles(ForwardRef(List))>
+    </WithStyles(ForwardRef(Drawer))>
+    <main
+      className="makeStyles-content-12"
+    >
+      <div
+        className="makeStyles-appBarSpacer-11"
+      />
+      <WithStyles(ForwardRef(Container))
+        className="makeStyles-container-13"
+        maxWidth="lg"
+      >
+        <WithStyles(ForwardRef(Grid))
+          container={true}
+          spacing={3}
+        >
+          <WithStyles(ForwardRef(Grid))
+            item={true}
+            lg={6}
+            md={6}
+            xs={12}
+          >
+            <WithStyles(ForwardRef(Paper))
+              className="makeStyles-paper-14 makeStyles-fixedHeight-15"
+            >
+              <UpcomingExams />
+            </WithStyles(ForwardRef(Paper))>
+          </WithStyles(ForwardRef(Grid))>
+          <WithStyles(ForwardRef(Grid))
+            item={true}
+            lg={6}
+            md={6}
+            xs={12}
+          >
+            <WithStyles(ForwardRef(Paper))
+              className="makeStyles-paper-14 makeStyles-fixedHeight-15"
+            >
+              <Deposits />
+            </WithStyles(ForwardRef(Paper))>
+          </WithStyles(ForwardRef(Grid))>
+          <WithStyles(ForwardRef(Grid))
+            item={true}
+            xs={12}
+          >
+            <WithStyles(ForwardRef(Paper))
+              className="makeStyles-paper-14"
+            >
+              <ChangeRequests />
+            </WithStyles(ForwardRef(Paper))>
+          </WithStyles(ForwardRef(Grid))>
+        </WithStyles(ForwardRef(Grid))>
+      </WithStyles(ForwardRef(Container))>
+    </main>
+  </div>,
+]
+`;
+
+exports[`Application All other components must be rendered properly 1`] = `
+Array [
+  <SignIn />,
+]
+`;
+
+exports[`ChangePw Password is acquired and authenticated 1`] = `
+Array [
+  <div>
+    <WithStyles(ForwardRef(Button))
+      color="primary"
+      onClick={[Function]}
+      variant="outlined"
+    >
+      Change Password
+    </WithStyles(ForwardRef(Button))>
+    <WithStyles(ForwardRef(Dialog))
+      aria-labelledby="form-dialog-title"
+      onClose={[Function]}
+      open={false}
+    >
+      <WithStyles(ForwardRef(DialogTitle))
+        id="form-dialog-title"
+      >
+        Change Password
+      </WithStyles(ForwardRef(DialogTitle))>
+      <WithStyles(ForwardRef(DialogContent))>
+        <WithStyles(ForwardRef(DialogContentText))>
+          This will Change your Password
+        </WithStyles(ForwardRef(DialogContentText))>
+        <WithStyles(ForwardRef(TextField))
+          fullWidth={true}
+          id="newPW"
+          label="New Password"
+          margin="dense"
+          name="newPW"
+          onChange={[Function]}
+          type="password"
+          value=""
+        />
+        <WithStyles(ForwardRef(TextField))
+          fullWidth={true}
+          id="cnfPW"
+          label="Confirm Password"
+          margin="dense"
+          name="cnfPW"
+          onChange={[Function]}
+          type="password"
+          value=""
+        />
+      </WithStyles(ForwardRef(DialogContent))>
+      <WithStyles(ForwardRef(DialogActions))>
+        <WithStyles(ForwardRef(Button))
+          color="primary"
+          onClick={[Function]}
+        >
+          Cancel
+        </WithStyles(ForwardRef(Button))>
+        <WithStyles(ForwardRef(Button))
+          color="primary"
+          onClick={[Function]}
+        >
+          Change
+        </WithStyles(ForwardRef(Button))>
+      </WithStyles(ForwardRef(DialogActions))>
+    </WithStyles(ForwardRef(Dialog))>
+    <WithStyles(ForwardRef(Snackbar))
+      autoHideDuration={2000}
+      onClose={[Function]}
+      open={false}
+    >
+      <Alert
+        onClose={[Function]}
+        severity="info"
+      />
+    </WithStyles(ForwardRef(Snackbar))>
+  </div>,
+]
+`;
+
+exports[`ChangeRequests should render initial layout 1`] = `
+Array [
+  <React.Fragment>
+    <Title>
+      Change Requests
+    </Title>
+    <WithStyles(ForwardRef(Table))
+      size="small"
+    >
+      <WithStyles(ForwardRef(TableHead))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            Date
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            From
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            To
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Subject
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Room No
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Status
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+      </WithStyles(ForwardRef(TableHead))>
+      <WithStyles(ForwardRef(TableBody))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            16 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 1
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 2
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Software
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Pending
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            17 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 2
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 1
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Compiler
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Pending
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            18 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 3
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 6
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Comp Intelligence
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Confirmed
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+      </WithStyles(ForwardRef(TableBody))>
+    </WithStyles(ForwardRef(Table))>
+    <div
+      className="makeStyles-seeMore-53"
+    >
+      <WithStyles(ForwardRef(Link))
+        color="primary"
+        href="#"
+        onClick={[Function]}
+      >
+        See more Requests
+      </WithStyles(ForwardRef(Link))>
+    </div>
+  </React.Fragment>,
+]
+`;
+
+exports[`CreateExam Initial layout rendering 1`] = `
+Array [
+  <div
+    className="makeStyles-root-54"
+  >
+    <WithStyles(ForwardRef(Stepper))
+      activeStep={0}
+      orientation="vertical"
+    >
+      <WithStyles(ForwardRef(Step))>
+        <WithStyles(ForwardRef(StepLabel))>
+          Select Date
+        </WithStyles(ForwardRef(StepLabel))>
+        <WithStyles(ForwardRef(StepContent))>
+          <WithStyles(ForwardRef(Typography))>
+            Select the date on which exam is required to be scheduled
+          </WithStyles(ForwardRef(Typography))>
+          <div
+            className="makeStyles-actionsContainer-56"
+          >
+            <div>
+              <WithStyles(ForwardRef(Button))
+                className="makeStyles-button-55"
+                disabled={true}
+                onClick={[Function]}
+              >
+                Back
+              </WithStyles(ForwardRef(Button))>
+              <WithStyles(ForwardRef(Button))
+                className="makeStyles-button-55"
+                color="primary"
+                onClick={[Function]}
+                variant="contained"
+              >
+                Next
+              </WithStyles(ForwardRef(Button))>
+            </div>
+          </div>
+        </WithStyles(ForwardRef(StepContent))>
+      </WithStyles(ForwardRef(Step))>
+      <WithStyles(ForwardRef(Step))>
+        <WithStyles(ForwardRef(StepLabel))>
+          Select Subject
+        </WithStyles(ForwardRef(StepLabel))>
+        <WithStyles(ForwardRef(StepContent))>
+          <WithStyles(ForwardRef(Typography))>
+            Select the subject
+          </WithStyles(ForwardRef(Typography))>
+          <div
+            className="makeStyles-actionsContainer-56"
+          >
+            <div>
+              <WithStyles(ForwardRef(Button))
+                className="makeStyles-button-55"
+                disabled={true}
+                onClick={[Function]}
+              >
+                Back
+              </WithStyles(ForwardRef(Button))>
+              <WithStyles(ForwardRef(Button))
+                className="makeStyles-button-55"
+                color="primary"
+                onClick={[Function]}
+                variant="contained"
+              >
+                Next
+              </WithStyles(ForwardRef(Button))>
+            </div>
+          </div>
+        </WithStyles(ForwardRef(StepContent))>
+      </WithStyles(ForwardRef(Step))>
+      <WithStyles(ForwardRef(Step))>
+        <WithStyles(ForwardRef(StepLabel))>
+          Review
+        </WithStyles(ForwardRef(StepLabel))>
+        <WithStyles(ForwardRef(StepContent))>
+          <WithStyles(ForwardRef(Typography))>
+            Review the Exam before confirmation
+          </WithStyles(ForwardRef(Typography))>
+          <div
+            className="makeStyles-actionsContainer-56"
+          >
+            <div>
+              <WithStyles(ForwardRef(Button))
+                className="makeStyles-button-55"
+                disabled={true}
+                onClick={[Function]}
+              >
+                Back
+              </WithStyles(ForwardRef(Button))>
+              <WithStyles(ForwardRef(Button))
+                className="makeStyles-button-55"
+                color="primary"
+                onClick={[Function]}
+                variant="contained"
+              >
+                Next
+              </WithStyles(ForwardRef(Button))>
+            </div>
+          </div>
+        </WithStyles(ForwardRef(StepContent))>
+      </WithStyles(ForwardRef(Step))>
+    </WithStyles(ForwardRef(Stepper))>
+  </div>,
+]
+`;
+
+exports[`FacultyDashboard Proper details must be rendered 1`] = `
+Array [
+  <div
+    className="makeStyles-root-16"
+  >
+    <WithStyles(CssBaseline) />
+    <WithStyles(ForwardRef(AppBar))
+      className="makeStyles-appBar-19"
+      position="absolute"
+    >
+      <WithStyles(ForwardRef(Toolbar))
+        className="makeStyles-toolbar-17"
+      >
+        <WithStyles(ForwardRef(IconButton))
+          aria-label="open drawer"
+          className="makeStyles-menuButton-21"
+          color="inherit"
+          edge="start"
+          onClick={[Function]}
+        >
+          <Memo />
+        </WithStyles(ForwardRef(IconButton))>
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-title-23"
+          color="inherit"
+          component="h1"
+          noWrap={true}
+          variant="h6"
+        >
+          Dashboard
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(IconButton))
+          color="inherit"
+          onClick={[Function]}
+        >
+          <Memo />
+        </WithStyles(ForwardRef(IconButton))>
+      </WithStyles(ForwardRef(Toolbar))>
+    </WithStyles(ForwardRef(AppBar))>
+    <WithStyles(ForwardRef(Drawer))
+      classes={
+        Object {
+          "paper": "makeStyles-drawerPaper-24 makeStyles-drawerPaperClose-25",
+        }
+      }
+      open={false}
+      variant="permanent"
+    >
+      <div
+        className="makeStyles-toolbarIcon-18"
+      >
+        <WithStyles(ForwardRef(IconButton))
+          onClick={[Function]}
+        >
+          <Memo />
+        </WithStyles(ForwardRef(IconButton))>
+      </div>
+      <WithStyles(ForwardRef(Divider)) />
+      <WithStyles(ForwardRef(List))>
+        <div>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Dashboard"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Faculty Requests"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Previous Exams"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Profile"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+        </div>
+      </WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(Divider)) />
+      <WithStyles(ForwardRef(List))>
+        <div />
+      </WithStyles(ForwardRef(List))>
+    </WithStyles(ForwardRef(Drawer))>
+    <main
+      className="makeStyles-content-27"
+    >
+      <div
+        className="makeStyles-appBarSpacer-26"
+      />
+      <WithStyles(ForwardRef(Container))
+        className="makeStyles-container-28"
+        maxWidth="lg"
+      >
+        <WithStyles(ForwardRef(Grid))
+          container={true}
+          spacing={3}
+        >
+          <WithStyles(ForwardRef(Grid))
+            item={true}
+            lg={6}
+            md={6}
+            xs={12}
+          >
+            <WithStyles(ForwardRef(Paper))
+              className="makeStyles-paper-29 makeStyles-fixedHeight-30"
+            >
+              <UpcomingTeacher />
+            </WithStyles(ForwardRef(Paper))>
+          </WithStyles(ForwardRef(Grid))>
+          <WithStyles(ForwardRef(Grid))
+            item={true}
+            lg={6}
+            md={6}
+            xs={12}
+          >
+            <WithStyles(ForwardRef(Paper))
+              className="makeStyles-paper-29 makeStyles-fixedHeight-30"
+            >
+              <Deposits />
+            </WithStyles(ForwardRef(Paper))>
+          </WithStyles(ForwardRef(Grid))>
+        </WithStyles(ForwardRef(Grid))>
+      </WithStyles(ForwardRef(Container))>
+    </main>
+  </div>,
+]
+`;
+
+exports[`NewExam Three steps with proper movement 1`] = `
+Array [
+  <div>
+    <WithStyles(ForwardRef(Button))
+      color="primary"
+      onClick={[Function]}
+      variant="outlined"
+    >
+      Schedule Exam
+    </WithStyles(ForwardRef(Button))>
+    <WithStyles(ForwardRef(Dialog))
+      TransitionComponent={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "render": [Function],
+        }
+      }
+      fullScreen={true}
+      onClose={[Function]}
+      open={false}
+    >
+      <WithStyles(ForwardRef(AppBar))
+        className="makeStyles-appBar-58"
+      >
+        <WithStyles(ForwardRef(Toolbar))>
+          <WithStyles(ForwardRef(IconButton))
+            aria-label="close"
+            color="inherit"
+            edge="start"
+            onClick={[Function]}
+          >
+            <Memo />
+          </WithStyles(ForwardRef(IconButton))>
+          <WithStyles(ForwardRef(Typography))
+            className="makeStyles-title-59"
+            variant="h6"
+          >
+            New Exam
+          </WithStyles(ForwardRef(Typography))>
+        </WithStyles(ForwardRef(Toolbar))>
+      </WithStyles(ForwardRef(AppBar))>
+      <div
+        className="makeStyles-root-60"
+      >
+        <WithStyles(ForwardRef(Stepper))
+          activeStep={0}
+          orientation="vertical"
+        >
+          <WithStyles(ForwardRef(Step))>
+            <WithStyles(ForwardRef(StepLabel))>
+              Select Date
+            </WithStyles(ForwardRef(StepLabel))>
+            <WithStyles(ForwardRef(StepContent))>
+              <WithStyles(ForwardRef(Typography))>
+                Select the date on which exam is required to be scheduled
+              </WithStyles(ForwardRef(Typography))>
+              <div
+                className="makeStyles-actionsContainer-62"
+              >
+                <div>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-61"
+                    disabled={true}
+                    onClick={[Function]}
+                  >
+                    Back
+                  </WithStyles(ForwardRef(Button))>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-61"
+                    color="primary"
+                    onClick={[Function]}
+                    variant="contained"
+                  >
+                    Next
+                  </WithStyles(ForwardRef(Button))>
+                </div>
+              </div>
+            </WithStyles(ForwardRef(StepContent))>
+          </WithStyles(ForwardRef(Step))>
+          <WithStyles(ForwardRef(Step))>
+            <WithStyles(ForwardRef(StepLabel))>
+              Select Subject
+            </WithStyles(ForwardRef(StepLabel))>
+            <WithStyles(ForwardRef(StepContent))>
+              <WithStyles(ForwardRef(Typography))>
+                Select the subject
+              </WithStyles(ForwardRef(Typography))>
+              <div
+                className="makeStyles-actionsContainer-62"
+              >
+                <div>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-61"
+                    disabled={true}
+                    onClick={[Function]}
+                  >
+                    Back
+                  </WithStyles(ForwardRef(Button))>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-61"
+                    color="primary"
+                    onClick={[Function]}
+                    variant="contained"
+                  >
+                    Next
+                  </WithStyles(ForwardRef(Button))>
+                </div>
+              </div>
+            </WithStyles(ForwardRef(StepContent))>
+          </WithStyles(ForwardRef(Step))>
+          <WithStyles(ForwardRef(Step))>
+            <WithStyles(ForwardRef(StepLabel))>
+              Review
+            </WithStyles(ForwardRef(StepLabel))>
+            <WithStyles(ForwardRef(StepContent))>
+              <WithStyles(ForwardRef(Typography))>
+                Review the Exam before confirmation
+              </WithStyles(ForwardRef(Typography))>
+              <div
+                className="makeStyles-actionsContainer-62"
+              >
+                <div>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-61"
+                    disabled={true}
+                    onClick={[Function]}
+                  >
+                    Back
+                  </WithStyles(ForwardRef(Button))>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-61"
+                    color="primary"
+                    onClick={[Function]}
+                    variant="contained"
+                  >
+                    Next
+                  </WithStyles(ForwardRef(Button))>
+                </div>
+              </div>
+            </WithStyles(ForwardRef(StepContent))>
+          </WithStyles(ForwardRef(Step))>
+        </WithStyles(ForwardRef(Stepper))>
+      </div>
+    </WithStyles(ForwardRef(Dialog))>
+  </div>,
+]
+`;
+
+exports[`Profile Given user details and firebase dependcies, loading proper values 1`] = `
+Array [
+  <React.Fragment>
+    <Title>
+         Profile
+    </Title>
+    <WithStyles(ForwardRef(Typography))
+      align="center"
+      component="p"
+      variant="h4"
+    />
+    <WithStyles(ForwardRef(Typography))
+      align="center"
+      className="makeStyles-depositContext-46"
+      color="textSecondary"
+    />
+    <div
+      align="center"
+    >
+      <img
+        alt="why"
+        className="makeStyles-img-47"
+        src=""
+      />
+    </div>
+    <WithStyles(ForwardRef(Typography))
+      align="center"
+      component="p"
+      variant="h6"
+    >
+      Change Profile Picture 
+    </WithStyles(ForwardRef(Typography))>
+    <WithStyles(ForwardRef(Button))>
+       
+      <input
+        onChange={[Function]}
+        type="file"
+      />
+       
+    </WithStyles(ForwardRef(Button))>
+    <WithStyles(ForwardRef(Button))
+      onClick={[Function]}
+    >
+       Upload 
+    </WithStyles(ForwardRef(Button))>
+    <div>
+      <ChangePw />
+    </div>
+  </React.Fragment>,
+]
+`;
+
+exports[`RequestChange Should render initial layout 1`] = `
+Array [
+  <div>
+    <WithStyles(ForwardRef(Button))
+      color="primary"
+      onClick={[Function]}
+      variant="outlined"
+    >
+      Request Change
+    </WithStyles(ForwardRef(Button))>
+    <WithStyles(ForwardRef(Dialog))
+      TransitionComponent={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "render": [Function],
+        }
+      }
+      fullScreen={true}
+      onClose={[Function]}
+      open={false}
+    >
+      <WithStyles(ForwardRef(AppBar))
+        className="makeStyles-appBar-64"
+      >
+        <WithStyles(ForwardRef(Toolbar))>
+          <WithStyles(ForwardRef(IconButton))
+            aria-label="close"
+            color="inherit"
+            edge="start"
+            onClick={[Function]}
+          >
+            <Memo />
+          </WithStyles(ForwardRef(IconButton))>
+          <WithStyles(ForwardRef(Typography))
+            className="makeStyles-title-65"
+            variant="h6"
+          >
+            New Exam
+          </WithStyles(ForwardRef(Typography))>
+        </WithStyles(ForwardRef(Toolbar))>
+      </WithStyles(ForwardRef(AppBar))>
+      <div
+        className="makeStyles-root-66"
+      >
+        <WithStyles(ForwardRef(Stepper))
+          activeStep={0}
+          orientation="vertical"
+        >
+          <WithStyles(ForwardRef(Step))>
+            <WithStyles(ForwardRef(StepLabel))>
+              Select Exam
+            </WithStyles(ForwardRef(StepLabel))>
+            <WithStyles(ForwardRef(StepContent))>
+              <WithStyles(ForwardRef(Typography))>
+                Select Exam that needs to be chaged
+              </WithStyles(ForwardRef(Typography))>
+              <div
+                className="makeStyles-actionsContainer-68"
+              >
+                <div>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-67"
+                    disabled={true}
+                    onClick={[Function]}
+                  >
+                    Back
+                  </WithStyles(ForwardRef(Button))>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-67"
+                    color="primary"
+                    onClick={[Function]}
+                    variant="contained"
+                  >
+                    Next
+                  </WithStyles(ForwardRef(Button))>
+                </div>
+              </div>
+            </WithStyles(ForwardRef(StepContent))>
+          </WithStyles(ForwardRef(Step))>
+          <WithStyles(ForwardRef(Step))>
+            <WithStyles(ForwardRef(StepLabel))>
+              Select Faculty
+            </WithStyles(ForwardRef(StepLabel))>
+            <WithStyles(ForwardRef(StepContent))>
+              <WithStyles(ForwardRef(Typography))>
+                Select faculty to replace
+              </WithStyles(ForwardRef(Typography))>
+              <div
+                className="makeStyles-actionsContainer-68"
+              >
+                <div>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-67"
+                    disabled={true}
+                    onClick={[Function]}
+                  >
+                    Back
+                  </WithStyles(ForwardRef(Button))>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-67"
+                    color="primary"
+                    onClick={[Function]}
+                    variant="contained"
+                  >
+                    Next
+                  </WithStyles(ForwardRef(Button))>
+                </div>
+              </div>
+            </WithStyles(ForwardRef(StepContent))>
+          </WithStyles(ForwardRef(Step))>
+          <WithStyles(ForwardRef(Step))>
+            <WithStyles(ForwardRef(StepLabel))>
+              Review
+            </WithStyles(ForwardRef(StepLabel))>
+            <WithStyles(ForwardRef(StepContent))>
+              <WithStyles(ForwardRef(Typography))>
+                Review the Exam before confirmation
+              </WithStyles(ForwardRef(Typography))>
+              <div
+                className="makeStyles-actionsContainer-68"
+              >
+                <div>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-67"
+                    disabled={true}
+                    onClick={[Function]}
+                  >
+                    Back
+                  </WithStyles(ForwardRef(Button))>
+                  <WithStyles(ForwardRef(Button))
+                    className="makeStyles-button-67"
+                    color="primary"
+                    onClick={[Function]}
+                    variant="contained"
+                  >
+                    Next
+                  </WithStyles(ForwardRef(Button))>
+                </div>
+              </div>
+            </WithStyles(ForwardRef(StepContent))>
+          </WithStyles(ForwardRef(Step))>
+        </WithStyles(ForwardRef(Stepper))>
+      </div>
+    </WithStyles(ForwardRef(Dialog))>
+  </div>,
+]
+`;
+
+exports[`SignIn Logins are rejected or accepted with proper rendering 1`] = `
+Array [
+  <WithStyles(ForwardRef(Container))
+    component="main"
+    maxWidth="xs"
+  >
+    <WithStyles(CssBaseline) />
+    <Styled(MuiBox)
+      height={100}
+    />
+    <div
+      className="makeStyles-paper-48"
+    >
+      <WithStyles(ForwardRef(Avatar))
+        className="makeStyles-avatar-49"
+      >
+        <Memo />
+      </WithStyles(ForwardRef(Avatar))>
+      <WithStyles(ForwardRef(Typography))
+        component="h1"
+        variant="h4"
+      >
+        The Invigilator
+      </WithStyles(ForwardRef(Typography))>
+      <WithStyles(ForwardRef(Typography))
+        component="h2"
+        variant="h6"
+      >
+        Sign in
+      </WithStyles(ForwardRef(Typography))>
+      <form
+        className="makeStyles-form-50"
+        noValidate={true}
+      >
+        <WithStyles(ForwardRef(TextField))
+          autoComplete="userEmail"
+          autoFocus={true}
+          fullWidth={true}
+          id="userEmail"
+          label="Email Address"
+          margin="normal"
+          name="userEmail"
+          onChange={[Function]}
+          required={true}
+          type="email"
+          value=""
+          variant="outlined"
+        />
+        <WithStyles(ForwardRef(TextField))
+          autoComplete="current-password"
+          fullWidth={true}
+          id="userPassword"
+          label="Password"
+          margin="normal"
+          name="userPassword"
+          onChange={[Function]}
+          required={true}
+          type="password"
+          value=""
+          variant="outlined"
+        />
+        <WithStyles(ForwardRef(Button))
+          className="makeStyles-submit-51"
+          color="primary"
+          fullWidth={true}
+          onClick={[Function]}
+          type="submit"
+          variant="contained"
+        >
+          Sign In
+        </WithStyles(ForwardRef(Button))>
+        <Styled(MuiBox)
+          flex={1}
+        />
+        <div>
+          <WithStyles(ForwardRef(Button))
+            color="primary"
+            fullWidth={true}
+            onClick={[Function]}
+            variant="outlined"
+          >
+            Forgot Password
+          </WithStyles(ForwardRef(Button))>
+          <WithStyles(ForwardRef(Dialog))
+            aria-labelledby="form-dialog-title"
+            fullWidth={true}
+            maxWidth="sm"
+            onClose={[Function]}
+            open={false}
+          >
+            <WithStyles(ForwardRef(DialogTitle))
+              id="form-dialog-title"
+            >
+              Forgot Password
+            </WithStyles(ForwardRef(DialogTitle))>
+            <WithStyles(ForwardRef(DialogContent))>
+              <WithStyles(ForwardRef(DialogContentText))>
+                Reset Password
+              </WithStyles(ForwardRef(DialogContentText))>
+              <WithStyles(ForwardRef(TextField))
+                fullWidth={true}
+                id="resetEmail"
+                label="Enter Email"
+                margin="dense"
+                name="resetEmail"
+                onChange={[Function]}
+                type="email"
+                value=""
+              />
+            </WithStyles(ForwardRef(DialogContent))>
+            <WithStyles(ForwardRef(DialogActions))>
+              <WithStyles(ForwardRef(Button))
+                color="primary"
+                onClick={[Function]}
+              >
+                Close
+              </WithStyles(ForwardRef(Button))>
+              <WithStyles(ForwardRef(Button))
+                color="primary"
+                onClick={[Function]}
+              >
+                Reset
+              </WithStyles(ForwardRef(Button))>
+            </WithStyles(ForwardRef(DialogActions))>
+          </WithStyles(ForwardRef(Dialog))>
+        </div>
+      </form>
+    </div>
+    <WithStyles(ForwardRef(Snackbar))
+      autoHideDuration={2000}
+      onClose={[Function]}
+      open={false}
+    >
+      <Alert
+        onClose={[Function]}
+        severity="info"
+      />
+    </WithStyles(ForwardRef(Snackbar))>
+  </WithStyles(ForwardRef(Container))>,
+]
+`;
+
+exports[`StudentDashboard Proper details must be rendered 1`] = `
+Array [
+  <div
+    className="makeStyles-root-31"
+  >
+    <WithStyles(CssBaseline) />
+    <WithStyles(ForwardRef(AppBar))
+      className="makeStyles-appBar-34"
+      position="absolute"
+    >
+      <WithStyles(ForwardRef(Toolbar))
+        className="makeStyles-toolbar-32"
+      >
+        <WithStyles(ForwardRef(IconButton))
+          aria-label="open drawer"
+          className="makeStyles-menuButton-36"
+          color="inherit"
+          edge="start"
+          onClick={[Function]}
+        >
+          <Memo />
+        </WithStyles(ForwardRef(IconButton))>
+        <WithStyles(ForwardRef(Typography))
+          className="makeStyles-title-38"
+          color="inherit"
+          component="h1"
+          noWrap={true}
+          variant="h6"
+        >
+          Dashboard
+        </WithStyles(ForwardRef(Typography))>
+        <WithStyles(ForwardRef(IconButton))
+          color="inherit"
+          onClick={[Function]}
+        >
+          <Memo />
+        </WithStyles(ForwardRef(IconButton))>
+      </WithStyles(ForwardRef(Toolbar))>
+    </WithStyles(ForwardRef(AppBar))>
+    <WithStyles(ForwardRef(Drawer))
+      classes={
+        Object {
+          "paper": "makeStyles-drawerPaper-39 makeStyles-drawerPaperClose-40",
+        }
+      }
+      open={false}
+      variant="permanent"
+    >
+      <div
+        className="makeStyles-toolbarIcon-33"
+      >
+        <WithStyles(ForwardRef(IconButton))
+          onClick={[Function]}
+        >
+          <Memo />
+        </WithStyles(ForwardRef(IconButton))>
+      </div>
+      <WithStyles(ForwardRef(Divider)) />
+      <WithStyles(ForwardRef(List))>
+        <div>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Dashboard"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Previous Exams"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+          <WithStyles(ForwardRef(ListItem))
+            button={true}
+          >
+            <WithStyles(ForwardRef(ListItemIcon))>
+              <Memo />
+            </WithStyles(ForwardRef(ListItemIcon))>
+            <WithStyles(ForwardRef(ListItemText))
+              primary="Profile"
+            />
+          </WithStyles(ForwardRef(ListItem))>
+        </div>
+      </WithStyles(ForwardRef(List))>
+      <WithStyles(ForwardRef(Divider)) />
+      <WithStyles(ForwardRef(List))>
+        <div />
+      </WithStyles(ForwardRef(List))>
+    </WithStyles(ForwardRef(Drawer))>
+    <main
+      className="makeStyles-content-42"
+    >
+      <div
+        className="makeStyles-appBarSpacer-41"
+      />
+      <WithStyles(ForwardRef(Container))
+        className="makeStyles-container-43"
+        maxWidth="lg"
+      >
+        <WithStyles(ForwardRef(Grid))
+          container={true}
+          spacing={3}
+        >
+          <WithStyles(ForwardRef(Grid))
+            item={true}
+            lg={6}
+            md={6}
+            xs={12}
+          >
+            <WithStyles(ForwardRef(Paper))
+              className="makeStyles-paper-44 makeStyles-fixedHeight-45"
+            >
+              <UpcomingTeacher />
+            </WithStyles(ForwardRef(Paper))>
+          </WithStyles(ForwardRef(Grid))>
+          <WithStyles(ForwardRef(Grid))
+            item={true}
+            lg={6}
+            md={6}
+            xs={12}
+          >
+            <WithStyles(ForwardRef(Paper))
+              className="makeStyles-paper-44 makeStyles-fixedHeight-45"
+            >
+              <Deposits />
+            </WithStyles(ForwardRef(Paper))>
+          </WithStyles(ForwardRef(Grid))>
+        </WithStyles(ForwardRef(Grid))>
+      </WithStyles(ForwardRef(Container))>
+    </main>
+  </div>,
+]
+`;
+
+exports[`Title Title rendered properly throughout 1`] = `
+Array [
+  <WithStyles(ForwardRef(Typography))
+    color="primary"
+    component="h2"
+    gutterBottom={true}
+    variant="h6"
+  />,
+]
+`;
+
+exports[`UpcomingExams Loading preloaded data 1`] = `
+Array [
+  <React.Fragment>
+    <Title>
+      Upcoming Exams
+    </Title>
+    <WithStyles(ForwardRef(Table))
+      size="small"
+    >
+      <WithStyles(ForwardRef(TableHead))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            Date
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Faculty
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Subject
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Room No
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+      </WithStyles(ForwardRef(TableHead))>
+      <WithStyles(ForwardRef(TableBody))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            16 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 1
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Software
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            17 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 2
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Compiler
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            18 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 3
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Comp Intelligence
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            19 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 4
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Networks
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            20 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 5
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Machine Learning
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+      </WithStyles(ForwardRef(TableBody))>
+    </WithStyles(ForwardRef(Table))>
+    <Styled(MuiBox)
+      flex={1}
+    />
+    <div>
+      <div
+        className="makeStyles-seeMore-70"
+      >
+        <WithStyles(ForwardRef(Link))
+          color="primary"
+          href="#"
+          onClick={[Function]}
+        >
+          See more Exams
+        </WithStyles(ForwardRef(Link))>
+      </div>
+      <div
+        className="makeStyles-addExam-71"
+      >
+        <NewExam />
+      </div>
+    </div>
+  </React.Fragment>,
+]
+`;
+
+exports[`UpcomingTeacher Loading preloaded data 1`] = `
+Array [
+  <React.Fragment>
+    <Title>
+      Upcoming Exams
+    </Title>
+    <WithStyles(ForwardRef(Table))
+      size="small"
+    >
+      <WithStyles(ForwardRef(TableHead))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            Date
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Faculty
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Subject
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Room No
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+      </WithStyles(ForwardRef(TableHead))>
+      <WithStyles(ForwardRef(TableBody))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            16 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 1
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Software
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            17 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 2
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Compiler
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            18 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 3
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Comp Intelligence
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            19 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 4
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Networks
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+        <WithStyles(ForwardRef(TableRow))>
+          <WithStyles(ForwardRef(TableCell))>
+            20 Mar, 2020
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Teacher 5
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            Machine Learning
+          </WithStyles(ForwardRef(TableCell))>
+          <WithStyles(ForwardRef(TableCell))>
+            A-101
+          </WithStyles(ForwardRef(TableCell))>
+        </WithStyles(ForwardRef(TableRow))>
+      </WithStyles(ForwardRef(TableBody))>
+    </WithStyles(ForwardRef(Table))>
+    <Styled(MuiBox)
+      flex={1}
+    />
+    <div>
+      <div
+        className="makeStyles-seeMore-72"
+      >
+        <WithStyles(ForwardRef(Link))
+          color="primary"
+          href="#"
+          onClick={[Function]}
+        >
+          See more Exams
+        </WithStyles(ForwardRef(Link))>
+      </div>
+      <div
+        className="makeStyles-addExam-73"
+      >
+        <RequestChange />
+      </div>
+    </div>
+  </React.Fragment>,
+]
+`;

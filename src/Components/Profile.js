@@ -53,8 +53,8 @@ export default function Deposits() {
     );
     loadImage();
   };
-  console.log(url);
-  console.log("image: ", image);
+  // console.log(url);
+  // console.log("image: ", image);
   let currUser = null;
   if(usertype === 'S'){
     currUser = "Student";
