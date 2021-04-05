@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Deposits() {
+export default function Profile() {
   const user = useContext(UserContext);
   const {email, displayName, usertype, profileLink} = user;
   const classes = useStyles();
