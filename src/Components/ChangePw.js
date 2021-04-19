@@ -93,7 +93,7 @@ export default function ChangePw() {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant="outlined" color="primary" onClick={handleClickOpen} id="pwChange">
         Change Password
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -124,10 +124,10 @@ export default function ChangePw() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color="primary" id="closeComponent">
             Cancel
           </Button>
-          <Button onClick={updatePassword} color="primary">
+          <Button onClick={updatePassword} color="primary" id="pwUpdate">
             Change
           </Button>
         </DialogActions>

@@ -191,6 +191,7 @@ const useStyles = makeStyles((theme) => ({
               autoComplete="current-password"
             />
             <Button
+              id = "signinSubmit"
               type="submit"
               fullWidth
               variant="contained"
@@ -202,7 +203,7 @@ const useStyles = makeStyles((theme) => ({
             </Button>
             <Box flex={1}/>
             <div>
-              <Button variant="outlined" fullWidth color="primary" onClick={handleClickOpen}>
+              <Button variant="outlined" fullWidth color="primary" onClick={handleClickOpen} id="pwForgot">
                 Forgot Password
               </Button>
               <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth="sm">
@@ -223,10 +224,10 @@ const useStyles = makeStyles((theme) => ({
                   />
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleClose} color="primary">
+                  <Button onClick={handleClose} color="primary" id="closePwForgot">
                     Close
                   </Button>
-                  <Button onClick = {sendResetEmail} color="primary">
+                  <Button onClick = {sendResetEmail} color="primary" id = "resetEmail">
                     Reset
                   </Button>
                 </DialogActions>
