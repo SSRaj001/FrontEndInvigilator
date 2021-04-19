@@ -227,7 +227,7 @@ const useStyles = makeStyles((theme) => ({
                   <Button onClick={handleClose} color="primary" id="closePwForgot">
                     Close
                   </Button>
-                  <Button onClick = {sendResetEmail} color="primary" id = "resetEmail">
+                  <Button onClick = {sendResetEmail} color="primary" id = "resetEmailButton">
                     Reset
                   </Button>
                 </DialogActions>
