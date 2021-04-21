@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -8,7 +8,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Box from '@material-ui/core/Box'
 import Title from './Title';
-import RequestChange from './RequestChange'
+import RequestChange from './RequestChange';
+import { UserContext } from "../providers/UserProvider";
+
+function GetExamDetails(){
+  const user = useContext(UserContext);
+  const {exams} = user;
+  console.log(exams);
+  //const col = firestore.collection('')
+};
 
 function createData(id, date, fac, subject, room) {
   return { id, date, fac, subject, room };
@@ -36,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UpcomingTeacher() {
+  GetExamDetails();
   const classes = useStyles();
   return (
     <React.Fragment>

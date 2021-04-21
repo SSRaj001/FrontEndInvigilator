@@ -3,7 +3,7 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 
-//const db = firebase.firestore();
+
 
 //let userRef = db.collection("users").doc("users");
 
@@ -15,7 +15,6 @@ export const signInWithGoogle = () => {
 
 //const userRef = firestore.doc(`users/${user.uid}`);
 //const snapshot = await userRef.get();
-
 export const generateUserDocument = async (user, displayName, userType) => {
     console.log(userType+displayName+"signup");
     if (!user) return;
@@ -59,6 +58,8 @@ firebase.initializeApp({
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
   measurementId: process.env.REACT_APP_MEASUREMENT_ID
 })
+
+export const db = firebase.firestore();
 const storage = firebase.storage();
 export{storage, firebase as default};
 
