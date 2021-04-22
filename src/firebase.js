@@ -2,6 +2,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
+import { UserContext } from "./providers/UserProvider";
+import React, { useContext } from 'react';
 
 
 
@@ -11,6 +13,20 @@ const provider = new firebase.auth.GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
     auth.signInWithPopup(provider);
+};
+
+export async function GetAllExamDetails(){
+  const examList = [];
+  (await db.collection("exams").get()).forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+    examList.push(doc.data())
+    });
+    return examList
+}
+
+export const GetExamDetails = async(exam) => {
+  let examDetailsRef = db.collection('exams').doc(exam);
+  return (examDetailsRef.get())
 };
 
 //const userRef = firestore.doc(`users/${user.uid}`);
@@ -59,7 +75,7 @@ firebase.initializeApp({
   measurementId: process.env.REACT_APP_MEASUREMENT_ID
 })
 
-export const db = firebase.firestore();
+export var db = firebase.firestore();
 const storage = firebase.storage();
 export{storage, firebase as default};
 

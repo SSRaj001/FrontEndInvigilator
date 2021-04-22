@@ -8,7 +8,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import Box from '@material-ui/core/Box';
-import NewExam from './NewExam'
+import NewExam from './NewExam';
+import { UserContext } from "../providers/UserProvider";
+import {GetAllExamDetails, db} from '../firebase';
+
+let examList = [];
 
 function createData(id, date, fac, subject, room) {
   return { id, date, fac, subject, room };
@@ -21,6 +25,11 @@ const rows = [
   createData(3, '19 Mar, 2020', 'Teacher 4', 'Networks', 'A-101'),
   createData(4, '20 Mar, 2020', 'Teacher 5', 'Machine Learning', 'A-101'),
 ];
+
+async function DisplayAllExamDetails(){
+  examList = await GetAllExamDetails()
+  console.log(examList[0])
+}
 
 function preventDefault(event) {
   event.preventDefault();
@@ -36,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UpcomingExams() {
+  DisplayAllExamDetails()
   const classes = useStyles();
   return (
     <React.Fragment>

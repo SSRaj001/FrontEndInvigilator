@@ -10,13 +10,18 @@ import Box from '@material-ui/core/Box'
 import Title from './Title';
 import RequestChange from './RequestChange';
 import { UserContext } from "../providers/UserProvider";
+import {GetExamDetails} from '../firebase';
 
-function GetExamDetails(){
+const DisplayDetails = async () => {
   const user = useContext(UserContext);
   const {exams} = user;
-  console.log(exams);
-  //const col = firestore.collection('')
-};
+  let detailsList = [];
+  for(let i=0;i<exams.length;i++){
+    let details = await GetExamDetails(exams[i])
+    detailsList.push(details)
+  }
+  console.log(detailsList[0].data())
+}
 
 function createData(id, date, fac, subject, room) {
   return { id, date, fac, subject, room };
@@ -44,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UpcomingTeacher() {
-  GetExamDetails();
+  DisplayDetails();
   const classes = useStyles();
   return (
     <React.Fragment>
