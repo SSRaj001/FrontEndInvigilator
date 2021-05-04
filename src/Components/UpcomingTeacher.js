@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext,useState } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -12,16 +12,6 @@ import RequestChange from './RequestChange';
 import { UserContext } from "../providers/UserProvider";
 import {GetExamDetails} from '../firebase';
 
-const DisplayDetails = async () => {
-  const user = useContext(UserContext);
-  const {exams} = user;
-  let detailsList = [];
-  for(let i=0;i<exams.length;i++){
-    let details = await GetExamDetails(exams[i])
-    detailsList.push(details)
-  }
-  console.log(detailsList[0].data())
-}
 
 function createData(id, date, fac, subject, room) {
   return { id, date, fac, subject, room };
@@ -49,8 +39,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UpcomingTeacher() {
-  DisplayDetails();
-  const classes = useStyles();
+
+  const userDetails = useContext(UserContext);
+  let temp = []
+  let [examsList,setExamsList] = useState({});
+  const [exam,setExam] = useState(null);
+  const DisplayDetails = async () => {
+    const {exams} = userDetails;
+    for(let i=0;i<exams.length;i++){
+      let details = await GetExamDetails(exams[i])
+      temp.push(details.data())
+      //examsList.push(details.data())
+    }
+    //examsList = temp
+    HandleList(temp)
+  }
+  const HandleList = (temp) => {
+    setExamsList(temp)
+    console.log(examsList[0].dateSlot)
+  }
+
+  const classes = useStyles();  
   return (
     <React.Fragment>
       <Title>Upcoming Exams</Title>
@@ -64,12 +73,12 @@ export default function UpcomingTeacher() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.fac}</TableCell>
-              <TableCell>{row.subject}</TableCell>
-              <TableCell>{row.room}</TableCell>
+          {(examsList).map((row) => (
+            <TableRow row={row.id}>
+              <TableCell>{row}</TableCell>
+              <TableCell>{}</TableCell>
+              <TableCell>{}</TableCell>
+              <TableCell>{}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -77,7 +86,7 @@ export default function UpcomingTeacher() {
       <Box flex={1}/>
       <div className={classes.extra}>
         <div className={classes.seeMore}>
-            <Link color="primary" href="#" onClick={preventDefault}>
+            <Link color="primary" href="#" onClick={DisplayDetails}>
             See more Exams
             </Link>
         </div>
