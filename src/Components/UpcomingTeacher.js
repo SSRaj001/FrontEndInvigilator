@@ -1,4 +1,4 @@
-import React, { useContext,useState } from 'react';
+import React, { useContext,useState,useEffect } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -42,18 +42,21 @@ export default function UpcomingTeacher() {
 
   const userDetails = useContext(UserContext);
   let temp = []
-  let [examsList,setExamsList] = useState({});
+  let [examsList,setExamsList] = useState([]);
   const [exam,setExam] = useState(null);
-  const DisplayDetails = async () => {
-    const {exams} = userDetails;
-    for(let i=0;i<exams.length;i++){
-      let details = await GetExamDetails(exams[i])
-      temp.push(details.data())
-      //examsList.push(details.data())
+  useEffect(() => {
+    const DisplayDetails = async () => {
+      const {exams} = userDetails;
+      for(let i=0;i<exams.length;i++){
+        let details = await GetExamDetails(exams[i])
+        //temp.push(details.data())
+        examsList.push(details.data())
+      }
+      //examsList = temp
+      HandleList(setExamsList)
     }
-    //examsList = temp
-    HandleList(temp)
-  }
+    DisplayDetails();
+  },[examsList]);
   const HandleList = (temp) => {
     setExamsList(temp)
     console.log(examsList[0].dateSlot)
@@ -63,6 +66,7 @@ export default function UpcomingTeacher() {
   return (
     <React.Fragment>
       <Title>Upcoming Exams</Title>
+      <div>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -73,20 +77,22 @@ export default function UpcomingTeacher() {
           </TableRow>
         </TableHead>
         <TableBody>
+          {/* {console.log(examsList[0].dateSlot)} */}
           {(examsList).map((row) => (
             <TableRow row={row.id}>
-              <TableCell>{row}</TableCell>
-              <TableCell>{}</TableCell>
-              <TableCell>{}</TableCell>
-              <TableCell>{}</TableCell>
+              <TableCell>{examsList[0].dateSlot}</TableCell>
+              <TableCell>{examsList[0].classes}</TableCell>
+              <TableCell>{examsList[0].course['name']}</TableCell>
+              <TableCell>{examsList[0].room}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      </div>
       <Box flex={1}/>
       <div className={classes.extra}>
         <div className={classes.seeMore}>
-            <Link color="primary" href="#" onClick={DisplayDetails}>
+            <Link color="primary" href="#" onClick={preventDefault}>
             See more Exams
             </Link>
         </div>

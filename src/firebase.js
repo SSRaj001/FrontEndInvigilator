@@ -24,7 +24,7 @@ export async function GetAllExamDetails(){
     return examList
 }
 
-export const GetExamDetails = async(exam) => {
+export const GetExamDetails = (exam) => {
   let examDetailsRef = db.collection('exams').doc(exam);
   return (examDetailsRef.get())
 };
