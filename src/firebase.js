@@ -26,8 +26,29 @@ export async function GetAllExamDetails(){
 
 export const GetExamDetails = (exam) => {
   let examDetailsRef = db.collection('exams').doc(exam);
-  return (examDetailsRef.get())
+  return (examDetailsRef.get());
 };
+
+export const GetClassRelatedExams = async (section) => {
+  let examListStudent = [];
+  (await db.collection("exams").where("classes","array-contains",section).get()).forEach((doc)=>{
+      let details = doc.data()
+      console.log(details)
+      details.id = doc.id;
+      examListStudent.push(details)
+    });
+  return examListStudent;
+}
+
+export const GetTeachers = async () =>{
+  let teacherList = []
+  (await db.collection("users").where("usertype","==",'T').get()).forEach((doc)=>{
+      let details = doc.data()
+      console.log(details)
+      teacherList.push({id:doc.id,Name:details.displayName})
+    });
+  return teacherList;
+}
 
 //const userRef = firestore.doc(`users/${user.uid}`);
 //const snapshot = await userRef.get();

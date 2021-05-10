@@ -17,7 +17,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { mainListItems, secondaryListItems } from './ListItemsStudent';
 import { createMuiTheme } from '@material-ui/core/styles';
-import UpcomingTeacher from './UpcomingTeacher';
+import UpcomingExams from './UpcomingExams';
 import Profile from "./Profile";
 import {auth} from "../firebase";
 
@@ -165,7 +165,7 @@ export default function StudentDashBoard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={6}>
               <Paper className={fixedHeightPaper}>
-                <UpcomingTeacher />
+                <UpcomingExams />
               </Paper>
             </Grid>
             <Grid item xs={12} md={6} lg={6}>

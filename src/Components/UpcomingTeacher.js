@@ -53,10 +53,11 @@ export default function UpcomingTeacher() {
         examsList.push(details.data())
       }
       //examsList = temp
-      HandleList(setExamsList)
+      HandleList(examsList)
     }
     DisplayDetails();
   },[examsList]);
+  
   const HandleList = (temp) => {
     setExamsList(temp)
     console.log(examsList[0].dateSlot)
@@ -71,7 +72,7 @@ export default function UpcomingTeacher() {
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            <TableCell>Faculty</TableCell>
+            <TableCell>Classes</TableCell>
             <TableCell>Subject</TableCell>
             <TableCell>Room No</TableCell>
           </TableRow>
