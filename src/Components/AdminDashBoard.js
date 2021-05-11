@@ -18,6 +18,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { mainListItems, secondaryListItems } from './ListItemsAdmin';
 import { createMuiTheme } from '@material-ui/core/styles';
 import UpcomingExams from './UpcomingExams';
+import NewExam from './NewExam';
 import ChangeRequests from './ChangeRequests'
 import Profile from "./Profile";
 import {auth} from "../firebase"
@@ -166,6 +167,7 @@ export default function AdminDashBoard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={6}>
               <Paper className={fixedHeightPaper}>
+                <NewExam />
                 <UpcomingExams />
               </Paper>
             </Grid>
