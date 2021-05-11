@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext,useState,useEffect } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -6,9 +6,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Box from '@material-ui/core/Box'
 import Title from './Title';
-import Box from '@material-ui/core/Box';
-import NewExam from './NewExam'
+import RequestChange from './RequestChange';
+import { UserContext } from "../providers/UserProvider";
+import {GetClassRelatedExams, GetTeachers} from '../firebase';
+
 
 function createData(id, date, fac, subject, room) {
   return { id, date, fac, subject, room };
@@ -36,31 +39,54 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UpcomingExams() {
-  const classes = useStyles();
+
+  const userDetails = useContext(UserContext);
+  let temp = []
+  let [examsList,setExamsList] = useState([]);
+  const [exam,setExam] = useState(null);
+  useEffect(() => {
+    const DisplayDetails = async () => {
+      const {section} = userDetails;
+      let details = await GetClassRelatedExams(section)
+      //temp.push(details.data())
+      examsList.push(...details)
+      //examsList = temp
+      HandleList(examsList)
+    }
+    DisplayDetails();
+  },[examsList]);
+  
+  const HandleList = (temp) => {
+    setExamsList(temp)
+    console.log(examsList)
+  }
+
+  const classes = useStyles();  
   return (
     <React.Fragment>
       <Title>Upcoming Exams</Title>
+      <div>
       <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            <TableCell>Faculty</TableCell>
             <TableCell>Subject</TableCell>
             <TableCell>Room No</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.fac}</TableCell>
-              <TableCell>{row.subject}</TableCell>
-              <TableCell>{row.room}</TableCell>
+          {/* {console.log(examsList[0].dateSlot)} */}
+          {(examsList).map((examDetail) => (
+            <TableRow key={examDetail.id}>
+              <TableCell>{examDetail.dateSlot}</TableCell>
+              <TableCell>{examDetail.course['name']}</TableCell>
+              <TableCell>{examDetail.room}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Box flex={1} />
+      </div>
+      <Box flex={1}/>
       <div className={classes.extra}>
         <div className={classes.seeMore}>
             <Link color="primary" href="#" onClick={preventDefault}>
@@ -68,7 +94,7 @@ export default function UpcomingExams() {
             </Link>
         </div>
         <div className={classes.addExam}>
-            <NewExam />
+            <RequestChange />
         </div>
       </div>
     </React.Fragment>

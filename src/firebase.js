@@ -2,8 +2,10 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
+import { UserContext } from "./providers/UserProvider";
+import React, { useContext } from 'react';
 
-//const db = firebase.firestore();
+
 
 //let userRef = db.collection("users").doc("users");
 
@@ -13,9 +15,43 @@ export const signInWithGoogle = () => {
     auth.signInWithPopup(provider);
 };
 
+export async function GetAllExamDetails(){
+  const examList = [];
+  (await db.collection("exams").get()).forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+    examList.push(doc.data())
+    });
+    return examList
+}
+
+export const GetExamDetails = (exam) => {
+  let examDetailsRef = db.collection('exams').doc(exam);
+  return (examDetailsRef.get());
+};
+
+export const GetClassRelatedExams = async (section) => {
+  let examListStudent = [];
+  (await db.collection("exams").where("classes","array-contains",section).get()).forEach((doc)=>{
+      let details = doc.data()
+      console.log(details)
+      details.id = doc.id;
+      examListStudent.push(details)
+    });
+  return examListStudent;
+}
+
+export const GetTeachers = async () =>{
+  let teacherList = []
+  (await db.collection("users").where("usertype","==",'T').get()).forEach((doc)=>{
+      let details = doc.data()
+      console.log(details)
+      teacherList.push({id:doc.id,Name:details.displayName})
+    });
+  return teacherList;
+}
+
 //const userRef = firestore.doc(`users/${user.uid}`);
 //const snapshot = await userRef.get();
-
 export const generateUserDocument = async (user, displayName, userType) => {
     console.log(userType+displayName+"signup");
     if (!user) return;
@@ -59,6 +95,8 @@ firebase.initializeApp({
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
   measurementId: process.env.REACT_APP_MEASUREMENT_ID
 })
+
+export var db = firebase.firestore();
 const storage = firebase.storage();
 export{storage, firebase as default};
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext,useState,useEffect } from 'react';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -8,7 +8,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Box from '@material-ui/core/Box'
 import Title from './Title';
-import RequestChange from './RequestChange'
+import RequestChange from './RequestChange';
+import { UserContext } from "../providers/UserProvider";
+import {GetExamDetails} from '../firebase';
+
 
 function createData(id, date, fac, subject, room) {
   return { id, date, fac, subject, room };
@@ -36,30 +39,57 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UpcomingTeacher() {
-  const classes = useStyles();
+
+  const userDetails = useContext(UserContext);
+  let temp = []
+  let [examsList,setExamsList] = useState([]);
+  const [exam,setExam] = useState(null);
+  useEffect(() => {
+    const DisplayDetails = async () => {
+      const {exams} = userDetails;
+      for(let i=0;i<exams.length;i++){
+        let details = await GetExamDetails(exams[i])
+        //temp.push(details.data())
+        examsList.push(details.data())
+      }
+      //examsList = temp
+      HandleList(examsList)
+    }
+    DisplayDetails();
+  },[examsList]);
+  
+  const HandleList = (temp) => {
+    setExamsList(temp)
+    console.log(examsList[0].dateSlot)
+  }
+
+  const classes = useStyles();  
   return (
     <React.Fragment>
       <Title>Upcoming Exams</Title>
+      <div>
       <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            <TableCell>Faculty</TableCell>
+            <TableCell>Classes</TableCell>
             <TableCell>Subject</TableCell>
             <TableCell>Room No</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.fac}</TableCell>
-              <TableCell>{row.subject}</TableCell>
-              <TableCell>{row.room}</TableCell>
+          {/* {console.log(examsList[0].dateSlot)} */}
+          {(examsList).map((row) => (
+            <TableRow row={row.id}>
+              <TableCell>{examsList[0].dateSlot}</TableCell>
+              <TableCell>{examsList[0].classes}</TableCell>
+              <TableCell>{examsList[0].course['name']}</TableCell>
+              <TableCell>{examsList[0].room}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      </div>
       <Box flex={1}/>
       <div className={classes.extra}>
         <div className={classes.seeMore}>
