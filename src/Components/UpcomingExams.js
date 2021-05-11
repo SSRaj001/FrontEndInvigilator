@@ -10,7 +10,7 @@ import Box from '@material-ui/core/Box'
 import Title from './Title';
 import RequestChange from './RequestChange';
 import { UserContext } from "../providers/UserProvider";
-import {GetClassRelatedExams, GetTeachers} from '../firebase';
+import {GetAllExamDetails, GetClassRelatedExams, GetTeachers} from '../firebase';
 
 
 function createData(id, date, fac, subject, room) {
@@ -43,14 +43,18 @@ export default function UpcomingExams() {
   const userDetails = useContext(UserContext);
   let temp = []
   let [examsList,setExamsList] = useState([]);
-  const [exam,setExam] = useState(null);
   useEffect(() => {
     const DisplayDetails = async () => {
-      const {section} = userDetails;
-      let details = await GetClassRelatedExams(section)
-      //temp.push(details.data())
-      examsList.push(...details)
-      //examsList = temp
+      const {usertype} = userDetails;
+      if(usertype == "S"){
+        const {section} = userDetails;
+        let details = await GetClassRelatedExams(section)
+        examsList.push(...details)
+      }
+      else{
+        let details = await GetAllExamDetails();
+        examsList.push(...details)
+      }
       HandleList(examsList)
     }
     DisplayDetails();

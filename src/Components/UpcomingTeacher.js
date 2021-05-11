@@ -43,16 +43,13 @@ export default function UpcomingTeacher() {
   const userDetails = useContext(UserContext);
   let temp = []
   let [examsList,setExamsList] = useState([]);
-  const [exam,setExam] = useState(null);
   useEffect(() => {
     const DisplayDetails = async () => {
       const {exams} = userDetails;
       for(let i=0;i<exams.length;i++){
         let details = await GetExamDetails(exams[i])
-        //temp.push(details.data())
         examsList.push(details.data())
       }
-      //examsList = temp
       HandleList(examsList)
     }
     DisplayDetails();

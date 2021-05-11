@@ -15,19 +15,29 @@ export const signInWithGoogle = () => {
     auth.signInWithPopup(provider);
 };
 
-export async function GetAllExamDetails(){
-  const examList = [];
-  (await db.collection("exams").get()).forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
-    examList.push(doc.data())
-    });
-    return examList
-}
+// export async function GetAllExamDetails(){
+//   const examList = [];
+//   (await db.collection("exams").get()).forEach((doc) => {
+//     console.log(doc.id, " => ", doc.data());
+//     examList.push(doc.data())
+//     });
+//     return examList
+// }
 
 export const GetExamDetails = (exam) => {
   let examDetailsRef = db.collection('exams').doc(exam);
   return (examDetailsRef.get());
 };
+
+export const GetAllExamDetails = async () => {
+  let examDetails = [];
+  (await db.collection("exams").get()).forEach((doc) => {
+    let details = doc.data()
+    console.log(doc.data());
+    examDetails.push(details)
+  });
+  return examDetails
+}
 
 export const GetClassRelatedExams = async (section) => {
   let examListStudent = [];
@@ -45,7 +55,7 @@ export const GetTeachers = async () =>{
   (await db.collection("users").where("usertype","==",'T').get()).forEach((doc)=>{
       let details = doc.data()
       console.log(details)
-      teacherList.push({id:doc.id,Name:details.displayName})
+      teacherList.push(details)
     });
   return teacherList;
 }
