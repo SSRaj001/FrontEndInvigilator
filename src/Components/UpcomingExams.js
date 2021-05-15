@@ -27,19 +27,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { createMuiTheme } from '@material-ui/core/styles';
 import {auth} from "../firebase"
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import AddIcon from '@material-ui/icons/Add';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import PersonIcon from '@material-ui/icons/Person';
-import { Link } from "@reach/router";
+import { mainListItems } from './ListItemsAdmin';
 
-function preventDefault(event) {
-  event.preventDefault();
-}
 
 const theme = createMuiTheme({
     palette: {
@@ -205,44 +194,7 @@ export default function UpcomingExams() {
           </IconButton>
         </div>
         <Divider />
-        <List>
-            <Link to = "/">
-              <ListItem button>
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Dashboard"/>
-              </ListItem>
-            </Link>
-
-            <ListItem button>
-              <ListItemIcon>
-                <AddIcon />
-              </ListItemIcon>
-              <ListItemText primary="Schedule Exam"/>
-            </ListItem>
-
-            <ListItem button>
-              <ListItemIcon>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Faculty Requests" />
-            </ListItem>
-
-            <ListItem button>
-              <ListItemIcon>
-                <BarChartIcon />
-              </ListItemIcon>
-              <ListItemText primary="Exams"/>
-            </ListItem>
-
-            <ListItem button>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </ListItem>
-        </List>
+        <List>{mainListItems}</List>
         <Divider />
       </Drawer>
       <main className={classes.content}>
