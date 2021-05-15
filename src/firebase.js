@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
+import { CodeSharp } from "@material-ui/icons";
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -105,9 +106,9 @@ export const CheckRoomAvailability = async(roomNo,dateSlot) => {
 
 ////////////////////////***Algorithm***/////////////////////////////////
 
-function produceRandom(x){
-  let y = Math.floor(Math.random(Math.random() *x));
-  console.log(y);
+function produceRandom(min,max){
+  let y = Math.floor(Math.random() * (max - min + 1)) + min;
+  console.log(y,max);
   return y;
 }
 
@@ -140,7 +141,7 @@ export const GetFreeTeacher = async (dateSlot) => {
   }
   else{
     return {
-      type:3, val:[ teachersAvailable[produceRandom(teachersAvailable.length)], roomsAvailable[produceRandom(roomsAvailable.length)] ]
+      type:3, val:[ teachersAvailable[produceRandom(0,teachersAvailable.length-1)], roomsAvailable[produceRandom(0,roomsAvailable.length-1)] ]
     }
   }
 }
