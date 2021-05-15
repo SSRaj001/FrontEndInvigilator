@@ -1,5 +1,5 @@
 import 'date-fns';
-import React from 'react';
+import React,{useContext,useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -21,6 +21,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import {GetSubjects} from '../firebase';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -81,6 +82,21 @@ export default function NewExam() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
+
+  let [subjectList,setSubjectList] = useState([]);
+  useEffect(() => {
+    const DisplayDetails = async () => {
+      let details = await GetSubjects()
+      subjectList.push(...details)
+      HandleList(subjectList)
+    }
+    DisplayDetails();
+  },[subjectList]);
+  
+  const HandleList = (temp) => {
+    setSubjectList(temp)
+    console.log(subjectList)
+  }
 
   const handleDateChange = (date) => {
     setSelectedDate(date);

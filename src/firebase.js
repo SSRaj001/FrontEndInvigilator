@@ -15,15 +15,6 @@ export const signInWithGoogle = () => {
     auth.signInWithPopup(provider);
 };
 
-// export async function GetAllExamDetails(){
-//   const examList = [];
-//   (await db.collection("exams").get()).forEach((doc) => {
-//     console.log(doc.id, " => ", doc.data());
-//     examList.push(doc.data())
-//     });
-//     return examList
-// }
-
 export const GetExamDetails = (exam) => {
   let examDetailsRef = db.collection('exams').doc(exam);
   return (examDetailsRef.get());
@@ -37,6 +28,21 @@ export const GetAllExamDetails = async () => {
     examDetails.push(details)
   });
   return examDetails
+}
+
+export const GetRoomLocation = async(roomNo) => {
+  let roomRef = (db.collection("rooms").doc(roomNo));
+  return roomRef.get();
+}
+
+export const GetSubjects = async () =>{
+  let subjectList = [];
+  (await db.collection("subjects").get()).forEach((doc) => {
+    let details = doc.id;
+    console.log(details);
+    subjectList.push(details);
+  });
+  return subjectList;
 }
 
 export const GetClassRelatedExams = async (section) => {
@@ -59,7 +65,6 @@ export const GetTeachers = async () =>{
     });
   return teacherList;
 }
-
 //const userRef = firestore.doc(`users/${user.uid}`);
 //const snapshot = await userRef.get();
 export const generateUserDocument = async (user, displayName, userType) => {

@@ -29,6 +29,7 @@ import AddIcon from '@material-ui/icons/Add';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import PersonIcon from '@material-ui/icons/Person';
+import { Link } from "@reach/router";
 
 const theme = createMuiTheme({
     palette: {
@@ -166,30 +167,38 @@ export default function AdminDashBoard() {
         </div>
         <Divider />
         <List>
-            <ListItem button>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard"/>
-            </ListItem>
+            <Link to = "/">
+              <ListItem button>
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard"/>
+              </ListItem>
+            </Link>
+
             <ListItem button>
               <ListItemIcon>
                 <AddIcon />
               </ListItemIcon>
               <ListItemText primary="Schedule Exam"/>
             </ListItem>
+
             <ListItem button>
               <ListItemIcon>
                 <PeopleIcon />
               </ListItemIcon>
               <ListItemText primary="Faculty Requests" />
             </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <BarChartIcon />
-              </ListItemIcon>
-              <ListItemText primary="Exams"/>
-            </ListItem>
+
+            <Link to="upcomingExams">
+              <ListItem button>
+                <ListItemIcon>
+                  <BarChartIcon />
+                </ListItemIcon>
+                <ListItemText primary="Exams"/>
+              </ListItem>
+            </Link>
+
             <ListItem button>
               <ListItemIcon>
                 <PersonIcon />

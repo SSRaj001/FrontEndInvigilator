@@ -1,16 +1,6 @@
-import React, { useContext,useState,useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Box from '@material-ui/core/Box'
-import Title from './Title';
-import RequestChange from './RequestChange';
-import { UserContext } from "../providers/UserProvider";
-import {GetAllExamDetails, GetClassRelatedExams, GetRoomLocation} from '../firebase';
+import React from 'react';
 import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -25,21 +15,13 @@ import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { mainListItems, secondaryListItems } from './ListItemsAdmin';
 import { createMuiTheme } from '@material-ui/core/styles';
+import UpcomingExams from './UpcomingExams';
+import NewExam from './NewExam';
+import ChangeRequests from './ChangeRequests'
+import Profile from "./Profile";
 import {auth} from "../firebase"
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import AddIcon from '@material-ui/icons/Add';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import PersonIcon from '@material-ui/icons/Person';
-import { Link } from "@reach/router";
-
-function preventDefault(event) {
-  event.preventDefault();
-}
 
 const theme = createMuiTheme({
     palette: {
@@ -125,11 +107,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 700,
+    height: 550,
   },
 }));
 
-export default function UpcomingExams() {
+export default function AdminDashBoard() {
   const classes = useStyles(theme);
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -139,36 +121,6 @@ export default function UpcomingExams() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  const userDetails = useContext(UserContext);
-  let [examsList,setExamsList] = useState([]);
-  useEffect(() => {
-    const DisplayDetails = async () => {
-      const {usertype} = userDetails;
-      if(usertype === "S"){
-        const {section} = userDetails;
-        let details = await GetClassRelatedExams(section)
-        for(let i=0;i<details.length;i++){
-          // console.log(details[i].room)
-          let loc = await GetRoomLocation(details[i].room);
-          //console.log(loc.data());
-          details[i].location = loc.data().location;
-        }
-        examsList.push(...details)
-      }
-      else{
-        let details = await GetAllExamDetails();
-        examsList.push(...details)
-      }
-      HandleList(examsList);
-    }
-    DisplayDetails();
-  },[examsList]);
-  
-  const HandleList = (temp) => {
-    setExamsList(temp)
-    console.log(examsList)
-  }
 
   return (
     <div className={classes.root}>
@@ -185,7 +137,7 @@ export default function UpcomingExams() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Exams
+            Dashboard
           </Typography>
           <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
               <ExitToAppIcon />
@@ -205,82 +157,28 @@ export default function UpcomingExams() {
           </IconButton>
         </div>
         <Divider />
-        <List>
-            <Link to = "/">
-              <ListItem button>
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Dashboard"/>
-              </ListItem>
-            </Link>
-
-            <ListItem button>
-              <ListItemIcon>
-                <AddIcon />
-              </ListItemIcon>
-              <ListItemText primary="Schedule Exam"/>
-            </ListItem>
-
-            <ListItem button>
-              <ListItemIcon>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Faculty Requests" />
-            </ListItem>
-
-            <ListItem button>
-              <ListItemIcon>
-                <BarChartIcon />
-              </ListItemIcon>
-              <ListItemText primary="Exams"/>
-            </ListItem>
-
-            <ListItem button>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </ListItem>
-        </List>
+        <List>{mainListItems}</List>
         <Divider />
+        <List>{secondaryListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={12} lg={12}>
+            <Grid item xs={12} md={6} lg={6}>
               <Paper className={fixedHeightPaper}>
-              <React.Fragment>
-                <Title>Upcoming Exams</Title>
-                <div>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Subject</TableCell>
-                    <TableCell>Room No</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {/* {console.log(examsList[0].dateSlot)} */}
-                    {(examsList).map((examDetail) => (
-                      <TableRow key={examDetail.id}>
-                        <TableCell>{examDetail.dateSlot}</TableCell>
-                        <TableCell>{examDetail.course['name']}</TableCell>
-                        <TableCell>{examDetail.room}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                </div>
-                <Box flex={1}/>
-                <div className={classes.extra}>
-                  <div className={classes.addExam}>
-                      <RequestChange />
-                  </div>
-                </div>
-              </React.Fragment>
+                <NewExam />
+                <UpcomingExams />
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={6} lg={6}>
+              <Paper className={fixedHeightPaper}>
+                <Profile />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                < ChangeRequests />
               </Paper>
             </Grid>
           </Grid>
