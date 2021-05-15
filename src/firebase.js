@@ -117,7 +117,7 @@ export const GetFreeTeacher = async (dateSlot) => {
   teachers = await GetTeachersTimetable();
   let teachersAvailable = []
   for(let i=0;i<teachers.length;i++){
-    if(teachers[i].timeTable[slot-1] === 0){
+    if(teachers[i].timeTable[slot] === 0){
       teachersAvailable.push(teachers[i].tid)
     }
   }
