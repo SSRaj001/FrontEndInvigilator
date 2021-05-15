@@ -97,6 +97,7 @@ export const GetTeacherName = async(teacherID) => {
   return teacherRef.get();
 }
 
+//Returns true if room if the room is available at a particular dateSlot
 export const CheckRoomAvailability = async(roomNo,dateSlot) => {
   let docRef = await db.collection("rooms").doc(roomNo).get();
   let slotmap = (docRef.data().upcomingSlots);
@@ -106,19 +107,21 @@ export const CheckRoomAvailability = async(roomNo,dateSlot) => {
 
 ////////////////////////***Algorithm***/////////////////////////////////
 
+//to produce random numbers.
 function produceRandom(min,max){
   let y = Math.floor(Math.random() * (max - min + 1)) + min;
   console.log(y,max);
   return y;
 }
 
+//Returns available teacher and rooms as array
 export const GetFreeTeacher = async (dateSlot) => {
   let teachers = [];
   let slot = parseInt(dateSlot.charAt(dateSlot.length-1));
   teachers = await GetTeachersTimetable();
   let teachersAvailable = []
   for(let i=0;i<teachers.length;i++){
-    if(teachers[i].timeTable[slot] === 0){
+    if(teachers[i].timeTable[slot-1] === 0){
       teachersAvailable.push(teachers[i].tid)
     }
   }
