@@ -9,7 +9,7 @@ import Box from '@material-ui/core/Box'
 import Title from './Title';
 import RequestChange from './RequestChange';
 import { UserContext } from "../providers/UserProvider";
-import {GetAllExamDetails, GetClassRelatedExams, GetRoomLocation} from '../firebase';
+import {GetAllExamDetails, GetClassRelatedExams, GetRoomLocation, GetFreeTeacher} from '../firebase';
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -133,6 +133,8 @@ export default function UpcomingExams() {
   let [examsList,setExamsList] = useState([]);
   useEffect(() => {
     const DisplayDetails = async () => {
+      let ret = await GetFreeTeacher("26/4/2021-1");
+      console.log(ret);
       const {usertype} = userDetails;
       if(usertype === "S"){
         const {section} = userDetails;
