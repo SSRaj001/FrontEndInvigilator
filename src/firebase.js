@@ -66,6 +66,11 @@ export const GetTeachers = async () =>{
     });
   return teacherList;
 }
+
+export const GetTeacherName = async(teacherID) => {
+  let teacherRef = db.collection("users").doc(teacherID);
+  return teacherRef.get();
+}
 //const userRef = firestore.doc(`users/${user.uid}`);
 //const snapshot = await userRef.get();
 export const generateUserDocument = async (user, displayName, userType) => {
