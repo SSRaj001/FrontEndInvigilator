@@ -24,6 +24,7 @@ export const GetAllExamDetails = async () => {
   let examDetails = [];
   (await db.collection("exams").get()).forEach((doc) => {
     let details = doc.data()
+    details.id = doc.id;
     console.log(doc.data());
     examDetails.push(details)
   });

@@ -138,15 +138,21 @@ export default function UpcomingExams() {
         const {section} = userDetails;
         let details = await GetClassRelatedExams(section)
         for(let i=0;i<details.length;i++){
-          // console.log(details[i].room)
+          console.log(details[i].room)
           let loc = await GetRoomLocation(details[i].room);
-          //console.log(loc.data());
+          console.log(loc.data());
           details[i].location = loc.data().location;
         }
         examsList.push(...details)
       }
       else{
         let details = await GetAllExamDetails();
+        for(let i=0;i<details.length;i++){
+          console.log(details[i].room)
+          let loc = await GetRoomLocation(details[i].room);
+          console.log(loc.data());
+          details[i].location = loc.data().location;
+        }
         examsList.push(...details)
       }
       HandleList(examsList);
@@ -209,9 +215,10 @@ export default function UpcomingExams() {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                    <TableCell>Date</TableCell>
+                    <TableCell>Date-Slot</TableCell>
                     <TableCell>Subject</TableCell>
                     <TableCell>Room No</TableCell>
+                    <TableCell>Location</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -221,6 +228,7 @@ export default function UpcomingExams() {
                         <TableCell>{examDetail.dateSlot}</TableCell>
                         <TableCell>{examDetail.course['name']}</TableCell>
                         <TableCell>{examDetail.room}</TableCell>
+                        <TableCell>{examDetail.location}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
