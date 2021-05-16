@@ -1,6 +1,8 @@
-import React from 'react';
-import clsx from 'clsx';
+import React, { useContext,useState,useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { UserContext } from "../providers/UserProvider";
+import {GetExamDetails, GetRoomLocation} from '../firebase';
+import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -17,15 +19,31 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { mainListItems, secondaryListItems } from './ListItemsFaculty';
 import { createMuiTheme } from '@material-ui/core/styles';
-import Profile from "./Profile";
 import {auth} from "../firebase";
-import { Link } from "@reach/router";
+import Request from './ChangeRequests';
+
+
+function createData(id, date, fac, subject, room) {
+  return { id, date, fac, subject, room };
+}
+
+const rows = [
+  createData(0, '16 Mar, 2020', 'Teacher 1', 'Software', 'A-101'),
+  createData(1, '17 Mar, 2020', 'Teacher 2', 'Compiler', 'A-101'),
+  createData(2, '18 Mar, 2020', 'Teacher 3', 'Comp Intelligence', 'A-101'),
+  createData(3, '19 Mar, 2020', 'Teacher 4', 'Networks', 'A-101'),
+  createData(4, '20 Mar, 2020', 'Teacher 5', 'Machine Learning', 'A-101'),
+];
+
+function preventDefault(event) {
+  event.preventDefault();
+}
 
 const theme = createMuiTheme({
-    palette: {
-      type: 'dark',
-    },
-  });
+  palette: {
+    type: 'dark',
+  },
+});
 
 const drawerWidth = 240;
 
@@ -107,9 +125,16 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 550,
   },
+  seeMore: {
+    marginTop: theme.spacing(1),
+  },
+  addExam: {
+    marginTop: theme.spacing(1),
+  },
 }));
 
-export default function FacultyDashBoard() {
+export default function UpcomingTeacher() {
+
   const classes = useStyles(theme);
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -120,6 +145,30 @@ export default function FacultyDashBoard() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  const userDetails = useContext(UserContext);
+  let [examsList,setExamsList] = useState([]);
+  useEffect(() => {
+    const DisplayDetails = async () => {
+      const {exams} = userDetails;
+      for(let i=0;i<exams.length;i++){
+        let details = await GetExamDetails(exams[i])
+        let data = details.data()
+        let room = data.room
+        let loc = await GetRoomLocation(room)
+        console.log(loc.data().location)
+        data.location = loc.data().location
+        data.id = exams[i]
+        examsList.push(data)
+      }
+      HandleList(examsList)
+    }
+    DisplayDetails();
+  },[examsList]);
+  
+  const HandleList = (temp) => {
+    setExamsList(temp)
+    console.log(examsList)
+  }
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -137,11 +186,9 @@ export default function FacultyDashBoard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <Link to = "/" style={{ textDecoration: 'none', color: "white" }}>
-            <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
-                <ExitToAppIcon />
-            </IconButton>
-          </Link>
+          <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
+              <ExitToAppIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -167,7 +214,9 @@ export default function FacultyDashBoard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
-                <Profile />
+                <React.Fragment>
+                  <Request />
+                </React.Fragment>
               </Paper>
             </Grid>
           </Grid>

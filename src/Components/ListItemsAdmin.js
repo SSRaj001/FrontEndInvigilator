@@ -11,7 +11,7 @@ import { Link } from "@reach/router";
 
 export const mainListItems = (
   <div>
-    <Link to = "/">
+    <Link to = "/" style={{ textDecoration: 'none', color: "black" }}>
       <ListItem button>
         <ListItemIcon>
           <DashboardIcon />
@@ -27,7 +27,7 @@ export const mainListItems = (
       <ListItemText primary="Faculty Requests" />
     </ListItem>
 
-    <Link to="/upcomingExams">
+    <Link to="/upcomingExams" style={{ textDecoration: 'none', color: "black" }}>
       <ListItem button>
         <ListItemIcon>
           <BarChartIcon />

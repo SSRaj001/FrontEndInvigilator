@@ -13,6 +13,10 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Paper from '@material-ui/core/Paper';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -87,9 +91,12 @@ export default function RequestChange() {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Request Change
-      </Button>
+      <ListItem button onClick={handleClickOpen}>
+        <ListItemIcon>
+          <SwapHorizIcon />
+        </ListItemIcon>
+        <ListItemText primary="Request Change" />
+      </ListItem>
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
@@ -97,7 +104,7 @@ export default function RequestChange() {
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              New Exam
+              Change Exam
             </Typography>
           </Toolbar>
         </AppBar>
