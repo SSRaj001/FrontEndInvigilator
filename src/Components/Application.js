@@ -16,10 +16,18 @@ function Application() {
     const { usertype } = user;
     // console.log(usertype);
     if(usertype === 'T'){
-        return <FacultyDashBoard />;
+        return (
+            <FacultyDashBoard />
+        );
     }
     if(usertype === 'A'){
-        return <AdminDashBoard />;
+        return(
+          <AdminDashBoard />
+          // <Router>
+          // <AdminDashBoard path = "/" />
+          // <UpcomingExams path = "/upcomingExams"/>
+          // </Router>
+        );
     }
     if(usertype === 'S'){
       return <StudentDashBoard />

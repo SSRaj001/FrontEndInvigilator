@@ -7,6 +7,7 @@ import { UserContext } from "../providers/UserProvider";
 import {storage} from '../firebase';
 import {useState} from "react";
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box'
 // import ReactFirebaseFileUpload from './ReactImageUpload';
 
 const useStyles = makeStyles({
@@ -83,6 +84,7 @@ export default function Profile() {
       <Button> <input type = "file" onChange = {handleChange}/> </Button>
       <Button onClick = {handleUpload}> Upload </Button>
       {/* NO MORE PP TIME */}
+      <Box flex={1}/>
       <div>
         <ChangePw />
       </div>

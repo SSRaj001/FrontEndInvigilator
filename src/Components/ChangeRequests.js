@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
+import Box from '@material-ui/core/Box'
 
 function createData(id, date, fac1, fac2, subject, room, status) {
   return { id, date, fac1, fac2, subject, room, status };
@@ -57,6 +58,7 @@ export default function ChangeRequests() {
           ))}
         </TableBody>
       </Table>
+      <Box flex={1}/>
       <div className={classes.seeMore}>
         <Link color="primary" href="#" onClick={preventDefault}>
           See more Requests

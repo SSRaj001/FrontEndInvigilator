@@ -5,21 +5,26 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import PersonIcon from '@material-ui/icons/Person';
+import {Link} from "@reach/router"
 
 export const mainListItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard"/>
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Previous Exams" />
-    </ListItem>
+    <Link to = "/" style={{ textDecoration: 'none', color: "black" }}>
+      <ListItem button>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard"/>
+      </ListItem>
+    </Link>
+    <Link to="/upcomingExams" style={{ textDecoration: 'none', color: "black" }}>
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Exams" />
+      </ListItem>
+    </Link>
     <ListItem button>
       <ListItemIcon>
         <PersonIcon />

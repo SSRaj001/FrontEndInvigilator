@@ -17,9 +17,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { mainListItems, secondaryListItems } from './ListItemsFaculty';
 import { createMuiTheme } from '@material-ui/core/styles';
-import UpcomingTeacher from './UpcomingTeacher';
 import Profile from "./Profile";
 import {auth} from "../firebase";
+import { Router, Link } from "@reach/router";
+import UpcomingTeacher from './UpcomingTeacher.js'
+import FacRequests from './ChangeRequests'
 
 const theme = createMuiTheme({
     palette: {
@@ -120,6 +122,8 @@ export default function FacultyDashBoard() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  const RouteWrapper = ({ children }) => <>{children}</>;
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -137,9 +141,11 @@ export default function FacultyDashBoard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
-              <ExitToAppIcon />
-          </IconButton>
+          <Link to = "/" style={{ textDecoration: 'none', color: "white" }}>
+            <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
+                <ExitToAppIcon />
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -163,14 +169,13 @@ export default function FacultyDashBoard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={6}>
+            <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
-                <UpcomingTeacher />
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={6} lg={6}>
-              <Paper className={fixedHeightPaper}>
-                <Profile />
+                <Router component={RouteWrapper}>
+                  <Profile path="/"/>
+                  <UpcomingTeacher path='/upcomingTeacher' />
+                  <FacRequests path='/seeRequests'/>
+                </Router>
               </Paper>
             </Grid>
           </Grid>

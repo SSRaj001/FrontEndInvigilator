@@ -15,12 +15,12 @@ import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { mainListItems, secondaryListItems } from './ListItemsAdmin';
 import { createMuiTheme } from '@material-ui/core/styles';
-import UpcomingExams from './UpcomingExams';
-import ChangeRequests from './ChangeRequests'
+import { mainListItems } from './ListItemsAdmin';
 import Profile from "./Profile";
 import {auth} from "../firebase"
+import { Router, Link } from "@reach/router";
+import UpcomingExams from "./UpcomingExams.js";
 
 const theme = createMuiTheme({
     palette: {
@@ -106,11 +106,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 550,
+    height: 700,
   },
 }));
 
 export default function AdminDashBoard() {
+
   const classes = useStyles(theme);
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -120,7 +121,7 @@ export default function AdminDashBoard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+  const RouteWrapper = ({ children }) => <>{children}</>;
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -138,9 +139,11 @@ export default function AdminDashBoard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
-              <ExitToAppIcon />
-          </IconButton>
+          <Link to = "/" style={{ textDecoration: 'none', color: "white" }}>
+            <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
+                <ExitToAppIcon />
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -158,25 +161,17 @@ export default function AdminDashBoard() {
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={6}>
+            <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
-                <UpcomingExams />
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={6} lg={6}>
-              <Paper className={fixedHeightPaper}>
-                <Profile />
-              </Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                < ChangeRequests />
+                <Router component={RouteWrapper}>
+                  <Profile path = "/" />
+                  <UpcomingExams path = "/upcomingExams"/>
+                </Router>
               </Paper>
             </Grid>
           </Grid>

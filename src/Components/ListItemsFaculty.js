@@ -6,27 +6,36 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import PersonIcon from '@material-ui/icons/Person';
+import { Link } from "@reach/router";
+import RequestChange from './RequestChange'
 
 export const mainListItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard"/>
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Faculty Requests" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Previous Exams" />
-    </ListItem>
+    <Link to = "/" style={{ textDecoration: 'none', color: "black" }}>
+      <ListItem button>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Dashboard"/>
+      </ListItem>
+    </Link>
+    <RequestChange/>
+    <Link to="/seeRequests" style={{ textDecoration: 'none', color: "black" }}>
+      <ListItem button>
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Faculty Requests" />
+      </ListItem>
+    </Link>
+    <Link to="/upcomingTeacher" style={{ textDecoration: 'none', color: "black" }}>
+      <ListItem button>
+        <ListItemIcon>
+          <BarChartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Exams"/>
+      </ListItem>
+    </Link>
     <ListItem button>
       <ListItemIcon>
         <PersonIcon />
