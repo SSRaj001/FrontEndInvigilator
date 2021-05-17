@@ -68,7 +68,7 @@ export const GetTeachers = async () =>{
 }
 
 //Returns Teachers Name, timetable and id
-export const GetTeachersTimetable = async () => {
+export const GetTeachersDetails = async () => {
   let teacherList = [];
   (await db.collection("teachers").get()).forEach((doc)=>{
     let details = doc.data();
@@ -117,7 +117,7 @@ function produceRandom(min,max){
 export const GetFreeTeacher = async (dateSlot) => {
   let teachers = [];
   let slot = parseInt(dateSlot.charAt(dateSlot.length-1));
-  teachers = await GetTeachersTimetable();
+  teachers = await GetTeachersDetails();
   let teachersAvailable = []
   for(let i=0;i<teachers.length;i++){
     if(teachers[i].timeTable[slot-1] === 0){

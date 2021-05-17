@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,6 +17,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import {GetExamDetails, GetTeachersDetails} from '../firebase';
+import { UserContext } from "../providers/UserProvider";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -66,6 +68,38 @@ export default function RequestChange() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
+  const [dateList, setDateList] = React.useState([]);
+  const [teacherList, setTeacherList] = React.useState([]);
+
+  const userDetails = useContext(UserContext);
+  const {displayName,exams} = userDetails;
+  useEffect(() => {
+    const HandleList = (temp) => {
+      setDateList(temp)
+      console.log(dateList)
+    }
+    const HandleTeacherList = (temp) => {
+      setTeacherList(temp)
+      console.log(teacherList)
+    }
+    const DisplayDetails = async () => {
+      for(let i=0;i<exams.length;i++){
+        let details = await GetExamDetails(exams[i])
+        let data = details.data();
+        console.log(data)
+        dateList.push(data.dateSlot);
+      }
+      HandleList(dateList);
+      let teacherDetails = await GetTeachersDetails();
+      for(let i=0;i<teacherDetails.length;i++){
+        if(teacherDetails[i].name !== displayName){
+          teacherList.push(teacherDetails[i].name)
+        }
+      }
+      HandleTeacherList(teacherList);
+    }
+    DisplayDetails();
+  },[dateList, teacherList]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);

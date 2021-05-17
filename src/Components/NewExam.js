@@ -25,7 +25,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {GetSubjects} from '../firebase';
+import {GetAllRooms, GetSubjects} from '../firebase';
 import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
@@ -82,25 +82,41 @@ switch (step) {
 }
 
 export default function NewExam() {
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2020-08-18T21:11:54'));
+  const [selectedDate, setSelectedDate] = React.useState();
   const [selectSession, setSelectSession] = React.useState(1);
+  const [selectExam, setSelectExam]  = React.useState(1);
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
 
   let [subjectList,setSubjectList] = useState([]);
+  let [classList, setClassList] = useState([]);
   useEffect(() => {
     const DisplayDetails = async () => {
+      let rooms = []
       let details = await GetSubjects()
-      subjectList.push(...details)
-      HandleList(subjectList)
+      let classDetails = await GetAllRooms();
+      for(let i=0;i<classDetails.length;i++){
+        rooms.push(classDetails[i].roomNo);
+      }
+      subjectList.push(...details);
+      classList.push(...rooms);
+      HandleList(subjectList);
+      HandleClassList(classList);
     }
     DisplayDetails();
-  },[subjectList]);
+  },[subjectList, classList]);
+
+  // const sendValue = () => {
+    
+  // }
   
   const HandleList = (temp) => {
-    setSubjectList(temp)
-    console.log(subjectList)
+    setSubjectList(temp);
+  }
+
+  const HandleClassList = (temp) => {
+    setClassList(temp);
   }
 
   const handleDateChange = (date) => {
@@ -127,6 +143,10 @@ export default function NewExam() {
 
   const handleChange = (event) => {
     setSelectSession(event.target.value);
+  };
+
+  const handleChangeExam = (event) => {
+    setSelectExam(event.target.value);
   };
 
   const handleClose = () => {
@@ -163,12 +183,12 @@ export default function NewExam() {
                 value={selectSession}
                 onChange={handleChange}
               >
-                <MenuItem value={1}>9:00-10:00</MenuItem>
-                <MenuItem value={2}>10:00-11:00</MenuItem>
-                <MenuItem value={3}>11:00-12:00</MenuItem>
-                <MenuItem value={4}>12:00-13:00</MenuItem>
-                <MenuItem value={5}>14:00-15:00</MenuItem>
-                <MenuItem value={6}>15:00-16:00</MenuItem>
+                <MenuItem value={'1'}>9:00-10:00</MenuItem>
+                <MenuItem value={'2'}>10:00-11:00</MenuItem>
+                <MenuItem value={'3'}>11:00-12:00</MenuItem>
+                <MenuItem value={'4'}>12:00-13:00</MenuItem>
+                <MenuItem value={'5'}>14:00-15:00</MenuItem>
+                <MenuItem value={'6'}>15:00-16:00</MenuItem>
               </Select>
             </FormControl>
           </>
@@ -181,15 +201,15 @@ export default function NewExam() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={selectSession}
-                onChange={handleChange}
+                value={selectExam}
+                onChange={handleChangeExam}
               >
-                <MenuItem value={1}>Algorithms</MenuItem>
-                <MenuItem value={2}>Operating Systems</MenuItem>
-                <MenuItem value={3}>Embedded Systems</MenuItem>
-                <MenuItem value={4}>DBMS</MenuItem>
-                <MenuItem value={5}>Compiler</MenuItem>
-                <MenuItem value={6}>Networks</MenuItem>
+                <MenuItem value={'1'}>Algorithms</MenuItem>
+                <MenuItem value={'2'}>Operating Systems</MenuItem>
+                <MenuItem value={'3'}>Embedded Systems</MenuItem>
+                <MenuItem value={'4'}>DBMS</MenuItem>
+                <MenuItem value={'5'}>Compiler</MenuItem>
+                <MenuItem value={'6'}>Networks</MenuItem>
               </Select>
             </FormControl>
           </>
@@ -256,6 +276,7 @@ export default function NewExam() {
             {activeStep === steps.length && (
                 <Paper square elevation={0} className={classes.resetContainer}>
                 <Typography>Confirm Again</Typography>
+                {console.log(selectedDate,selectSession, selectExam)}
                 <Button onClick={handleClose} className={classes.button}>
                     Confirm
                 </Button>
