@@ -20,6 +20,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import UpcomingExams from './UpcomingExams';
 import Profile from "./Profile";
 import {auth} from "../firebase";
+import {Router, Link} from '@reach/router'
 
 const theme = createMuiTheme({
     palette: {
@@ -120,6 +121,8 @@ export default function StudentDashBoard() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  const RouteWrapper = ({ children }) => <>{children}</>;
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -137,9 +140,11 @@ export default function StudentDashBoard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
-              <ExitToAppIcon />
-          </IconButton>
+          <Link to = "/" style={{ textDecoration: 'none', color: "white" }}>
+            <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
+                <ExitToAppIcon />
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -163,14 +168,12 @@ export default function StudentDashBoard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={6}>
+            <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
-                <UpcomingExams />
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={6} lg={6}>
-              <Paper className={fixedHeightPaper}>
-                <Profile />
+                <Router component={RouteWrapper}>
+                  <Profile path="/"/>
+                  <UpcomingExams path="/upcomingExams"/>
+                </Router>
               </Paper>
             </Grid>
           </Grid>

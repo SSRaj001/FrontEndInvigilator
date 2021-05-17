@@ -19,6 +19,8 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { mainListItems } from './ListItemsAdmin';
 import Profile from "./Profile";
 import {auth} from "../firebase"
+import { Router, Link } from "@reach/router";
+import UpcomingExams from "./UpcomingExams.js";
 
 const theme = createMuiTheme({
     palette: {
@@ -119,7 +121,7 @@ export default function AdminDashBoard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+  const RouteWrapper = ({ children }) => <>{children}</>;
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -137,9 +139,11 @@ export default function AdminDashBoard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
-              <ExitToAppIcon />
-          </IconButton>
+          <Link to = "/" style={{ textDecoration: 'none', color: "white" }}>
+            <IconButton color="inherit" onClick = {() => {auth.signOut()}}>
+                <ExitToAppIcon />
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -164,7 +168,10 @@ export default function AdminDashBoard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
-                <Profile />
+                <Router component={RouteWrapper}>
+                  <Profile path = "/" />
+                  <UpcomingExams path = "/upcomingExams"/>
+                </Router>
               </Paper>
             </Grid>
           </Grid>

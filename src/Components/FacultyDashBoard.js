@@ -19,7 +19,9 @@ import { mainListItems, secondaryListItems } from './ListItemsFaculty';
 import { createMuiTheme } from '@material-ui/core/styles';
 import Profile from "./Profile";
 import {auth} from "../firebase";
-import { Link } from "@reach/router";
+import { Router, Link } from "@reach/router";
+import UpcomingTeacher from './UpcomingTeacher.js'
+import FacRequests from './ChangeRequests'
 
 const theme = createMuiTheme({
     palette: {
@@ -120,6 +122,8 @@ export default function FacultyDashBoard() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  const RouteWrapper = ({ children }) => <>{children}</>;
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -167,7 +171,11 @@ export default function FacultyDashBoard() {
           <Grid container spacing={3}>
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
-                <Profile />
+                <Router component={RouteWrapper}>
+                  <Profile path="/"/>
+                  <UpcomingTeacher path='/upcomingTeacher' />
+                  <FacRequests path='/seeRequests'/>
+                </Router>
               </Paper>
             </Grid>
           </Grid>
