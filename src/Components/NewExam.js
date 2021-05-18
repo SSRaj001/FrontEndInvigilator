@@ -27,6 +27,13 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {GetAllRooms, GetSubjects} from '../firebase';
 import AddIcon from '@material-ui/icons/Add';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -69,11 +76,11 @@ return ['Select Date', 'Select Subject', 'Select Classes', 'Review'];
 function getStepContent(step) {
 switch (step) {
     case 0:
-    return 'Select the date on which exam is required to be scheduled';
+    return 'Select the date and Time on which exam is required to be scheduled';
     case 1:
     return '';
     case 2:
-    return 'Select Classes'
+    return '';
     case 3:
     return 'Review the Exam before confirmation';
     default:
@@ -82,12 +89,13 @@ switch (step) {
 }
 
 export default function NewExam() {
-  const [selectedDate, setSelectedDate] = React.useState();
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [selectSession, setSelectSession] = React.useState(1);
   const [selectExam, setSelectExam]  = React.useState(1);
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
+  const [selectedClasses, setSelectedClasses] = React.useState([]);
 
   let [subjectList,setSubjectList] = useState([]);
   let [classList, setClassList] = useState([]);
@@ -152,6 +160,10 @@ export default function NewExam() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  function fummy(){
+    console.log(`${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}-${selectSession}`);
+  }
   
   function getStep(step) {
     switch (step) {
@@ -183,6 +195,7 @@ export default function NewExam() {
                 value={selectSession}
                 onChange={handleChange}
               >
+                
                 <MenuItem value={'1'}>9:00-10:00</MenuItem>
                 <MenuItem value={'2'}>10:00-11:00</MenuItem>
                 <MenuItem value={'3'}>11:00-12:00</MenuItem>
@@ -204,20 +217,48 @@ export default function NewExam() {
                 value={selectExam}
                 onChange={handleChangeExam}
               >
-                <MenuItem value={'1'}>Algorithms</MenuItem>
-                <MenuItem value={'2'}>Operating Systems</MenuItem>
-                <MenuItem value={'3'}>Embedded Systems</MenuItem>
-                <MenuItem value={'4'}>DBMS</MenuItem>
-                <MenuItem value={'5'}>Compiler</MenuItem>
-                <MenuItem value={'6'}>Networks</MenuItem>
+                {subjectList.map((sub, index) =>
+                  <MenuItem key={index} value={sub}>{sub}</MenuItem>
+                )}
               </Select>
             </FormControl>
           </>
         );
         case 2:
-        return (<></>);
+        return (
+          <>
+            <Autocomplete
+              multiple
+              id="checkboxes-tags-demo"
+              options={classList}
+              onChange={(event, value) => setSelectedClasses(value)}
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option}
+                </React.Fragment>
+              )}
+              style={{ width: 500 }}
+              renderInput={(params) => (
+                <TextField {...params} variant="outlined"
+                  label="Select Class"
+                  placeholder="Class" />
+              )}
+            />
+          </>);
         case 3:
-        return "Review";
+        return (
+          <>
+            <br/>
+            <Typography> 
+              Entered details are : {`${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}-${selectSession}`} {selectExam} {selectedClasses}
+            </Typography>
+          </>);
         default:
         return 'Unknown step';
     }
@@ -276,7 +317,8 @@ export default function NewExam() {
             {activeStep === steps.length && (
                 <Paper square elevation={0} className={classes.resetContainer}>
                 <Typography>Confirm Again</Typography>
-                {console.log(selectedDate,selectSession, selectExam)}
+                {fummy()}
+                {console.log(selectedDate,selectSession, selectExam, selectedClasses)}
                 <Button onClick={handleClose} className={classes.button}>
                     Confirm
                 </Button>

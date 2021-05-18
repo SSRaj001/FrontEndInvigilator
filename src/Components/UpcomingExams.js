@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Box from '@material-ui/core/Box'
 import Title from './Title';
-import RequestChange from './RequestChange';
+import NewExam from './NewExam';
 import { UserContext } from "../providers/UserProvider";
 import {GetAllExamDetails, GetClassRelatedExams, GetRoomLocation, GetFreeTeacher} from '../firebase';
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -107,7 +107,7 @@ export default function UpcomingExams() {
       <Box flex={1}/>
       <div className={classes.extra}>
         <div className={classes.addExam}>
-            <RequestChange />
+            <NewExam />
         </div>
       </div>
       </React.Fragment>
