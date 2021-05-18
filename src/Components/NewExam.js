@@ -126,10 +126,10 @@ export default function NewExam() {
       for(let i=0;i<ret.classes.length;i++){
         let data = await ExtractEmails(ret.classes[i]);
         let teacherEmailData = await ExtractTeacherEmail(ret.val[2]);
-        let teacherEmail = teacherEmailData.data().email;
         emailList.push(...data.data().students);
-        emailList.push(teacherEmail);
       }
+      let teacherEmail = teacherEmailData.data().email;
+      emailList.push(teacherEmail);
       console.log(emailList);
     }
     else{
