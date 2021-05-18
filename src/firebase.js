@@ -165,6 +165,7 @@ export const AddExam = async(classList,date,subject) => {
     console.log(subjectCode);
     let teacherPromise = await GetTeacherTimetable(teacherRoom.val[0]);
     let timeTable = teacherPromise.data().timeTable;
+    let teacherName = teacherPromise.data().name;
     console.log(timeTable);
 
     //adding the data to exam
@@ -180,10 +181,10 @@ export const AddExam = async(classList,date,subject) => {
     UpdateTeacherDateSlot(teacherRoom.val[0],date)
     AddRommInfo(teacherRoom.val[1],date,autoID)
     AddExamDetailToUserCollection(teacherRoom.val[0],autoID);
-    return teacherRoom.type;
+    return {type :  teacherRoom.type, val: [ teacherName, teacherRoom.val[1] ]}
   }
   else{
-    return teacherRoom.type;
+    return {type : teacherRoom.type};
   }
 }
 

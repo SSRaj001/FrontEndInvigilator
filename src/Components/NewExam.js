@@ -118,13 +118,13 @@ export default function NewExam() {
   const AddDataToDb = async() => {
     let dateSlot = `${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}-${selectSession}`;
     console.log(selectExam);
-    let type = await AddExam(selectedClasses,dateSlot,selectExam);
-    console.log(type);
-    if(type === 3){
-      console.log("success");
+    let ret = await AddExam(selectedClasses,dateSlot,selectExam);
+    console.log(ret);
+    if(ret.type === 3){
+      console.log("success",ret.val);
     }
     else{
-      if(type === 1){
+      if(ret.type === 1){
         console.log("TeacherNotFound");
       }
       else{
