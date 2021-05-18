@@ -102,17 +102,20 @@ export const GetAllClasses = async() => {
   return classList;
 }
 
+//given subject get code
 export const GetSubjectCode = async(subject) => {
   console.log(subject)
   let subjectRef = db.collection("subjects").doc(subject);
   return subjectRef.get();
 }
 
+//teacher timetable
 export const GetTeacherTimetable = async(teacherID) => {
   let teacherRef = db.collection("teachers").doc(teacherID);
   return teacherRef.get();
 }
 
+//adding dateslot details to rooms collections
 export const AddRommInfo = async(roomNo,dateSlot,examID) => {
   db.collection("rooms").doc(roomNo).set({
       upcomingSlots : {
@@ -121,12 +124,15 @@ export const AddRommInfo = async(roomNo,dateSlot,examID) => {
     },{merge:true})
 }
 
+
+//adding date slot to teachers collection
 export const UpdateTeacherDateSlot = async(teacherID,date) => {
   db.collection("teachers").doc(teacherID).update({
     dateSlot : firebase.firestore.FieldValue.arrayUnion(date),
   })
 }
 
+//custom firestore auto-ID function
 export const firestoreAutoId = () => {
   const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
@@ -140,12 +146,14 @@ export const firestoreAutoId = () => {
   return autoId
 }
 
+//Adding the exam id to teacher in user collection
 export const AddExamDetailToUserCollection = (teacherID, examID) =>{
   db.collection("users").doc(teacherID).update({
     exams : firebase.firestore.FieldValue.arrayUnion(examID),
   })
 }
 
+//Adding the exam to appropriate collections
 export const AddExam = async(classList,date,subject) => {
   let autoID = firestoreAutoId();
   var examRef = db.collection("exams").doc(autoID);
