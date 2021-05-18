@@ -25,7 +25,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {GetAllRooms, GetSubjects} from '../firebase';
+import {GetAllClasses, GetSubjects, AddExam} from '../firebase';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -101,14 +101,10 @@ export default function NewExam() {
   let [classList, setClassList] = useState([]);
   useEffect(() => {
     const DisplayDetails = async () => {
-      let rooms = []
       let details = await GetSubjects()
-      let classDetails = await GetAllRooms();
-      for(let i=0;i<classDetails.length;i++){
-        rooms.push(classDetails[i].roomNo);
-      }
+      let classDetails = await GetAllClasses();
       subjectList.push(...details);
-      classList.push(...rooms);
+      classList.push(...classDetails);
       HandleList(subjectList);
       HandleClassList(classList);
     }
@@ -119,12 +115,32 @@ export default function NewExam() {
     
   // }
   
+  const AddDataToDb = async() => {
+    let dateSlot = `${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}-${selectSession}`;
+    console.log(selectExam);
+    let type = await AddExam(selectedClasses,dateSlot,selectExam);
+    console.log(type);
+    if(type === 3){
+      console.log("success");
+    }
+    else{
+      if(type === 1){
+        console.log("TeacherNotFound");
+      }
+      else{
+        console.log("RoomNotFound");
+      }
+    }
+    handleClose();
+  }
+
   const HandleList = (temp) => {
     setSubjectList(temp);
   }
 
   const HandleClassList = (temp) => {
     setClassList(temp);
+    console.log(classList);
   }
 
   const handleDateChange = (date) => {
@@ -319,7 +335,7 @@ export default function NewExam() {
                 <Typography>Confirm Again</Typography>
                 {fummy()}
                 {console.log(selectedDate,selectSession, selectExam, selectedClasses)}
-                <Button onClick={handleClose} className={classes.button}>
+                <Button onClick={AddDataToDb} className={classes.button}>
                     Confirm
                 </Button>
                 </Paper>

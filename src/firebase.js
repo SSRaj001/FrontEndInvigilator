@@ -19,7 +19,7 @@ export const GetExamDetails = (exam) => {
 export const GetAllExamDetails = async () => {
   let examDetails = [];
   (await db.collection("exams").get()).forEach((doc) => {
-    let details = doc.data()
+    let details = doc.data();
     details.id = doc.id;
     console.log(doc.data());
     examDetails.push(details)
@@ -68,13 +68,15 @@ export const GetTeachers = async () =>{
 }
 
 //Returns Teachers Name, timetable and id
-export const GetTeachersDetails = async () => {
+export const GetTeachersDetails = async (date) => {
   let teacherList = [];
   (await db.collection("teachers").get()).forEach((doc)=>{
     let details = doc.data();
-    details.tid = doc.id;
-    //console.log(details)
-    teacherList.push(details);
+    let dateArray = details.dateSlot
+    if(!dateArray.includes(date)){
+      details.tid = doc.id;
+      teacherList.push(details);
+    }
   });
   return teacherList;
 }
@@ -88,6 +90,93 @@ export const GetAllRooms = async () => {
     rooms.push(details);
   });
   return rooms;
+};
+
+//returns all classNames
+export const GetAllClasses = async() => {
+  let classList = [];
+  (await db.collection("classes").get()).forEach((doc)=>{
+    let details = doc.id;
+    classList.push(details);
+  });
+  return classList;
+}
+
+export const GetSubjectCode = async(subject) => {
+  console.log(subject)
+  let subjectRef = db.collection("subjects").doc(subject);
+  return subjectRef.get();
+}
+
+export const GetTeacherTimetable = async(teacherID) => {
+  let teacherRef = db.collection("teachers").doc(teacherID);
+  return teacherRef.get();
+}
+
+export const AddRommInfo = async(roomNo,dateSlot,examID) => {
+  db.collection("rooms").doc(roomNo).set({
+      upcomingSlots : {
+        [`${dateSlot}`] : examID,
+      }
+    },{merge:true})
+}
+
+export const UpdateTeacherDateSlot = async(teacherID,date) => {
+  db.collection("teachers").doc(teacherID).update({
+    dateSlot : firebase.firestore.FieldValue.arrayUnion(date),
+  })
+}
+
+export const firestoreAutoId = () => {
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+  let autoId = ''
+
+  for (let i = 0; i < 20; i++) {
+    autoId += CHARS.charAt(
+      Math.floor(Math.random() * CHARS.length)
+    )
+  }
+  return autoId
+}
+
+export const AddExamDetailToUserCollection = (teacherID, examID) =>{
+  db.collection("users").doc(teacherID).update({
+    exams : firebase.firestore.FieldValue.arrayUnion(examID),
+  })
+}
+
+export const AddExam = async(classList,date,subject) => {
+  let autoID = firestoreAutoId();
+  var examRef = db.collection("exams").doc(autoID);
+  let teacherRoom = await GetFreeTeacher(date);
+  if(teacherRoom.type === 3){
+    console.log(teacherRoom.val);
+    let sc = await GetSubjectCode(subject);
+    let subjectCode = sc.data().code;
+    console.log(subjectCode);
+    let teacherPromise = await GetTeacherTimetable(teacherRoom.val[0]);
+    let timeTable = teacherPromise.data().timeTable;
+    console.log(timeTable);
+
+    //adding the data to exam
+    examRef.set({
+      classes : classList,
+      dateSlot : date,
+      faculty : teacherRoom.val[0],
+      room : teacherRoom.val[1],
+      course : {code : subjectCode, name : subject}
+    });
+
+    //updating teachers table and room allocation
+    UpdateTeacherDateSlot(teacherRoom.val[0],date)
+    AddRommInfo(teacherRoom.val[1],date,autoID)
+    AddExamDetailToUserCollection(teacherRoom.val[0],autoID);
+    return teacherRoom.type;
+  }
+  else{
+    return teacherRoom.type;
+  }
 }
 
 //Given teacher ID returns teacher name
@@ -117,7 +206,7 @@ function produceRandom(min,max){
 export const GetFreeTeacher = async (dateSlot) => {
   let teachers = [];
   let slot = parseInt(dateSlot.charAt(dateSlot.length-1));
-  teachers = await GetTeachersDetails();
+  teachers = await GetTeachersDetails(dateSlot);
   let teachersAvailable = []
   for(let i=0;i<teachers.length;i++){
     if(teachers[i].timeTable[slot-1] === 0){
