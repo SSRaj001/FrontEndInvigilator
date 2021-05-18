@@ -169,23 +169,33 @@ export const AddExam = async(classList,date,subject) => {
     console.log(timeTable);
 
     //adding the data to exam
-    examRef.set({
-      classes : classList,
-      dateSlot : date,
-      faculty : teacherRoom.val[0],
-      room : teacherRoom.val[1],
-      course : {code : subjectCode, name : subject}
-    });
+    // examRef.set({
+    //   classes : classList,
+    //   dateSlot : date,
+    //   faculty : teacherRoom.val[0],
+    //   room : teacherRoom.val[1],
+    //   course : {code : subjectCode, name : subject}
+    // });
 
-    //updating teachers table and room allocation
-    UpdateTeacherDateSlot(teacherRoom.val[0],date)
-    AddRommInfo(teacherRoom.val[1],date,autoID)
-    AddExamDetailToUserCollection(teacherRoom.val[0],autoID);
-    return {type :  teacherRoom.type, val: [ teacherName, teacherRoom.val[1] ]}
+    // //updating teachers table and room allocation
+    // UpdateTeacherDateSlot(teacherRoom.val[0],date)
+    // AddRommInfo(teacherRoom.val[1],date,autoID)
+    // AddExamDetailToUserCollection(teacherRoom.val[0],autoID);
+    return {type :  teacherRoom.type, val: [ teacherName, teacherRoom.val[1], teacherRoom.val[0] ], classes: classList}
   }
   else{
     return {type : teacherRoom.type};
   }
+}
+
+export const ExtractTeacherEmail = async(teacherID) => {
+  let userRef = db.collection("users").doc(teacherID);
+  return userRef.get();
+}
+
+export const ExtractEmails = async(section) =>{
+  let classRef = db.collection("classes").doc(section);
+  return classRef.get();
 }
 
 //Given teacher ID returns teacher name

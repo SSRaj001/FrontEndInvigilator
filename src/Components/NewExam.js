@@ -25,7 +25,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {GetAllClasses, GetSubjects, AddExam} from '../firebase';
+import {GetAllClasses, GetSubjects, AddExam, ExtractEmails, ExtractTeacherEmail} from '../firebase';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -121,7 +121,16 @@ export default function NewExam() {
     let ret = await AddExam(selectedClasses,dateSlot,selectExam);
     console.log(ret);
     if(ret.type === 3){
-      console.log("success",ret.val);
+      console.log("success",ret.val); //ret.val = [teachername,roomAssigned,teacherID];
+      let emailList = []
+      for(let i=0;i<ret.classes.length;i++){
+        let data = await ExtractEmails(ret.classes[i]);
+        let teacherEmailData = await ExtractTeacherEmail(ret.val[2]);
+        let teacherEmail = teacherEmailData.data().email;
+        emailList.push(...data.data().students);
+        emailList.push(teacherEmail);
+      }
+      console.log(emailList);
     }
     else{
       if(ret.type === 1){
@@ -175,6 +184,9 @@ export default function NewExam() {
 
   const handleClose = () => {
     setOpen(false);
+    setSelectedDate(new Date());
+    setSelectSession(1);
+    setSelectExam(1);
   };
 
   function fummy(){
