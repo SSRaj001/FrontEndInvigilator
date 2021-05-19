@@ -32,6 +32,9 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import firebase from "firebase/app";
+import 'firebase/firestore';
+import 'firebase/functions';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -114,8 +117,34 @@ export default function NewExam() {
   // const sendValue = () => {
     
   // }
+
+  const sendConfirmationEmail = (emailList, dates, sessions, rooms, roomLoc, faculty, classes, sub) => {
+    let addMessage = firebase.functions().httpsCallable('sendExamBooked');
+    addMessage({ 
+      toEmail : emailList, // array of string or single string
+      subject : sub, // string
+      date : dates, // string
+      time : sessions, //string
+      room : rooms, // string
+      Location: roomLoc, //string
+      fac: faculty, //string
+      classes: classes //string
+     })
+    .then((result) => {
+      console.log("Done Email")
+      // Read result of the Cloud Function.
+    });
+  };
   
   const AddDataToDb = async() => {
+    let sessionMapping = {
+      '1' : "9:00 - 10:00",
+      '2' : "10:00 - 11:00",
+      '3' : "11:00 - 12:00",
+      '4' : "12:00 - 13:00",
+      '5' : "14:00 - 15:00",
+      '6' : "15:00 - 16:00"
+    }
     let dateSlot = `${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}-${selectSession}`;
     console.log(selectExam);
     let ret = await AddExam(selectedClasses,dateSlot,selectExam);
@@ -133,10 +162,12 @@ export default function NewExam() {
       for(let i=0;i<selectedClasses.length;i++){
         selectedClassString = selectedClasses[i]+" ";
       }
+      let date = `${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}`
       let teacherEmailData = await ExtractTeacherEmail(ret.val[2]);
       let teacherEmail = teacherEmailData.data().email;
       emailList.push(teacherEmail);
       console.log(emailList,selectedClassString);
+      sendConfirmationEmail(emailList, date, sessionMapping[selectSession], ret.val[1], roomLoc, ret.val[0],selectedClassString, selectExam);
     }
     else{
       if(ret.type === 1){
