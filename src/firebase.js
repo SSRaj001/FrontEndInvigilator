@@ -56,6 +56,32 @@ export const GetClassRelatedExams = async (section) => {
   return examListStudent;
 }
 
+//Given teacherID get teacherMail
+export const ExtractTeacherEmail = async(teacherID) => {
+  let userRef = db.collection("users").doc(teacherID);
+  return userRef.get();
+}
+
+//return emails
+export const ExtractEmails = async(section) =>{
+  let classRef = db.collection("classes").doc(section);
+  return classRef.get();
+}
+
+//Given teacher ID returns teacher name
+export const GetTeacherName = async(teacherID) => {
+  let teacherRef = db.collection("users").doc(teacherID);
+  return teacherRef.get();
+}
+
+//Returns true if room if the room is available at a particular dateSlot
+export const CheckRoomAvailability = async(roomNo,dateSlot) => {
+  let docRef = await db.collection("rooms").doc(roomNo).get();
+  let slotmap = (docRef.data().upcomingSlots);
+  let slots = Object.keys(slotmap);
+  return (slots.includes(dateSlot));
+}
+
 //Returns list of all teachers from users collection
 export const GetTeachers = async () =>{
   let teacherList = [];
@@ -120,7 +146,7 @@ export const GetSubjectCode = async(subject) => {
 }
 
 //teacher timetable
-export const GetTeacherTimetable = async(teacherID) => {
+export const GetTeacherInfo = async(teacherID) => {
   let teacherRef = db.collection("teachers").doc(teacherID);
   return teacherRef.get();
 }
@@ -162,6 +188,32 @@ export const AddExamDetailToUserCollection = (teacherID, examID) =>{
   })
 }
 
+export const CheckRequests = async(teacherID, requestedExamSlot) => {
+  let requestList = [];
+  (await db.collection("requests").where("to","==",teacherID).get()).forEach((doc) => {
+    let details = doc.data();
+    if(details.dateSlot === requestedExamSlot){
+      requestList.push(details.from);
+    }
+  });
+  return requestList;
+}
+
+export const RequestChange = async(fromTeacherID, requestedExamSlot, requestedTeacherID, examID) => {
+  let autoID = firestoreAutoId();
+  var requestRef = db.collection("requests").doc(autoID);
+  let freeDateSlotTeacher = await GetTeacherInfo(requestedTeacherID);
+  if(!freeDateSlotTeacher.data().dateSlot.includes(requestedExamSlot)){
+    requestRef.set({
+      from : fromTeacherID,
+      to : requestedTeacherID,
+      dateSlot : requestedExamSlot,
+    });
+    return true;
+  }
+  return false;
+}
+
 //Adding the exam to appropriate collections
 export const AddExam = async(classList,date,subject) => {
   let autoID = firestoreAutoId();
@@ -172,7 +224,7 @@ export const AddExam = async(classList,date,subject) => {
     let sc = await GetSubjectCode(subject);
     let subjectCode = sc.data().code;
     console.log(subjectCode);
-    let teacherPromise = await GetTeacherTimetable(teacherRoom.val[0]);
+    let teacherPromise = await GetTeacherInfo(teacherRoom.val[0]);
     let timeTable = teacherPromise.data().timeTable;
     let teacherName = teacherPromise.data().name;
     console.log(timeTable);
@@ -195,30 +247,6 @@ export const AddExam = async(classList,date,subject) => {
   else{
     return {type : teacherRoom.type};
   }
-}
-
-export const ExtractTeacherEmail = async(teacherID) => {
-  let userRef = db.collection("users").doc(teacherID);
-  return userRef.get();
-}
-
-export const ExtractEmails = async(section) =>{
-  let classRef = db.collection("classes").doc(section);
-  return classRef.get();
-}
-
-//Given teacher ID returns teacher name
-export const GetTeacherName = async(teacherID) => {
-  let teacherRef = db.collection("users").doc(teacherID);
-  return teacherRef.get();
-}
-
-//Returns true if room if the room is available at a particular dateSlot
-export const CheckRoomAvailability = async(roomNo,dateSlot) => {
-  let docRef = await db.collection("rooms").doc(roomNo).get();
-  let slotmap = (docRef.data().upcomingSlots);
-  let slots = Object.keys(slotmap);
-  return (slots.includes(dateSlot));
 }
 
 ////////////////////////***Algorithm***/////////////////////////////////

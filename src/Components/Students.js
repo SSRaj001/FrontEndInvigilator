@@ -1,4 +1,4 @@
-import React, { useContext,useState,useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,7 +8,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Box from '@material-ui/core/Box'
 import Title from './Title';
 import NewExam from './NewExam';
-import { UserContext } from "../providers/UserProvider";
 import { createMuiTheme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -35,6 +34,10 @@ export default function Students() {
     const [studentList, setStudentList] = useState([]);
 
     useEffect(() => {
+      const HandleList = (temp) => {
+        setStudentList(temp);
+        console.log(studentList);
+      }
         const DisplayDetails = async () => {
             let students = await GetStudents();
             studentList.push(...students);
@@ -42,11 +45,6 @@ export default function Students() {
         DisplayDetails();
         HandleList(studentList);
     },[studentList]);
-
-    const HandleList = (temp) => {
-        setStudentList(temp);
-        console.log(studentList);
-    }
 
     return (
         <React.Fragment>
