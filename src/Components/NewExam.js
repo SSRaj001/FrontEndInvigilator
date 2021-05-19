@@ -188,10 +188,6 @@ export default function NewExam() {
     setSelectSession(1);
     setSelectExam(1);
   };
-
-  function fummy(){
-    console.log(`${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}-${selectSession}`);
-  }
   
   function getStep(step) {
     switch (step) {
@@ -345,8 +341,6 @@ export default function NewExam() {
             {activeStep === steps.length && (
                 <Paper square elevation={0} className={classes.resetContainer}>
                 <Typography>Confirm Again</Typography>
-                {fummy()}
-                {console.log(selectedDate,selectSession, selectExam, selectedClasses)}
                 <Button onClick={AddDataToDb} className={classes.button}>
                     Confirm
                 </Button>
