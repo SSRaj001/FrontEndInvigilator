@@ -25,7 +25,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {GetAllClasses, GetSubjects, AddExam, ExtractEmails, ExtractTeacherEmail} from '../firebase';
+import {GetAllClasses, GetSubjects, AddExam, ExtractEmails, ExtractTeacherEmail, GetRoomLocation} from '../firebase';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -127,10 +127,16 @@ export default function NewExam() {
         let data = await ExtractEmails(ret.classes[i]);
         emailList.push(...data.data().students);
       }
+      let roomLocPromise = await GetRoomLocation(ret.val[1]);
+      let roomLoc = roomLocPromise.data().location;
+      let selectedClassString = "";
+      for(let i=0;i<selectedClasses.length;i++){
+        selectedClassString = selectedClasses[i]+" ";
+      }
       let teacherEmailData = await ExtractTeacherEmail(ret.val[2]);
       let teacherEmail = teacherEmailData.data().email;
       emailList.push(teacherEmail);
-      console.log(emailList);
+      console.log(emailList,selectedClassString);
     }
     else{
       if(ret.type === 1){
