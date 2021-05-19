@@ -49,9 +49,9 @@ export const GetClassRelatedExams = async (section) => {
   let examListStudent = [];
   (await db.collection("exams").where("classes","array-contains",section).get()).forEach((doc)=>{
       let details = doc.data()
-      console.log(details)
+      console.log(details);
       details.id = doc.id;
-      examListStudent.push(details)
+      examListStudent.push(details);
     });
   return examListStudent;
 }
@@ -60,11 +60,21 @@ export const GetClassRelatedExams = async (section) => {
 export const GetTeachers = async () =>{
   let teacherList = [];
   (await db.collection("users").where("usertype","==",'T').get()).forEach((doc)=>{
-      let details = doc.data()
-      console.log(details)
-      teacherList.push(details)
+      let details = doc.data();
+      console.log(details);
+      teacherList.push(details);
     });
   return teacherList;
+}
+
+export const GetStudents = async () =>{
+  let studentList = [];
+  (await db.collection("users").where("usertype","==",'S').get()).forEach((doc)=>{
+      let details = doc.data();
+      details.id = doc.id;
+      studentList.push(details);
+    });
+  return studentList;
 }
 
 //Returns Teachers Name, timetable and id
@@ -123,7 +133,6 @@ export const AddRommInfo = async(roomNo,dateSlot,examID) => {
       }
     },{merge:true})
 }
-
 
 //adding date slot to teachers collection
 export const UpdateTeacherDateSlot = async(teacherID,date) => {

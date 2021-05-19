@@ -36,12 +36,14 @@ export const mainListItems = (
       </ListItem>
     </Link>
 
-    <ListItem button>
-      <ListItemIcon>
-        <PersonIcon />
-      </ListItemIcon>
-      <ListItemText primary="Profile" />
-    </ListItem>
+    <Link to="/students" style={{ textDecoration: 'none', color: "black" }}>
+      <ListItem button>
+        <ListItemIcon>
+          <PersonIcon />
+        </ListItemIcon>
+        <ListItemText primary="Profile" />
+      </ListItem>
+    </Link>
   </div>
 );
 

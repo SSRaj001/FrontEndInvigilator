@@ -44,12 +44,21 @@ export default function UpcomingTeacher() {
       for(let i=0;i<exams.length;i++){
         let details = await GetExamDetails(exams[i])
         let data = details.data()
-        let room = data.room
-        let loc = await GetRoomLocation(room)
-        console.log(loc.data().location)
-        data.location = loc.data().location
-        data.id = exams[i]
-        examsList.push(data)
+        let todayDate = new Date();
+        let dateSlot = data.dateSlot;
+        let [d,m,y] = dateSlot.split("/");// 2012-2
+        y = y.split("-")[0]
+        console.log([d,m,y]);
+        let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+        console.log(examDate)
+        if(examDate >= todayDate){
+          let room = data.room
+          let loc = await GetRoomLocation(room)
+          console.log(loc.data().location)
+          data.location = loc.data().location
+          data.id = exams[i]
+          examsList.push(data)
+        }
       }
       HandleList(examsList)
     }

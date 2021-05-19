@@ -80,8 +80,8 @@ export default function RequestChange() {
       console.log(dateList)
     }
     const HandleTeacherList = (temp) => {
-      setTeacherList(temp)
-      console.log(teacherList)
+      setTeacherList(temp);
+      console.log(teacherList);
     }
     const DisplayDetails = async () => {
       for(let i=0;i<exams.length;i++){
@@ -174,12 +174,12 @@ export default function RequestChange() {
                 ))}
             </Stepper>
             {activeStep === steps.length && (
-                <Paper square elevation={0} className={classes.resetContainer}>
-                <Typography>Confirm Again</Typography>
-                <Button onClick={handleClose} className={classes.button}>
-                    Confirm
-                </Button>
-                </Paper>
+              <Paper square elevation={0} className={classes.resetContainer}>
+              <Typography>Confirm Again</Typography>
+              <Button onClick={handleClose} className={classes.button}>
+                  Confirm
+              </Button>
+              </Paper>
             )}
         </div>
       </Dialog>
