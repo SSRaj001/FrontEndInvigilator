@@ -25,8 +25,18 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import {GetSubjects} from '../firebase';
+import {GetAllClasses, GetSubjects, AddExam, ExtractEmails, ExtractTeacherEmail, GetRoomLocation} from '../firebase';
 import AddIcon from '@material-ui/icons/Add';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import firebase from "firebase/app";
+import 'firebase/firestore';
+import 'firebase/functions';
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -69,11 +79,11 @@ return ['Select Date', 'Select Subject', 'Select Classes', 'Review'];
 function getStepContent(step) {
 switch (step) {
     case 0:
-    return 'Select the date on which exam is required to be scheduled';
+    return 'Select the date and Time on which exam is required to be scheduled';
     case 1:
     return '';
     case 2:
-    return 'Select Classes'
+    return '';
     case 3:
     return 'Review the Exam before confirmation';
     default:
@@ -82,25 +92,101 @@ switch (step) {
 }
 
 export default function NewExam() {
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2020-08-18T21:11:54'));
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [selectSession, setSelectSession] = React.useState(1);
+  const [selectExam, setSelectExam]  = React.useState(1);
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
+  const [selectedClasses, setSelectedClasses] = React.useState([]);
 
   let [subjectList,setSubjectList] = useState([]);
+  let [classList, setClassList] = useState([]);
   useEffect(() => {
     const DisplayDetails = async () => {
       let details = await GetSubjects()
-      subjectList.push(...details)
-      HandleList(subjectList)
+      let classDetails = await GetAllClasses();
+      subjectList.push(...details);
+      classList.push(...classDetails);
+      HandleList(subjectList);
+      HandleClassList(classList);
     }
     DisplayDetails();
-  },[subjectList]);
+  },[subjectList, classList]);
+
+  // const sendValue = () => {
+    
+  // }
+
+  const sendConfirmationEmail = (emailList, dates, sessions, rooms, roomLoc, faculty, classes, sub) => {
+    let addMessage = firebase.functions().httpsCallable('sendExamBooked');
+    addMessage({ 
+      toEmail : emailList, // array of string or single string
+      subject : sub, // string
+      date : dates, // string
+      time : sessions, //string
+      room : rooms, // string
+      Location: roomLoc, //string
+      fac: faculty, //string
+      classes: classes //string
+     })
+    .then((result) => {
+      console.log("Done Email")
+      // Read result of the Cloud Function.
+    });
+  };
   
+  const AddDataToDb = async() => {
+    let sessionMapping = {
+      '1' : "9:00 - 10:00",
+      '2' : "10:00 - 11:00",
+      '3' : "11:00 - 12:00",
+      '4' : "12:00 - 13:00",
+      '5' : "14:00 - 15:00",
+      '6' : "15:00 - 16:00"
+    }
+    let dateSlot = `${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}-${selectSession}`;
+    console.log(selectExam);
+    let ret = await AddExam(selectedClasses,dateSlot,selectExam);
+    console.log(ret);
+    if(ret.type === 3){
+      console.log("success",ret.val); //ret.val = [teachername,roomAssigned,teacherID];
+      let emailList = []
+      for(let i=0;i<ret.classes.length;i++){
+        let data = await ExtractEmails(ret.classes[i]);
+        emailList.push(...data.data().students);
+      }
+      let roomLocPromise = await GetRoomLocation(ret.val[1]);
+      let roomLoc = roomLocPromise.data().location;
+      let selectedClassString = "";
+      for(let i=0;i<selectedClasses.length;i++){
+        selectedClassString = selectedClasses[i]+" ";
+      }
+      let date = `${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}`
+      let teacherEmailData = await ExtractTeacherEmail(ret.val[2]);
+      let teacherEmail = teacherEmailData.data().email;
+      emailList.push(teacherEmail);
+      console.log(emailList,selectedClassString);
+      sendConfirmationEmail(emailList, date, sessionMapping[selectSession], ret.val[1], roomLoc, ret.val[0],selectedClassString, selectExam);
+    }
+    else{
+      if(ret.type === 1){
+        console.log("TeacherNotFound");
+      }
+      else{
+        console.log("RoomNotFound");
+      }
+    }
+    handleClose();
+  }
+
   const HandleList = (temp) => {
-    setSubjectList(temp)
-    console.log(subjectList)
+    setSubjectList(temp);
+  }
+
+  const HandleClassList = (temp) => {
+    setClassList(temp);
+    console.log(classList);
   }
 
   const handleDateChange = (date) => {
@@ -129,8 +215,15 @@ export default function NewExam() {
     setSelectSession(event.target.value);
   };
 
+  const handleChangeExam = (event) => {
+    setSelectExam(event.target.value);
+  };
+
   const handleClose = () => {
     setOpen(false);
+    setSelectedDate(new Date());
+    setSelectSession(1);
+    setSelectExam(1);
   };
   
   function getStep(step) {
@@ -163,12 +256,13 @@ export default function NewExam() {
                 value={selectSession}
                 onChange={handleChange}
               >
-                <MenuItem value={1}>9:00-10:00</MenuItem>
-                <MenuItem value={2}>10:00-11:00</MenuItem>
-                <MenuItem value={3}>11:00-12:00</MenuItem>
-                <MenuItem value={4}>12:00-13:00</MenuItem>
-                <MenuItem value={5}>14:00-15:00</MenuItem>
-                <MenuItem value={6}>15:00-16:00</MenuItem>
+                
+                <MenuItem value={'1'}>9:00-10:00</MenuItem>
+                <MenuItem value={'2'}>10:00-11:00</MenuItem>
+                <MenuItem value={'3'}>11:00-12:00</MenuItem>
+                <MenuItem value={'4'}>12:00-13:00</MenuItem>
+                <MenuItem value={'5'}>14:00-15:00</MenuItem>
+                <MenuItem value={'6'}>15:00-16:00</MenuItem>
               </Select>
             </FormControl>
           </>
@@ -181,23 +275,51 @@ export default function NewExam() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={selectSession}
-                onChange={handleChange}
+                value={selectExam}
+                onChange={handleChangeExam}
               >
-                <MenuItem value={1}>Algorithms</MenuItem>
-                <MenuItem value={2}>Operating Systems</MenuItem>
-                <MenuItem value={3}>Embedded Systems</MenuItem>
-                <MenuItem value={4}>DBMS</MenuItem>
-                <MenuItem value={5}>Compiler</MenuItem>
-                <MenuItem value={6}>Networks</MenuItem>
+                {subjectList.map((sub, index) =>
+                  <MenuItem key={index} value={sub}>{sub}</MenuItem>
+                )}
               </Select>
             </FormControl>
           </>
         );
         case 2:
-        return (<></>);
+        return (
+          <>
+            <Autocomplete
+              multiple
+              id="checkboxes-tags-demo"
+              options={classList}
+              onChange={(event, value) => setSelectedClasses(value)}
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option}
+                </React.Fragment>
+              )}
+              style={{ width: 500 }}
+              renderInput={(params) => (
+                <TextField {...params} variant="outlined"
+                  label="Select Class"
+                  placeholder="Class" />
+              )}
+            />
+          </>);
         case 3:
-        return "Review";
+        return (
+          <>
+            <br/>
+            <Typography> 
+              Entered details are : {`${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}-${selectSession}`} {selectExam} {selectedClasses}
+            </Typography>
+          </>);
         default:
         return 'Unknown step';
     }
@@ -256,7 +378,7 @@ export default function NewExam() {
             {activeStep === steps.length && (
                 <Paper square elevation={0} className={classes.resetContainer}>
                 <Typography>Confirm Again</Typography>
-                <Button onClick={handleClose} className={classes.button}>
+                <Button onClick={AddDataToDb} className={classes.button}>
                     Confirm
                 </Button>
                 </Paper>
