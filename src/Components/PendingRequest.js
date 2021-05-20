@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,7 +11,8 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {Link} from '@reach/router';
-import {GetStudents} from '../firebase';
+import {CheckRequests, GetTeacherInfo, GetExamDetails} from '../firebase';
+import { UserContext } from "../providers/UserProvider";
 
 const theme = createMuiTheme({
   palette: {
@@ -29,27 +30,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function PendingRequest() {
+  const userDetails = useContext(UserContext);
+  let {uid} = userDetails;
+
+  const [teacherName, setTeacherName] = useState([]);
   const classes = useStyles(theme);
-  const [studentList, setStudentList] = useState([]);
+  const [requestList, setRequestList] = useState([]);
+  const [examName, setExamName] = useState([]);
 
   useEffect(() => {
-    const HandleList = (temp) => {
-      setStudentList(temp);
-      console.log(studentList);
+    const HandleList = (temp, temp1, temp2) => {
+      setRequestList(temp);
+      setTeacherName(temp1);
+      setExamName(temp2);
+      console.log(requestList);
+      console.log(teacherName);
+      console.log(examName);
     }
-      const DisplayDetails = async () => {
-        let students = await GetStudents();
-        studentList.push(...students);
+    const DisplayDetails = async () => {
+      //console.log(details);
+      let requests = await CheckRequests(uid);
+      requestList.push(...requests);
+      for(let i=0;i<requestList.length;i++){
+        let details = await GetTeacherInfo(requestList[i].from);
+        let examDetails = await GetExamDetails(requestList[i].exam);
+        examName.push(examDetails.data().course['name']);
+        teacherName.push(details.data().name);
       }
-      DisplayDetails();
-      HandleList(studentList);
-  },[studentList]);
+      HandleList(requestList, teacherName, examName);
+    }
+    DisplayDetails();
+  },[requestList,uid,teacherName,examName]);
 
 return (
     <React.Fragment>
       <div>       
-      <Title>All Students</Title> 
-      <Link to = "/students" style={{ textDecoration: 'none', color: "white" }}>
+      <Title>Requests</Title> 
+      <Link to = "/pendingRequest" style={{ textDecoration: 'none', color: "white" }}>
           <IconButton><RefreshIcon/></IconButton>
       </Link>
       </div>
@@ -57,16 +74,18 @@ return (
       <Table size="small">
           <TableHead>
           <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell>Section</TableCell>
+          <TableCell><b>Request From</b></TableCell>
+          <TableCell><b>Date-Slot</b></TableCell>
+          <TableCell><b>Exam</b></TableCell>
           </TableRow>
           </TableHead>
           <TableBody>
           {/* {console.log(examsList[0].dateSlot)} */}
-          {(studentList).map((studentDetail) => (
-              <TableRow key={studentDetail.id}>
-              <TableCell>{studentDetail.displayName}</TableCell>
-              <TableCell>{studentDetail.section}</TableCell>
+          {(requestList).map((requestDetail, index) => (
+              <TableRow key={requestDetail.requestID}>
+              <TableCell>{teacherName[index]}</TableCell>
+              <TableCell>{requestDetail.dateSlot}</TableCell>
+              <TableCell>{examName[index]}</TableCell>
               </TableRow>
           ))}
           </TableBody>

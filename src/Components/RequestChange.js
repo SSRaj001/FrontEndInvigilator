@@ -18,7 +18,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import {GetExamDetails, GetTeachersDetails} from '../firebase';
+import {GetExamDetails, GetTeachersDetails, RequestChangeExam} from '../firebase';
 import { UserContext } from "../providers/UserProvider";
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -90,6 +90,16 @@ export default function RequestChange() {
     console.log(uid) // From ID
     console.log(dateList[dateSlot]) // dateslot
     console.log(examID[dateSlot]) //examID
+    let ret = await RequestChangeExam(uid, dateList[dateSlot], teacherID[faculty], examID[dateSlot]);
+    if(ret.type === 0){
+      console.log("Requested teacher is free");
+    }
+    else if(ret.type === 1){
+      console.log("No free teacher found");
+    }
+    else if(ret.type === 2){
+      console.log("requested teacher not free, random teacher assigned", ret.val)
+    }
     handleClose()
   }
 
@@ -125,7 +135,7 @@ export default function RequestChange() {
       HandleTeacherList(teacherList, teacherID);
     }
     DisplayDetails();
-  },[dateList, teacherList]);
+  },[dateList, teacherList, teacherID]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);

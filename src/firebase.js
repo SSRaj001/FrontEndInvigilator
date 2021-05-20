@@ -203,13 +203,14 @@ export const CheckRequests = async(teacherID) => {
       requestList.push(details);
     }
   });
+  console.log(requestList);
   return requestList;
 }
 
-export const RequestChange = async(fromTeacherID, requestedExamSlot, requestedTeacherID, examID) => {
+export const RequestChangeExam = async(fromTeacherID, requestedExamSlot, requestedTeacherID, examID) => {
   let freeDateSlotTeacher = await GetTeacherInfo(requestedTeacherID);
+  let autoID = firestoreAutoId();
   if(!freeDateSlotTeacher.data().dateSlot.includes(requestedExamSlot)){
-    let autoID = firestoreAutoId();
     var requestRef = db.collection("requests").doc(autoID);
     requestRef.set({
       from : fromTeacherID,
@@ -217,7 +218,7 @@ export const RequestChange = async(fromTeacherID, requestedExamSlot, requestedTe
       dateSlot : requestedExamSlot,
       exam : examID
     });
-    return true;
+    return {type : 0};
   }
   else{
     let teachers = [];
@@ -233,15 +234,36 @@ export const RequestChange = async(fromTeacherID, requestedExamSlot, requestedTe
       return {type:1};
     }
     else{
+      var requestRefe = db.collection("requests").doc(autoID);
+      let randTeacherID = teachersAvailable[produceRandom(0,teachersAvailable.length-1)];
+      requestRefe.set({
+        from : fromTeacherID,
+        to : randTeacherID,
+        dateSlot : requestedExamSlot,
+        exam : examID
+      });
       return {
-        type:3, val:[ teachersAvailable[produceRandom(0,teachersAvailable.length-1)]]
+        type:2, val: randTeacherID
       }
     }
   }
 }
 
+export const GetRequestDetails = async(requestID) => {
+  let reqRef = db.collection("requests").doc(requestID);
+  return reqRef.get();
+}
+
 export const DeleteAcceptedRequest = async(requestID) => {
-  db.collection.apply("requests").doc(requestID).delete();
+  let reqPromise = await GetRequestDetails(requestID);
+  let reqDetails = reqPromise.data();
+  db.collection("requestsHistory").doc(requestID).set({
+    to : reqDetails.to,
+    from : reqDetails.from,
+    dateSlot : reqDetails.dateSlot,
+    exam : reqDetails.exam,
+  })
+  db.collection("requests").doc(requestID).delete();
 }
 
 export const ChangeFacultyForExam = async(examID, teacherToID) => {
@@ -273,12 +295,14 @@ export const UpdateInTeachersCollections = async(dateSlot, teacherTo, teacherFro
   })
 }
 
-export const AcceptOrDenyRequest = async(request, teacherFrom, teacherTo, examSlot, examID, requestID) => {
+export const AcceptOrDenyRequest = async(request, requestID) => {
   if(request === 1){
+    let details = await GetRequestDetails(requestID);
+    console.log(details);
     DeleteAcceptedRequest(requestID);
-    ChangeFacultyForExam(examID, teacherTo);
-    RemoveAndAddExamToFacultyUsers(examID, teacherTo, teacherFrom);
-    UpdateInTeachersCollections(examSlot, teacherTo, teacherFrom);
+    ChangeFacultyForExam(details.data().exam, details.data().to);
+    RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);
+    UpdateInTeachersCollections(details.data().dateSlot, details.data().to,  details.data().from);
     return {type:1,val:"Accepted"}
   }
   return {type:2,val:"denied"}
@@ -302,18 +326,18 @@ export const AddExam = async(classList,date,subject) => {
     console.log(timeTable);
 
     //adding the data to exam
-    // examRef.set({
-    //   classes : classList,
-    //   dateSlot : date,
-    //   faculty : teacherRoom.val[0],
-    //   room : teacherRoom.val[1],
-    //   course : {code : subjectCode, name : subject}
-    // });
+    examRef.set({
+      classes : classList,
+      dateSlot : date,
+      faculty : teacherRoom.val[0],
+      room : teacherRoom.val[1],
+      course : {code : subjectCode, name : subject}
+    });
 
-    // //updating teachers table and room allocation
-    // UpdateTeacherDateSlot(teacherRoom.val[0],date)
-    // AddRommInfo(teacherRoom.val[1],date,autoID)
-    // AddExamDetailToUserCollection(teacherRoom.val[0],autoID);
+    //updating teachers table and room allocation
+    UpdateTeacherDateSlot(teacherRoom.val[0],date)
+    AddRommInfo(teacherRoom.val[1],date,autoID)
+    AddExamDetailToUserCollection(teacherRoom.val[0],autoID);
     return {type :  teacherRoom.type, val: [ teacherName, teacherRoom.val[1], teacherRoom.val[0] ], classes: classList}
   }
   else{
