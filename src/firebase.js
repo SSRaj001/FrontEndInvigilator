@@ -268,7 +268,7 @@ export const DeleteAcceptedRequest = async(requestID) => {
 
 export const ChangeFacultyForExam = async(examID, teacherToID) => {
   let examRef = db.collection("exams").doc(examID);
-  examRef.set({
+  examRef.update({
     faculty : teacherToID,
   })
 }
@@ -280,7 +280,7 @@ export const RemoveAndAddExamToFacultyUsers = async(examID, teacherTo, teacherFr
   })
   userRef = db.collection("users").doc(teacherTo);
   userRef.update({
-    exams : firebase.firestore.FieldValue.arrayUnion(examID),
+    dateSlot : firebase.firestore.FieldValue.arrayUnion(examID),
   })
 }
 
