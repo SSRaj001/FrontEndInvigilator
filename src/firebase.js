@@ -4,6 +4,7 @@ import "firebase/storage";
 import "firebase/firestore";
 
 const provider = new firebase.auth.GoogleAuthProvider();
+let todayDate = new Date();
 
 export const signInWithGoogle = () => {
     auth.signInWithPopup(provider);
@@ -188,31 +189,84 @@ export const AddExamDetailToUserCollection = (teacherID, examID) =>{
   })
 }
 
-export const CheckRequests = async(teacherID, requestedExamSlot) => {
+/////////////////////****************Requests ****////////////////////////////////////////////
+export const CheckRequests = async(teacherID) => {
   let requestList = [];
   (await db.collection("requests").where("to","==",teacherID).get()).forEach((doc) => {
     let details = doc.data();
-    if(details.dateSlot === requestedExamSlot){
-      requestList.push(details.from);
+    details.requestID = doc.id;
+    let dateSlot = details.dateSlot;
+    let [d,m,y] = dateSlot.split("/");// 2012-2
+    let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+    y = y.split("-")[0]
+    if(examDate >= todayDate){
+      requestList.push(details);
     }
   });
   return requestList;
 }
 
 export const RequestChange = async(fromTeacherID, requestedExamSlot, requestedTeacherID, examID) => {
-  let autoID = firestoreAutoId();
-  var requestRef = db.collection("requests").doc(autoID);
   let freeDateSlotTeacher = await GetTeacherInfo(requestedTeacherID);
   if(!freeDateSlotTeacher.data().dateSlot.includes(requestedExamSlot)){
+    let autoID = firestoreAutoId();
+    var requestRef = db.collection("requests").doc(autoID);
     requestRef.set({
       from : fromTeacherID,
       to : requestedTeacherID,
       dateSlot : requestedExamSlot,
+      exam : examID
     });
     return true;
   }
   return false;
 }
+
+export const DeleteAcceptedRequest = async(requestID) => {
+  db.collection.apply("requests").doc(requestID).delete();
+}
+
+export const ChangeFacultyForExam = async(examID, teacherToID) => {
+  let examRef = db.collection("exams").doc(examID);
+  examRef.set({
+    faculty : teacherToID,
+  })
+}
+
+export const RemoveAndAddExamToFacultyUsers = async(examID, teacherTo, teacherFrom) => {
+  let userRef = db.collection("users").doc(teacherFrom);
+  userRef.update({
+    exams : firebase.firestore.FieldValue.arrayRemove(examID),
+  })
+  userRef = db.collection("users").doc(teacherTo);
+  userRef.update({
+    exams : firebase.firestore.FieldValue.arrayUnion(examID),
+  })
+}
+
+export const UpdateInTeachersCollections = async(dateSlot, teacherTo, teacherFrom) => {
+  let userRef = db.collection("teachers").doc(teacherFrom);
+  userRef.update({
+    dateSlot : firebase.firestore.FieldValue.arrayRemove(dateSlot),
+  })
+  userRef = db.collection("teachers").doc(teacherTo);
+  userRef.update({
+    exams : firebase.firestore.FieldValue.arrayUnion(dateSlot),
+  })
+}
+
+export const AcceptOrDenyRequest = async(request, teacherFrom, teacherTo, examSlot, examID, requestID) => {
+  if(request === 1){
+    DeleteAcceptedRequest(requestID);
+    ChangeFacultyForExam(examID, teacherTo);
+    RemoveAndAddExamToFacultyUsers(examID, teacherTo, teacherFrom);
+    UpdateInTeachersCollections(examSlot, teacherTo, teacherFrom);
+    return {type:1,val:"Accepted"}
+  }
+  return {type:2,val:"denied"}
+}
+
+//////////////////////************************ *//////////////////////////////////////
 
 //Adding the exam to appropriate collections
 export const AddExam = async(classList,date,subject) => {

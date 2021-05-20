@@ -15,70 +15,70 @@ import {Link} from '@reach/router';
 import {GetStudents} from '../firebase';
 
 const theme = createMuiTheme({
-    palette: {
-      type: 'dark',
-    },
-  });
+  palette: {
+    type: 'dark',
+  },
+});
   
-  const useStyles = makeStyles((theme) => ({
-    seeMore: {
-      marginTop: theme.spacing(1),
-    },
-    addExam: {
-      marginTop: theme.spacing(1),
-    },
-  }));
+const useStyles = makeStyles((theme) => ({
+  seeMore: {
+    marginTop: theme.spacing(1),
+  },
+  addExam: {
+    marginTop: theme.spacing(1),
+  },
+}));
 
 export default function Students() {
-    const classes = useStyles(theme);
-    const [studentList, setStudentList] = useState([]);
+  const classes = useStyles(theme);
+  const [studentList, setStudentList] = useState([]);
 
-    useEffect(() => {
-      const HandleList = (temp) => {
-        setStudentList(temp);
-        console.log(studentList);
+  useEffect(() => {
+    const HandleList = (temp) => {
+      setStudentList(temp);
+      console.log(studentList);
+    }
+      const DisplayDetails = async () => {
+        let students = await GetStudents();
+        studentList.push(...students);
       }
-        const DisplayDetails = async () => {
-            let students = await GetStudents();
-            studentList.push(...students);
-        }
-        DisplayDetails();
-        HandleList(studentList);
-    },[studentList]);
+      DisplayDetails();
+      HandleList(studentList);
+  },[studentList]);
 
-    return (
-        <React.Fragment>
-            <div>       
-            <Title>All Students</Title> 
-            <Link to = "/students" style={{ textDecoration: 'none', color: "white" }}>
-                <IconButton><RefreshIcon/></IconButton>
-            </Link>
-            </div>
-            <div>
-            <Table size="small">
-                <TableHead>
-                <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Section</TableCell>
-                </TableRow>
-                </TableHead>
-                <TableBody>
-                {/* {console.log(examsList[0].dateSlot)} */}
-                {(studentList).map((studentDetail) => (
-                    <TableRow key={studentDetail.id}>
-                    <TableCell>{studentDetail.displayName}</TableCell>
-                    <TableCell>{studentDetail.section}</TableCell>
-                    </TableRow>
-                ))}
-                </TableBody>
-            </Table>
-            </div>
-            <Box flex={1}/>
-            <div className={classes.extra}>
-            <div className={classes.addExam}>
-                <NewExam />
-            </div>
-            </div>
-            </React.Fragment>
-        );
+return (
+    <React.Fragment>
+      <div>       
+      <Title>All Students</Title> 
+      <Link to = "/students" style={{ textDecoration: 'none', color: "white" }}>
+          <IconButton><RefreshIcon/></IconButton>
+      </Link>
+      </div>
+      <div>
+      <Table size="small">
+          <TableHead>
+          <TableRow>
+          <TableCell>Name</TableCell>
+          <TableCell>Section</TableCell>
+          </TableRow>
+          </TableHead>
+          <TableBody>
+          {/* {console.log(examsList[0].dateSlot)} */}
+          {(studentList).map((studentDetail) => (
+              <TableRow key={studentDetail.id}>
+              <TableCell>{studentDetail.displayName}</TableCell>
+              <TableCell>{studentDetail.section}</TableCell>
+              </TableRow>
+          ))}
+          </TableBody>
+      </Table>
+      </div>
+      <Box flex={1}/>
+      <div className={classes.extra}>
+      <div className={classes.addExam}>
+          <NewExam />
+      </div>
+      </div>
+      </React.Fragment>
+    );
 }
