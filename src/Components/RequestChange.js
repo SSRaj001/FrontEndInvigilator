@@ -216,7 +216,7 @@ export default function RequestChange() {
         default:
         return 'Unknown step';
     }
-    }
+  }
 
   return (
     <div>

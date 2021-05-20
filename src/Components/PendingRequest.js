@@ -11,8 +11,10 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {Link} from '@reach/router';
-import {CheckRequests, GetTeacherInfo, GetExamDetails} from '../firebase';
+import {CheckRequests, GetTeacherInfo, GetExamDetails, AcceptOrDenyRequest} from '../firebase';
 import { UserContext } from "../providers/UserProvider";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const theme = createMuiTheme({
   palette: {
@@ -62,6 +64,16 @@ export default function PendingRequest() {
     DisplayDetails();
   },[requestList,uid,teacherName,examName]);
 
+  const handleAccept = (index) => {
+    console.log("accept", index)
+    AcceptOrDenyRequest(1,index);
+  }
+
+  const handleRejection = (index) => {
+    console.log("Reject", index)
+    AcceptOrDenyRequest(0,index);
+  }
+
 return (
     <React.Fragment>
       <div>       
@@ -73,11 +85,12 @@ return (
       <div>
       <Table size="small">
           <TableHead>
-          <TableRow>
-          <TableCell><b>Request From</b></TableCell>
-          <TableCell><b>Date-Slot</b></TableCell>
-          <TableCell><b>Exam</b></TableCell>
-          </TableRow>
+            <TableRow>
+              <TableCell><b>Request From</b></TableCell>
+              <TableCell><b>Date-Slot</b></TableCell>
+              <TableCell><b>Exam</b></TableCell>
+              <TableCell><b>Action</b></TableCell>
+            </TableRow>
           </TableHead>
           <TableBody>
           {/* {console.log(examsList[0].dateSlot)} */}
@@ -86,6 +99,10 @@ return (
               <TableCell>{teacherName[index]}</TableCell>
               <TableCell>{requestDetail.dateSlot}</TableCell>
               <TableCell>{examName[index]}</TableCell>
+              <TableCell>
+                <IconButton onClick={() => handleAccept(requestDetail.requestID)} style={{ color: "green" }}><CheckCircleIcon/></IconButton>
+                <IconButton onClick={() => handleRejection(requestDetail.requestID)} style={{ color: "red" }}><CancelIcon/></IconButton> 
+              </TableCell>
               </TableRow>
           ))}
           </TableBody>
