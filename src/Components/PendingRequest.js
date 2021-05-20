@@ -64,14 +64,20 @@ export default function PendingRequest() {
     DisplayDetails();
   },[requestList,uid,teacherName,examName]);
 
-  const handleAccept = (index) => {
-    console.log("accept", index)
-    AcceptOrDenyRequest(1,index);
+  const handleAccept = (requestID,index) => {
+    console.log("accept", requestID);
+    requestList.splice(index,1);
+    setRequestList(requestList);
+    console.log(requestList);
+    AcceptOrDenyRequest(1,requestID);
   }
 
-  const handleRejection = (index) => {
-    console.log("Reject", index)
-    AcceptOrDenyRequest(0,index);
+  const handleRejection = (requestID,index) => {
+    console.log("Reject", requestID);
+    requestList.splice(index,1);
+    setRequestList(requestList);
+    console.log(requestList);
+    AcceptOrDenyRequest(0,requestID);
   }
 
 return (
@@ -100,8 +106,10 @@ return (
               <TableCell>{requestDetail.dateSlot}</TableCell>
               <TableCell>{examName[index]}</TableCell>
               <TableCell>
-                <IconButton onClick={() => handleAccept(requestDetail.requestID)} style={{ color: "green" }}><CheckCircleIcon/></IconButton>
-                <IconButton onClick={() => handleRejection(requestDetail.requestID)} style={{ color: "red" }}><CancelIcon/></IconButton> 
+                <Link to="/pendingRequest">
+                <IconButton onClick={() => handleAccept(requestDetail.requestID, index)} style={{ color: "green" }}><CheckCircleIcon/></IconButton>
+                <IconButton onClick={() => handleRejection(requestDetail.requestID, index)} style={{ color: "red" }}><CancelIcon/></IconButton>
+                </Link> 
               </TableCell>
               </TableRow>
           ))}

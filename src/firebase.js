@@ -152,6 +152,11 @@ export const GetTeacherInfo = async(teacherID) => {
   return teacherRef.get();
 }
 
+export const GetUserInfo = async(userID) => {
+  let userRef = db.collection("users").doc(userID);
+  return userRef.get();
+}
+
 //adding dateslot details to rooms collections
 export const AddRommInfo = async(roomNo,dateSlot,examID) => {
   db.collection("rooms").doc(roomNo).set({
@@ -280,7 +285,7 @@ export const RemoveAndAddExamToFacultyUsers = async(examID, teacherTo, teacherFr
   })
   userRef = db.collection("users").doc(teacherTo);
   userRef.update({
-    dateSlot : firebase.firestore.FieldValue.arrayUnion(examID),
+    exams : firebase.firestore.FieldValue.arrayUnion(examID),
   })
 }
 
@@ -291,7 +296,7 @@ export const UpdateInTeachersCollections = async(dateSlot, teacherTo, teacherFro
   })
   userRef = db.collection("teachers").doc(teacherTo);
   userRef.update({
-    exams : firebase.firestore.FieldValue.arrayUnion(dateSlot),
+    dateSlot : firebase.firestore.FieldValue.arrayUnion(dateSlot),
   })
 }
 

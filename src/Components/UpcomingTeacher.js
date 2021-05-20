@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Box from '@material-ui/core/Box'
 import Title from './Title';
 import RequestChange from './RequestChange';
-import {GetExamDetails, GetRoomLocation} from '../firebase';
+import {GetExamDetails, GetRoomLocation, GetUserInfo} from '../firebase';
 import { createMuiTheme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -40,7 +40,9 @@ export default function UpcomingTeacher() {
   let [examsList,setExamsList] = useState([]);
   useEffect(() => {
     const DisplayDetails = async () => {
-      const {exams} = userDetails;
+      const {uid} = userDetails;
+      let userInfo = await GetUserInfo(uid);
+      let exams = userInfo.data().exams;
       for(let i=0;i<exams.length;i++){
         let details = await GetExamDetails(exams[i])
         let data = details.data()
