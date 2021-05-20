@@ -303,14 +303,20 @@ export const UpdateInTeachersCollections = async(dateSlot, teacherTo, teacherFro
 export const AcceptOrDenyRequest = async(request, requestID) => {
   if(request === 1){
     let details = await GetRequestDetails(requestID);
-    console.log(details);
-    DeleteAcceptedRequest(requestID);
-    ChangeFacultyForExam(details.data().exam, details.data().to);
-    RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);
-    UpdateInTeachersCollections(details.data().dateSlot, details.data().to,  details.data().from);
-    return {type:1,val:"Accepted"}
+    let teacherDetails = await GetTeacherInfo(details.data().to);
+    if(!teacherDetails.data().dateSlot.includes(details.data().dateSlot)){
+      console.log(details);
+      DeleteAcceptedRequest(requestID);
+      ChangeFacultyForExam(details.data().exam, details.data().to);
+      RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);
+      UpdateInTeachersCollections(details.data().dateSlot, details.data().to,  details.data().from);
+      return {type:1, val:"Accepted"}
+    }
+    else{
+      return {type:3, val:"You accepted the same slot recently"}
+    }
   }
-  return {type:2,val:"denied"}
+  return {type:2, val:"denied"}
 }
 
 //////////////////////************************ *//////////////////////////////////////
