@@ -219,7 +219,25 @@ export const RequestChange = async(fromTeacherID, requestedExamSlot, requestedTe
     });
     return true;
   }
-  return false;
+  else{
+    let teachers = [];
+    let slot = parseInt(requestedExamSlot.charAt(requestedExamSlot.length-1));
+    teachers = await GetTeachersDetails(requestedExamSlot);
+    let teachersAvailable = []
+    for(let i=0;i<teachers.length;i++){
+      if(teachers[i].timeTable[slot-1] === 0){
+        teachersAvailable.push(teachers[i].tid)
+      }
+    }
+    if(teachersAvailable.length === 0){
+      return {type:1};
+    }
+    else{
+      return {
+        type:3, val:[ teachersAvailable[produceRandom(0,teachersAvailable.length-1)]]
+      }
+    }
+  }
 }
 
 export const DeleteAcceptedRequest = async(requestID) => {

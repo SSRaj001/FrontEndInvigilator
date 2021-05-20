@@ -20,6 +20,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 import {GetExamDetails, GetTeachersDetails} from '../firebase';
 import { UserContext } from "../providers/UserProvider";
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -41,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
   },
   resetContainer: {
     padding: theme.spacing(3),
+  },
+  formControl: {
+    margin: theme.spacing(0),
+    minWidth: 150,
   },
 }));
 
@@ -70,17 +78,32 @@ export default function RequestChange() {
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
   const [dateList, setDateList] = React.useState([]);
+  const [examID, setExamId] = React.useState([]);
   const [teacherList, setTeacherList] = React.useState([]);
+  const [teacherID, setTeacherID] = React.useState([]);
+  const [dateSlot, setDateSlot] = React.useState(0);
+  const [faculty, setFaculty] = React.useState(0);
+
+
+  const AddDataToDb = async() => {
+    console.log(teacherID[faculty], teacherList[faculty])
+    console.log(uid) // From ID
+    console.log(dateList[dateSlot]) // dateslot
+    console.log(examID[dateSlot]) //examID
+    handleClose()
+  }
 
   const userDetails = useContext(UserContext);
-  const {displayName,exams} = userDetails;
+  const {displayName, exams, uid} = userDetails;
   useEffect(() => {
-    const HandleList = (temp) => {
+    const HandleList = (temp, temp1) => {
       setDateList(temp)
+      setExamId(temp1)
       console.log(dateList)
     }
-    const HandleTeacherList = (temp) => {
+    const HandleTeacherList = (temp, temp1) => {
       setTeacherList(temp);
+      setTeacherID(temp1)
       console.log(teacherList);
     }
     const DisplayDetails = async () => {
@@ -89,15 +112,17 @@ export default function RequestChange() {
         let data = details.data();
         console.log(data)
         dateList.push(data.dateSlot);
+        examID.push(exams[i])
       }
-      HandleList(dateList);
+      HandleList(dateList, exams);
       let teacherDetails = await GetTeachersDetails();
       for(let i=0;i<teacherDetails.length;i++){
         if(teacherDetails[i].name !== displayName){
           teacherList.push(teacherDetails[i].name)
+          teacherID.push(teacherDetails[i].tid)
         }
       }
-      HandleTeacherList(teacherList);
+      HandleTeacherList(teacherList, teacherID);
     }
     DisplayDetails();
   },[dateList, teacherList]);
@@ -123,6 +148,65 @@ export default function RequestChange() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleChangeDate= (event) => {
+    setDateSlot(event.target.value);
+  };
+
+  const handleChangeFac= (event) => {
+    setFaculty(event.target.value);
+  };
+
+  function getStep(step) {
+    switch (step) {
+        case 0:
+        return (
+          <>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">Subject</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={dateSlot}
+                onChange={handleChangeDate}
+              >
+                {dateList.map((sub, index) =>
+                  <MenuItem key={index} value={index}>{sub}</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </>
+          );
+        case 1:
+        return (
+          <>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">Subject</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={faculty}
+                onChange={handleChangeFac}
+              >
+                {teacherList.map((sub, index) =>
+                  <MenuItem key={index} value={index}>{sub}</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </>
+        );
+        case 2:
+        return (
+          <>
+            <br/>
+            <Typography> 
+              Entered details are : {dateList[dateSlot]} and {teacherList[faculty]}
+            </Typography>
+          </>);
+        default:
+        return 'Unknown step';
+    }
+    }
 
   return (
     <div>
@@ -150,6 +234,7 @@ export default function RequestChange() {
                     <StepLabel>{label}</StepLabel>
                     <StepContent>
                     <Typography>{getStepContent(index)}</Typography>
+                    <div>{getStep(index)}</div>
                     <div className={classes.actionsContainer}>
                         <div>
                         <Button
@@ -176,7 +261,7 @@ export default function RequestChange() {
             {activeStep === steps.length && (
               <Paper square elevation={0} className={classes.resetContainer}>
               <Typography>Confirm Again</Typography>
-              <Button onClick={handleClose} className={classes.button}>
+              <Button onClick={AddDataToDb} className={classes.button}>
                   Confirm
               </Button>
               </Paper>
