@@ -21,6 +21,7 @@ import Profile from "./Profile";
 import {auth} from "../firebase"
 import { Router, Link } from "@reach/router";
 import UpcomingExams from "./UpcomingExams.js";
+import Students from "./Students.js";
 
 const theme = createMuiTheme({
     palette: {
@@ -171,6 +172,7 @@ export default function AdminDashBoard() {
                 <Router component={RouteWrapper}>
                   <Profile path = "/" />
                   <UpcomingExams path = "/upcomingExams"/>
+                  <Students path = "/students"/>
                 </Router>
               </Paper>
             </Grid>

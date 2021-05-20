@@ -6,6 +6,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import PersonIcon from '@material-ui/icons/Person';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { Link } from "@reach/router";
 import RequestChange from './RequestChange'
 
@@ -34,6 +35,14 @@ export const mainListItems = (
           <BarChartIcon />
         </ListItemIcon>
         <ListItemText primary="Exams"/>
+      </ListItem>
+    </Link>
+    <Link to="/pendingRequest" style={{ textDecoration: 'none', color: "black" }}>
+      <ListItem button>
+        <ListItemIcon>
+          <AccessTimeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Pending Requests"/>
       </ListItem>
     </Link>
     <ListItem button>

@@ -22,6 +22,7 @@ import {auth} from "../firebase";
 import { Router, Link } from "@reach/router";
 import UpcomingTeacher from './UpcomingTeacher.js'
 import FacRequests from './ChangeRequests'
+import PendingRequest from './PendingRequest';
 
 const theme = createMuiTheme({
     palette: {
@@ -175,6 +176,7 @@ export default function FacultyDashBoard() {
                   <Profile path="/"/>
                   <UpcomingTeacher path='/upcomingTeacher' />
                   <FacRequests path='/seeRequests'/>
+                  <PendingRequest path='/pendingRequest'/>
                 </Router>
               </Paper>
             </Grid>
