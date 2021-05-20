@@ -22,7 +22,6 @@ export const GetAllExamDetails = async () => {
   (await db.collection("exams").get()).forEach((doc) => {
     let details = doc.data();
     details.id = doc.id;
-    console.log(doc.data());
     examDetails.push(details)
   });
   return examDetails
@@ -355,7 +354,6 @@ export const AddExam = async(classList,date,subject) => {
 //to produce random numbers.
 function produceRandom(min,max){
   let y = Math.floor(Math.random() * (max - min + 1)) + min;
-  console.log(y,max);
   return y;
 }
 
