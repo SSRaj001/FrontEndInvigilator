@@ -69,7 +69,16 @@ export default function PendingRequest() {
     requestList.splice(index,1);
     setRequestList(requestList);
     console.log(requestList);
-    AcceptOrDenyRequest(1,requestID);
+    let ret = await AcceptOrDenyRequest(1,requestID);
+    if(ret.type === 1){
+      console.log("accepted");
+    }
+    else if(ret.type === 2){
+      console.log("denied");
+    }
+    else{
+      console.log("accpeted recently");
+    }
   }
 
   const handleRejection = (requestID,index) => {
@@ -77,7 +86,16 @@ export default function PendingRequest() {
     requestList.splice(index,1);
     setRequestList(requestList);
     console.log(requestList);
-    AcceptOrDenyRequest(0,requestID);
+    let ret = await AcceptOrDenyRequest(0,requestID);
+    if(ret.type === 1){
+      console.log("accepted");
+    }
+    else if(ret.type === 2){
+      console.log("denied");
+    }
+    else{
+      console.log("accpeted recently");
+    }
   }
 
 return (
