@@ -64,7 +64,7 @@ export default function PendingRequest() {
     DisplayDetails();
   },[requestList,uid,teacherName,examName]);
 
-  const handleAccept = (requestID,index) => {
+  const handleAccept = async(requestID,index) => {
     console.log("accept", requestID);
     requestList.splice(index,1);
     setRequestList(requestList);
@@ -81,7 +81,7 @@ export default function PendingRequest() {
     }
   }
 
-  const handleRejection = (requestID,index) => {
+  const handleRejection = async(requestID,index) => {
     console.log("Reject", requestID);
     requestList.splice(index,1);
     setRequestList(requestList);

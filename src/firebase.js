@@ -22,7 +22,6 @@ export const GetAllExamDetails = async () => {
   (await db.collection("exams").get()).forEach((doc) => {
     let details = doc.data();
     details.id = doc.id;
-    console.log(doc.data());
     examDetails.push(details)
   });
   return examDetails
@@ -304,7 +303,7 @@ export const AcceptOrDenyRequest = async(request, requestID) => {
   if(request === 1){
     let details = await GetRequestDetails(requestID);
     let teacherDetails = await GetTeacherInfo(details.data().to);
-    if(!teacherDetails.data().dateSlot.includes(details.data().dateSlot)){
+    if(!teacherDetails.data().dateSlot().includes(details.data().dateSlot)){
       console.log(details);
       DeleteAcceptedRequest(requestID);
       ChangeFacultyForExam(details.data().exam, details.data().to);
@@ -313,7 +312,7 @@ export const AcceptOrDenyRequest = async(request, requestID) => {
       return {type:1, val:"Accepted"}
     }
     else{
-      return {type:3, val:"You accepted the same slot recently"}
+      return {type:3, val:"Recently accepted the dateSlot"}
     }
   }
   return {type:2, val:"denied"}
@@ -321,9 +320,29 @@ export const AcceptOrDenyRequest = async(request, requestID) => {
 
 //////////////////////************************ *//////////////////////////////////////
 
+export const GetDateSlotClasses = (section) =>{
+  let sectionRef = db.collection("classes").doc(section);
+  return sectionRef.get();
+}
+
+export const AddExamToClasses = (classList, date) => {
+  for(let i=0;i<classList.length;i++){
+    let classRef = db.collection("classes").doc(classList[i]);
+    classRef.update({
+      exams : firebase.firestore.FieldValue.arrayUnion(date),
+    })
+  }
+}
+
 //Adding the exam to appropriate collections
 export const AddExam = async(classList,date,subject) => {
   let autoID = firestoreAutoId();
+  for(let i=0;i<classList.length;i++){
+    let classRef = await GetDateSlotClasses(classList[i]);
+    if(classRef.data().exams.includes(date)){
+      return {type: 4, val: "Same date for some classes already allocated"};
+    }
+  }
   var examRef = db.collection("exams").doc(autoID);
   let teacherRoom = await GetFreeTeacher(date);
   if(teacherRoom.type === 3){
@@ -349,6 +368,7 @@ export const AddExam = async(classList,date,subject) => {
     UpdateTeacherDateSlot(teacherRoom.val[0],date)
     AddRommInfo(teacherRoom.val[1],date,autoID)
     AddExamDetailToUserCollection(teacherRoom.val[0],autoID);
+    AddExamToClasses(classList,date);
     return {type :  teacherRoom.type, val: [ teacherName, teacherRoom.val[1], teacherRoom.val[0] ], classes: classList}
   }
   else{
@@ -361,7 +381,6 @@ export const AddExam = async(classList,date,subject) => {
 //to produce random numbers.
 function produceRandom(min,max){
   let y = Math.floor(Math.random() * (max - min + 1)) + min;
-  console.log(y,max);
   return y;
 }
 
