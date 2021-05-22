@@ -320,9 +320,29 @@ export const AcceptOrDenyRequest = async(request, requestID) => {
 
 //////////////////////************************ *//////////////////////////////////////
 
+export const GetDateSlotClasses = (section) =>{
+  let sectionRef = db.collection("classes").doc(section);
+  return sectionRef.get();
+}
+
+export const AddExamToClasses(classList, date){
+  for(let i=0;i<classList.length;i++){
+    let classRef = db.collection("classes").doc(classList[i]);
+    classRef.update({
+      exams : firebase.firestore.FieldValue.arrayUnion(date),
+    })
+  }
+}
+
 //Adding the exam to appropriate collections
 export const AddExam = async(classList,date,subject) => {
   let autoID = firestoreAutoId();
+  for(let i=0;i<classList.length;i++){
+    let classRef = await GetDateSlotClasses(classList[i]);
+    if(classRef.data().exams.includes(date)){
+      return {type: 4, val: "Same date for some classes already allocated"};
+    }
+  }
   var examRef = db.collection("exams").doc(autoID);
   let teacherRoom = await GetFreeTeacher(date);
   if(teacherRoom.type === 3){
@@ -348,6 +368,7 @@ export const AddExam = async(classList,date,subject) => {
     UpdateTeacherDateSlot(teacherRoom.val[0],date)
     AddRommInfo(teacherRoom.val[1],date,autoID)
     AddExamDetailToUserCollection(teacherRoom.val[0],autoID);
+    AddExamToClasses(classList,date);
     return {type :  teacherRoom.type, val: [ teacherName, teacherRoom.val[1], teacherRoom.val[0] ], classes: classList}
   }
   else{
