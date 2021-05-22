@@ -360,6 +360,7 @@ export const AddExam = async(classList,date,subject) => {
       classes : classList,
       dateSlot : date,
       faculty : teacherRoom.val[0],
+      facName : teacherName,
       room : teacherRoom.val[1],
       course : {code : subjectCode, name : subject}
     });
