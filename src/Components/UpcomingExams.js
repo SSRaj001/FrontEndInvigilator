@@ -106,6 +106,6 @@ export default function UpcomingExams() {
             <NewExam />
         </div>
       </div>
-      </React.Fragment>
+    </React.Fragment>
   );
 }
