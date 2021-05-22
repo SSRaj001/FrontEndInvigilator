@@ -120,9 +120,18 @@ export default function RequestChange() {
       for(let i=0;i<exams.length;i++){
         let details = await GetExamDetails(exams[i])
         let data = details.data();
-        console.log(data)
-        dateList.push(data.dateSlot);
-        examID.push(exams[i])
+        console.log(data);
+        let todayDate = new Date();
+        let dateSlot = data.dateSlot;
+        let [d,m,y] = dateSlot.split("/");// 2012-2
+        y = y.split("-")[0]
+        console.log([d,m,y]);
+        let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+        console.log(examDate);
+        if(examDate >= todayDate){
+          dateList.push(data.dateSlot);
+          examID.push(exams[i]);
+        }
       }
       HandleList(dateList, exams);
       let teacherDetails = await GetTeachersDetails();

@@ -87,7 +87,6 @@ export default function PendingRequest() {
     setRequestList(requestList);
     console.log(requestList);
     let ret = await AcceptOrDenyRequest(0,requestID);
-
     if(ret.type === 1){
       console.log("accepted");
     }
