@@ -173,8 +173,11 @@ export default function NewExam() {
       if(ret.type === 1){
         console.log("TeacherNotFound");
       }
-      else{
+      else if(ret.type === 2){
         console.log("RoomNotFound");
+      }
+      else{
+        console.log("Date allocated for one of the classes already. choose another date");
       }
     }
     handleClose();

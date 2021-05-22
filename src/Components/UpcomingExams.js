@@ -10,7 +10,7 @@ import Box from '@material-ui/core/Box'
 import Title from './Title';
 import NewExam from './NewExam';
 import { UserContext } from "../providers/UserProvider";
-import {GetAllExamDetails, GetClassRelatedExams, GetRoomLocation, GetFreeTeacher} from '../firebase';
+import {GetAllExamDetails, GetClassRelatedExams, GetRoomLocation} from '../firebase';
 import { createMuiTheme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -39,8 +39,6 @@ export default function UpcomingExams() {
   let [examsList,setExamsList] = useState([]);
   useEffect(() => {
     const DisplayDetails = async () => {
-      let ret = await GetFreeTeacher("26/4/2021-1");
-      console.log(ret);
       const {usertype} = userDetails;
       if(usertype === "S"){
         const {section} = userDetails;
@@ -56,9 +54,7 @@ export default function UpcomingExams() {
       else{
         let details = await GetAllExamDetails();
         for(let i=0;i<details.length;i++){
-          console.log(details[i].room)
           let loc = await GetRoomLocation(details[i].room);
-          console.log(loc.data());
           details[i].location = loc.data().location;
         }
         examsList.push(...details)
