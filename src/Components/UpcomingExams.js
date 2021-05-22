@@ -87,7 +87,7 @@ export default function UpcomingExams() {
             <TableCell>Subject</TableCell>
             <TableCell>Room No</TableCell>
             <TableCell>Location</TableCell>
-            <TableCell>Teacher</TableCell>
+            <TableCell>Faculty</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
