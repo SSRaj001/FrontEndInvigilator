@@ -325,7 +325,7 @@ export const GetDateSlotClasses = (section) =>{
   return sectionRef.get();
 }
 
-export const AddExamToClasses(classList, date){
+export const AddExamToClasses = (classList, date) => {
   for(let i=0;i<classList.length;i++){
     let classRef = db.collection("classes").doc(classList[i]);
     classRef.update({
