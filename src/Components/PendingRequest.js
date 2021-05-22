@@ -71,13 +71,13 @@ export default function PendingRequest() {
     console.log(requestList);
     let ret = await AcceptOrDenyRequest(1,requestID);
     if(ret.type === 1){
-      console.log("accepted");
+      console.log("Accepted");
     }
     else if(ret.type === 2){
-      console.log("denied");
+      console.log("Denied");
     }
-    else{
-      console.log("accpeted recently");
+    else if(ret.type === 3){
+      console.log("Same slot accessed recently");
     }
   }
 
@@ -87,6 +87,7 @@ export default function PendingRequest() {
     setRequestList(requestList);
     console.log(requestList);
     let ret = await AcceptOrDenyRequest(0,requestID);
+
     if(ret.type === 1){
       console.log("accepted");
     }
