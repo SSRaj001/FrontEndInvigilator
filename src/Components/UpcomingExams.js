@@ -10,7 +10,7 @@ import Box from '@material-ui/core/Box'
 import Title from './Title';
 import NewExam from './NewExam';
 import { UserContext } from "../providers/UserProvider";
-import {GetAllExamDetails, GetClassRelatedExams, GetRoomLocation} from '../firebase';
+import {GetAllExamDetails, GetClassRelatedExams, GetRoomLocation, GetTeacherName} from '../firebase';
 import { createMuiTheme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -44,7 +44,7 @@ export default function UpcomingExams() {
         const {section} = userDetails;
         let details = await GetClassRelatedExams(section)
         for(let i=0;i<details.length;i++){
-          console.log(details[i].room)
+          console.log(details[i].room);
           let loc = await GetRoomLocation(details[i].room);
           console.log(loc.data());
           details[i].location = loc.data().location;
@@ -55,6 +55,8 @@ export default function UpcomingExams() {
         let details = await GetAllExamDetails();
         for(let i=0;i<details.length;i++){
           let loc = await GetRoomLocation(details[i].room);
+          let teacherDetails = await GetTeacherName(details[i].faculty);
+          details[i].facName = teacherDetails.data().displayName;
           details[i].location = loc.data().location;
         }
         examsList.push(...details)
@@ -85,6 +87,7 @@ export default function UpcomingExams() {
             <TableCell>Subject</TableCell>
             <TableCell>Room No</TableCell>
             <TableCell>Location</TableCell>
+            <TableCell>Teacher</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -95,6 +98,7 @@ export default function UpcomingExams() {
                 <TableCell>{examDetail.course['name']}</TableCell>
                 <TableCell>{examDetail.room}</TableCell>
                 <TableCell>{examDetail.location}</TableCell>
+                <TableCell>{examDetail.facName}</TableCell>
               </TableRow>
             ))}
           </TableBody>
