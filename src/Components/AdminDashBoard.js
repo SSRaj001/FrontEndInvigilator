@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 700,
+    height: 'auto',
   },
 }));
 
@@ -171,7 +171,7 @@ export default function AdminDashBoard() {
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
                 <Router component={RouteWrapper}>
-                  <Profile path = "/" />
+                  <Profile path = "/"/>
                   <UpcomingExams path = "/upcomingExams"/>
                   <Students path = "/students"/>
                   <AdminRequest path ='/requests'/>

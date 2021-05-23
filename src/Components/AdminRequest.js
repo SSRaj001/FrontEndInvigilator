@@ -43,8 +43,9 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'displayName', numeric: false, disablePadding: true, label: 'Student Name' },
-  { id: 'section', numeric: true, disablePadding: true, label: 'Section' },
+  { id: 'fromName', numeric: true, disablePadding: true, label: 'From' },
+  { id: 'toName', numeric: true, disablePadding: true, label: 'To' },
+  { id: 'dateSlot', numeric: true, disablePadding: true, label: 'Date-Slot' },
 ];
 
 function EnhancedTableHead(props) {
@@ -123,7 +124,7 @@ function SortingTable(props) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('displayName');
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(9);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -143,15 +144,12 @@ function SortingTable(props) {
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, studentList.length - page * rowsPerPage);
 
   return (
-    <div className={classes.root}>
-        <Link to = "/requests" style={{ textDecoration: 'none', color: "white" }}>
-            <IconButton><RefreshIcon/></IconButton>
-        </Link>
-      <Typography variant='h5'>
-        {headText}
-      </Typography>
-      <br></br>
+    <>
       <Paper className={classes.paper}>
+        <Typography variant='h5'>
+        {headText}
+        </Typography>
+        <br></br>
         <TableContainer>
           <Table
             className={classes.table}
@@ -179,9 +177,10 @@ function SortingTable(props) {
                       key={row.displayName}
                     >
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.displayName}
+                        {row.fromName}
                       </TableCell>
-                      <TableCell >{row.section}</TableCell>
+                      <TableCell >{row.toName}</TableCell>
+                      <TableCell >{row.dateSlot}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -194,7 +193,7 @@ function SortingTable(props) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[9, 15, 20]}
+          rowsPerPageOptions={[5, 15, 20]}
           component="div"
           count={studentList.length}
           rowsPerPage={rowsPerPage}
@@ -203,7 +202,7 @@ function SortingTable(props) {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
-    </div>
+    </>
   );
 }
 
@@ -231,6 +230,10 @@ export default function AdminRequest(){
 
   return (
       <>
+        <Link to = "/requests" style={{ textDecoration: 'none', color: "black"}}>
+            <IconButton><RefreshIcon/> Refresh</IconButton>
+        </Link>
+        <br></br>
         <SortingTable studentList={ongoingRequests} headText={"Ongoing Requests"}/>
         <br></br>
         <SortingTable studentList={prevRequests} headText={"Past Requests"}/>

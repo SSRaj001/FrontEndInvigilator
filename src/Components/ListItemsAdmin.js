@@ -2,7 +2,6 @@ import React from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 import NewExam from './NewExam';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
@@ -11,17 +10,17 @@ import { Link } from "@reach/router";
 
 export const mainListItems = (
   <div>
-    <Link to = "/" style={{ textDecoration: 'none', color: "black" }}>
+     <Link to="/" style={{ textDecoration: 'none', color: "black" }}>
       <ListItem button>
         <ListItemIcon>
-          <DashboardIcon />
+          <PersonIcon />
         </ListItemIcon>
-        <ListItemText primary="Dashboard"/>
+        <ListItemText primary="Profile" />
       </ListItem>
     </Link>
 
     <NewExam/>
-    
+
     <Link to="/requests" style={{ textDecoration: 'none', color: "black" }}>
       <ListItem button>
         <ListItemIcon>
@@ -37,15 +36,6 @@ export const mainListItems = (
           <BarChartIcon />
         </ListItemIcon>
         <ListItemText primary="Exams"/>
-      </ListItem>
-    </Link>
-
-    <Link to="/students" style={{ textDecoration: 'none', color: "black" }}>
-      <ListItem button>
-        <ListItemIcon>
-          <PersonIcon />
-        </ListItemIcon>
-        <ListItemText primary="Profile" />
       </ListItem>
     </Link>
   </div>
