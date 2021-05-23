@@ -258,9 +258,28 @@ export const GetRequestDetails = async(requestID) => {
   return reqRef.get();
 }
 
+export const GetUpcomingRequests = async() => {
+  let upcomingRequests = [];
+  (await db.collection("requests").get()).forEach((doc) => {
+    let details = doc.data();
+    upcomingRequests.push(details);
+  })
+  return upcomingRequests;
+}
+
+export const GetRequestsHistory = async() => {
+  let requestHistory = [];
+  (await db.collection("requestsHistory").get()).forEach((doc) =>{
+    let details = doc.data();
+    requestHistory.push(details);
+  })
+  return requestHistory;
+}
+
 export const DeleteAcceptedRequest = async(requestID) => {
   let reqPromise = await GetRequestDetails(requestID);
   let reqDetails = reqPromise.data();
+  //Adding accepted requests to history
   db.collection("requestsHistory").doc(requestID).set({
     to : reqDetails.to,
     from : reqDetails.from,
