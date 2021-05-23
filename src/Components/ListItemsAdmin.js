@@ -19,13 +19,17 @@ export const mainListItems = (
         <ListItemText primary="Dashboard"/>
       </ListItem>
     </Link>
+
     <NewExam/>
-    <ListItem button>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Faculty Requests" />
-    </ListItem>
+    
+    <Link to="/requests" style={{ textDecoration: 'none', color: "black" }}>
+      <ListItem button>
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Faculty Requests" />
+      </ListItem>
+    </Link>
 
     <Link to="/upcomingExams" style={{ textDecoration: 'none', color: "black" }}>
       <ListItem button>
