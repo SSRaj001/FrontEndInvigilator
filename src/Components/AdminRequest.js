@@ -220,11 +220,13 @@ export default function AdminRequest(){
       const DisplayDetails = async () => {
         let ongoing = await GetUpcomingRequests();
         let history = await GetRequestsHistory();
+        console.log(history);
         ongoingRequests.push(...ongoing);
         prevRequests.push(...history);
+        console.log(prevRequests);
+        HandleList(ongoingRequests, prevRequests);
       }
       DisplayDetails();
-      HandleList(ongoingRequests, prevRequests);
   },[ongoingRequests, prevRequests]);
 
   return (

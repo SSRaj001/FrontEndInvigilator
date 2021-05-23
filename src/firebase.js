@@ -213,6 +213,7 @@ export const CheckRequests = async(teacherID) => {
 
 export const RequestChangeExam = async(fromTeacherID, requestedExamSlot, requestedTeacherID, examID) => {
   let freeDateSlotTeacher = await GetTeacherInfo(requestedTeacherID);
+  let fromTeacherInfo = await GetTeacherInfo(fromTeacherID);
   let autoID = firestoreAutoId();
   if(!freeDateSlotTeacher.data().dateSlot.includes(requestedExamSlot)){
     var requestRef = db.collection("requests").doc(autoID);
@@ -220,7 +221,9 @@ export const RequestChangeExam = async(fromTeacherID, requestedExamSlot, request
       from : fromTeacherID,
       to : requestedTeacherID,
       dateSlot : requestedExamSlot,
-      exam : examID
+      exam : examID,
+      fromName : fromTeacherInfo.data().name,
+      toName : freeDateSlotTeacher.data().name,
     });
     return {type : 0};
   }
@@ -244,7 +247,9 @@ export const RequestChangeExam = async(fromTeacherID, requestedExamSlot, request
         from : fromTeacherID,
         to : randTeacherID,
         dateSlot : requestedExamSlot,
-        exam : examID
+        exam : examID,
+        fromName : fromTeacherInfo.data().name,
+        toName : freeDateSlotTeacher.data().name,
       });
       return {
         type:2, val: randTeacherID
@@ -271,6 +276,7 @@ export const GetRequestsHistory = async() => {
   let requestHistory = [];
   (await db.collection("requestsHistory").get()).forEach((doc) =>{
     let details = doc.data();
+    console.log(details);
     requestHistory.push(details);
   })
   return requestHistory;
@@ -285,6 +291,8 @@ export const DeleteAcceptedRequest = async(requestID) => {
     from : reqDetails.from,
     dateSlot : reqDetails.dateSlot,
     exam : reqDetails.exam,
+    fromName : reqDetails.fromName,
+    toName : reqDetails.toName,
   })
   db.collection("requests").doc(requestID).delete();
 }
