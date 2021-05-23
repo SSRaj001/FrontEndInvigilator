@@ -12,7 +12,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import {GetStudents} from '../firebase';
+import {GetUpcomingRequests, GetRequestsHistory} from '../firebase';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {Link} from '@reach/router';
 
@@ -208,26 +208,30 @@ function SortingTable(props) {
 }
 
 export default function AdminRequest(){
-  const [studentList, setStudentList] = useState([]);
-
+  const [ongoingRequests, setOngoingRequests] = useState([]);
+  const [prevRequests, setPrevRequest] = useState([])
   useEffect(() => {
-    const HandleList = (temp) => {
-      setStudentList(temp);
-      console.log(studentList);
+    const HandleList = (temp, temp2) => {
+      setOngoingRequests(temp);
+      setPrevRequest(temp2);
+      console.log(ongoingRequests);
+      console.log(prevRequests);
     }
       const DisplayDetails = async () => {
-        let students = await GetStudents();
-        studentList.push(...students);
+        let ongoing = await GetUpcomingRequests();
+        let history = await GetRequestsHistory();
+        ongoingRequests.push(...ongoing);
+        prevRequests.push(...history);
       }
       DisplayDetails();
-      HandleList(studentList);
-  },[studentList]);
+      HandleList(ongoingRequests, prevRequests);
+  },[ongoingRequests, prevRequests]);
 
   return (
       <>
-        <SortingTable studentList={studentList} headText={"Ongoing Requests"}/>
+        <SortingTable studentList={ongoingRequests} headText={"Ongoing Requests"}/>
         <br></br>
-        <SortingTable studentList={studentList} headText={"Past Requests"}/>
+        <SortingTable studentList={prevRequests} headText={"Past Requests"}/>
       </>
   );
 }
