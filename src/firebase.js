@@ -327,22 +327,26 @@ export const UpdateInTeachersCollections = async(dateSlot, teacherTo, teacherFro
 }
 
 export const AcceptOrDenyRequest = async(request, requestID) => {
+  let reqDetails = await GetRequestDetails(requestID);
+  let requestedDate = reqDetails.data().dateSlot;
+  let teacherDetails = await GetUserInfo(reqDetails.data().from);
+  let teacherEmail = teacherDetails.data().email;
   if(request === 1){
     let details = await GetRequestDetails(requestID);
     let teacherDetails = await GetTeacherInfo(details.data().to);
-    if(!teacherDetails.data().dateSlot().includes(details.data().dateSlot)){
+    if(!teacherDetails.data().dateSlot.includes(details.data().dateSlot)){
       console.log(details);
       DeleteAcceptedRequest(requestID);
       ChangeFacultyForExam(details.data().exam, details.data().to);
       RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);
       UpdateInTeachersCollections(details.data().dateSlot, details.data().to,  details.data().from);
-      return {type:1, val:"Accepted"}
+      return {type:1, val:"Accepted", date: requestedDate, mail : teacherEmail}
     }
     else{
       return {type:3, val:"Recently accepted the dateSlot"}
     }
   }
-  return {type:2, val:"denied"}
+  return {type:2, val:"denied", date: requestedDate, mail : teacherEmail}
 }
 
 //////////////////////************************ *//////////////////////////////////////
