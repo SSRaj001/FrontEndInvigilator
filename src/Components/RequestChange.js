@@ -18,7 +18,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import {GetExamDetails, GetTeachersDetails, RequestChangeExam} from '../firebase';
+import {GetExamDetails, GetTeacherInfo, GetTeachersDetails, RequestChangeExam, GetUserInfo} from '../firebase';
 import { UserContext } from "../providers/UserProvider";
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -84,12 +84,20 @@ export default function RequestChange() {
   const [dateSlot, setDateSlot] = React.useState(0);
   const [faculty, setFaculty] = React.useState(0);
 
+  const userDetails = useContext(UserContext);
+  const {displayName, exams, uid} = userDetails;
 
   const AddDataToDb = async() => {
     console.log(teacherID[faculty], teacherList[faculty])
     console.log(uid) // From ID
     console.log(dateList[dateSlot]) // dateslot
     console.log(examID[dateSlot]) //examID
+    let teacherPromise = await GetUserInfo(teacherID[faculty]);
+    let ExamDetails = await GetExamDetails(examID[dateSlot]);
+    let examName = ExamDetails.data().course['name'];
+    let requestedDateSlot = dateList[dateSlot];
+    let teacherFromName = displayName;
+    let teacherToEmail = teacherPromise.data().email;
     let ret = await RequestChangeExam(uid, dateList[dateSlot], teacherID[faculty], examID[dateSlot]);
     if(ret.type === 0){
       console.log("Requested teacher is free");
@@ -103,8 +111,6 @@ export default function RequestChange() {
     handleClose()
   }
 
-  const userDetails = useContext(UserContext);
-  const {displayName, exams, uid} = userDetails;
   useEffect(() => {
     const HandleList = (temp, temp1) => {
       setDateList(temp)
