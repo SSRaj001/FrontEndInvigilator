@@ -15,6 +15,7 @@ import {CheckRequests, GetTeacherInfo, GetExamDetails, AcceptOrDenyRequest} from
 import { UserContext } from "../providers/UserProvider";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
+import firebase from "firebase/app";
 
 const theme = createMuiTheme({
   palette: {
@@ -70,16 +71,32 @@ export default function PendingRequest() {
     setRequestList(requestList);
     console.log(requestList);
     let ret = await AcceptOrDenyRequest(1,requestID);
-    if(ret.type === 1){
-      console.log("Accepted");
-    }
-    else if(ret.type === 2){
-      console.log("Denied");
+    if(ret.type === 1 || ret.type === 2){
+      if(ret.type === 1){
+        console.log("accepted");
+        sendCNFMail(ret.mail, ret.date, "ACCEPTED")
+      }
+      else{
+        console.log("denied");
+      }
     }
     else if(ret.type === 3){
       console.log("Same slot accessed recently");
     }
   }
+
+  const sendCNFMail = (emailList, dates, stat) => {
+    let addMessage = firebase.functions().httpsCallable('responseEmail');
+    addMessage({ 
+      toEmail : emailList, // array of string or single string
+      date : dates, // string
+      status : stat,
+     })
+    .then((result) => {
+      console.log("Done Email")
+      // Read result of the Cloud Function.
+    });
+  };
 
   const handleRejection = async(requestID,index) => {
     console.log("Reject", requestID);
@@ -87,12 +104,14 @@ export default function PendingRequest() {
     setRequestList(requestList);
     console.log(requestList);
     let ret = await AcceptOrDenyRequest(0,requestID);
-
-    if(ret.type === 1){
-      console.log("accepted");
-    }
-    else if(ret.type === 2){
-      console.log("denied");
+    if(ret.type === 1 || ret.type === 2){
+      if(ret.type === 1){
+        console.log("accepted");
+        sendCNFMail(ret.mail, ret.date, "DENIED")
+      }
+      else{
+        console.log("denied");
+      }
     }
     else{
       console.log("accpeted recently");

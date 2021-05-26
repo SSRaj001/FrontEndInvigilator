@@ -158,7 +158,7 @@ export default function Students() {
 
   return (
     <div className={classes.root}>
-        <Link to = "/testing" style={{ textDecoration: 'none', color: "white" }}>
+        <Link to = "/students" style={{ textDecoration: 'none', color: "white" }}>
             <IconButton><RefreshIcon/></IconButton>
         </Link>
       <Typography variant='h5'>

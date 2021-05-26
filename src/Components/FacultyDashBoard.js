@@ -21,7 +21,6 @@ import Profile from "./Profile";
 import {auth} from "../firebase";
 import { Router, Link } from "@reach/router";
 import UpcomingTeacher from './UpcomingTeacher.js'
-import FacRequests from './ChangeRequests'
 import PendingRequest from './PendingRequest';
 
 const theme = createMuiTheme({
@@ -108,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   fixedHeight: {
-    height: 550,
+    height: 'auto',
   },
 }));
 
@@ -174,8 +173,7 @@ export default function FacultyDashBoard() {
               <Paper className={fixedHeightPaper}>
                 <Router component={RouteWrapper}>
                   <Profile path="/"/>
-                  <UpcomingTeacher path='/upcomingTeacher' />
-                  <FacRequests path='/seeRequests'/>
+                  <UpcomingTeacher path='/upcomingTeacher'/>
                   <PendingRequest path='/pendingRequest'/>
                 </Router>
               </Paper>

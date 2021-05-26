@@ -213,6 +213,7 @@ export const CheckRequests = async(teacherID) => {
 
 export const RequestChangeExam = async(fromTeacherID, requestedExamSlot, requestedTeacherID, examID) => {
   let freeDateSlotTeacher = await GetTeacherInfo(requestedTeacherID);
+  let fromTeacherInfo = await GetTeacherInfo(fromTeacherID);
   let autoID = firestoreAutoId();
   if(!freeDateSlotTeacher.data().dateSlot.includes(requestedExamSlot)){
     var requestRef = db.collection("requests").doc(autoID);
@@ -220,7 +221,9 @@ export const RequestChangeExam = async(fromTeacherID, requestedExamSlot, request
       from : fromTeacherID,
       to : requestedTeacherID,
       dateSlot : requestedExamSlot,
-      exam : examID
+      exam : examID,
+      fromName : fromTeacherInfo.data().name,
+      toName : freeDateSlotTeacher.data().name,
     });
     return {type : 0};
   }
@@ -244,7 +247,9 @@ export const RequestChangeExam = async(fromTeacherID, requestedExamSlot, request
         from : fromTeacherID,
         to : randTeacherID,
         dateSlot : requestedExamSlot,
-        exam : examID
+        exam : examID,
+        fromName : fromTeacherInfo.data().name,
+        toName : freeDateSlotTeacher.data().name,
       });
       return {
         type:2, val: randTeacherID
@@ -258,22 +263,47 @@ export const GetRequestDetails = async(requestID) => {
   return reqRef.get();
 }
 
+export const GetUpcomingRequests = async() => {
+  let upcomingRequests = [];
+  (await db.collection("requests").get()).forEach((doc) => {
+    let details = doc.data();
+    upcomingRequests.push(details);
+  })
+  return upcomingRequests;
+}
+
+export const GetRequestsHistory = async() => {
+  let requestHistory = [];
+  (await db.collection("requestsHistory").get()).forEach((doc) =>{
+    let details = doc.data();
+    console.log(details);
+    requestHistory.push(details);
+  })
+  return requestHistory;
+}
+
 export const DeleteAcceptedRequest = async(requestID) => {
   let reqPromise = await GetRequestDetails(requestID);
   let reqDetails = reqPromise.data();
+  //Adding accepted requests to history
   db.collection("requestsHistory").doc(requestID).set({
     to : reqDetails.to,
     from : reqDetails.from,
     dateSlot : reqDetails.dateSlot,
     exam : reqDetails.exam,
+    fromName : reqDetails.fromName,
+    toName : reqDetails.toName,
   })
   db.collection("requests").doc(requestID).delete();
 }
 
-export const ChangeFacultyForExam = async(examID, teacherToID) => {
+export const ChangeFacultyForExam = async(examID, teacherToID, teacherName) => {
   let examRef = db.collection("exams").doc(examID);
+  console.log(teacherToID, teacherName+"updateExams");
+  console.log("updated In exams");
   examRef.update({
     faculty : teacherToID,
+    facName : teacherName,
   })
 }
 
@@ -300,22 +330,28 @@ export const UpdateInTeachersCollections = async(dateSlot, teacherTo, teacherFro
 }
 
 export const AcceptOrDenyRequest = async(request, requestID) => {
+  let reqDetails = await GetRequestDetails(requestID);
+  let requestedDate = reqDetails.data().dateSlot;
+  let teacherInfo = await GetUserInfo(reqDetails.data().from);
+  let teacherEmail = teacherInfo.data().email;
   if(request === 1){
     let details = await GetRequestDetails(requestID);
     let teacherDetails = await GetTeacherInfo(details.data().to);
-    if(!teacherDetails.data().dateSlot().includes(details.data().dateSlot)){
-      console.log(details);
-      DeleteAcceptedRequest(requestID);
-      ChangeFacultyForExam(details.data().exam, details.data().to);
-      RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);
-      UpdateInTeachersCollections(details.data().dateSlot, details.data().to,  details.data().from);
-      return {type:1, val:"Accepted"}
+    let teacherDetailsTo = await GetUserInfo(details.data().to);
+    let teacherNameTo = teacherDetailsTo.data().displayName;
+    if(!teacherDetails.data().dateSlot.includes(details.data().dateSlot)){
+      console.log(details+"FIREBASE");
+      DeleteAcceptedRequest(requestID);//works
+      ChangeFacultyForExam(details.data().exam, details.data().to, teacherNameTo);
+      RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);//works
+      UpdateInTeachersCollections(details.data().dateSlot, details.data().to,  details.data().from);//works
+      return {type:1, val:"Accepted", date: requestedDate, mail : teacherEmail}
     }
     else{
       return {type:3, val:"Recently accepted the dateSlot"}
     }
   }
-  return {type:2, val:"denied"}
+  return {type:2, val:"denied", date: requestedDate, mail : teacherEmail}
 }
 
 //////////////////////************************ *//////////////////////////////////////
@@ -360,6 +396,7 @@ export const AddExam = async(classList,date,subject) => {
       classes : classList,
       dateSlot : date,
       faculty : teacherRoom.val[0],
+      facName : teacherName,
       room : teacherRoom.val[1],
       course : {code : subjectCode, name : subject}
     });

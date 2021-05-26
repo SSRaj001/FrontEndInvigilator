@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext,useState,useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -13,8 +12,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import { UserContext } from "../providers/UserProvider";
-import {GetAllExamDetails, GetClassRelatedExams, GetRoomLocation, GetTeacherName} from '../firebase';
+import {GetUpcomingRequests, GetRequestsHistory} from '../firebase';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {Link} from '@reach/router';
 
@@ -45,11 +43,9 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'dateSlot', numeric: false, disablePadding: true, label: 'Date-Slot' },
-  { id: "course" , numeric: false, disablePadding: true, label: 'Subject' },
-  { id: 'room', numeric: false, disablePadding: true, label: 'Room No' },
-  { id: 'location', numeric: false, disablePadding: true, label: 'Location' },
-  { id: 'facName', numeric: false, disablePadding: true, label: 'Faculty' },
+  { id: 'fromName', numeric: true, disablePadding: true, label: 'From' },
+  { id: 'toName', numeric: true, disablePadding: true, label: 'To' },
+  { id: 'dateSlot', numeric: true, disablePadding: true, label: 'Date-Slot' },
 ];
 
 function EnhancedTableHead(props) {
@@ -181,12 +177,10 @@ function SortingTable(props) {
                       key={row.displayName}
                     >
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.dateSlot}
+                        {row.fromName}
                       </TableCell>
-                      <TableCell >{row.course['name']}</TableCell>
-                      <TableCell >{row.room}</TableCell>
-		                  <TableCell >{row.location}</TableCell>
-		                  <TableCell >{row.facName}</TableCell>
+                      <TableCell >{row.toName}</TableCell>
+                      <TableCell >{row.dateSlot}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -213,49 +207,36 @@ function SortingTable(props) {
 }
 
 export default function AdminRequest(){
-  const userDetails = useContext(UserContext);
-  let [examsList,setExamsList] = useState([]);
+  const [ongoingRequests, setOngoingRequests] = useState([]);
+  const [prevRequests, setPrevRequest] = useState([])
   useEffect(() => {
-    const DisplayDetails = async () => {
-      const {usertype} = userDetails;
-      if(usertype === "S"){
-        const {section} = userDetails;
-        let details = await GetClassRelatedExams(section)
-        for(let i=0;i<details.length;i++){
-          console.log(details[i].room);
-          let loc = await GetRoomLocation(details[i].room);
-          console.log(loc.data());
-          details[i].location = loc.data().location;
-        }
-        examsList.push(...details)
-      }
-      else{
-        let details = await GetAllExamDetails();
-        for(let i=0;i<details.length;i++){
-          let loc = await GetRoomLocation(details[i].room);
-          let teacherDetails = await GetTeacherName(details[i].faculty);
-          details[i].facName = teacherDetails.data().displayName;
-          details[i].location = loc.data().location;
-        }
-        examsList.push(...details)
-      }
-      HandleList(examsList);
+    const HandleList = (temp, temp2) => {
+      setOngoingRequests(temp);
+      setPrevRequest(temp2);
+      console.log(ongoingRequests);
+      console.log(prevRequests);
     }
-    DisplayDetails();
-  },[examsList]);
-  
-  const HandleList = (temp) => {
-    setExamsList(temp)
-    console.log(examsList)
-  }
+      const DisplayDetails = async () => {
+        let ongoing = await GetUpcomingRequests();
+        let history = await GetRequestsHistory();
+        console.log(history);
+        ongoingRequests.push(...ongoing);
+        prevRequests.push(...history);
+        console.log(prevRequests);
+        HandleList(ongoingRequests, prevRequests);
+      }
+      DisplayDetails();
+  },[ongoingRequests, prevRequests]);
 
   return (
       <>
-        <Link to = "/upcomingExams" style={{ textDecoration: 'none', color: "black"}}>
+        <Link to = "/requests" style={{ textDecoration: 'none', color: "black"}}>
             <IconButton><RefreshIcon/> Refresh</IconButton>
         </Link>
         <br></br>
-        <SortingTable studentList={examsList} headText={"Upcoming Exams"}/>
+        <SortingTable studentList={ongoingRequests} headText={"Ongoing Requests"}/>
+        <br></br>
+        <SortingTable studentList={prevRequests} headText={"Past Requests"}/>
       </>
   );
 }

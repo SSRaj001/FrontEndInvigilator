@@ -69,7 +69,7 @@ export default function Profile() {
   loadImage()
   return (
     <React.Fragment>
-      <Title>{currUser}   Profile</Title>
+      <Title>{currUser}Profile</Title>
       <Typography component="p" align='center' variant="h4">
         {displayName}
       </Typography>

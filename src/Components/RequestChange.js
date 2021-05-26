@@ -18,7 +18,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import {GetExamDetails, GetTeachersDetails, RequestChangeExam} from '../firebase';
+import firebase from "firebase/app";
+import {GetExamDetails, GetTeachersDetails, RequestChangeExam, GetUserInfo} from '../firebase';
 import { UserContext } from "../providers/UserProvider";
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -84,27 +85,65 @@ export default function RequestChange() {
   const [dateSlot, setDateSlot] = React.useState(0);
   const [faculty, setFaculty] = React.useState(0);
 
+  const userDetails = useContext(UserContext);
+  const {displayName, exams, uid} = userDetails;
+
+  const sendConfirmationEmail = (emailList, dates, sessions, rooms, faculty, sub) => {
+    let addMessage = firebase.functions().httpsCallable('newChangeRequest');
+    addMessage({ 
+      toEmail : emailList, // array of string or single string
+      subject : sub, // string
+      date : dates, // string
+      time : sessions, //string
+      room : rooms, // string
+      fac: faculty, //string
+      classes: classes //string
+     })
+    .then((result) => {
+      console.log("Done Email")
+      // Read result of the Cloud Function.
+    });
+  };
 
   const AddDataToDb = async() => {
     console.log(teacherID[faculty], teacherList[faculty])
     console.log(uid) // From ID
     console.log(dateList[dateSlot]) // dateslot
     console.log(examID[dateSlot]) //examID
+    
     let ret = await RequestChangeExam(uid, dateList[dateSlot], teacherID[faculty], examID[dateSlot]);
-    if(ret.type === 0){
-      console.log("Requested teacher is free");
+    if(ret.type === 0 || ret.type === 2){
+      let teach = teacherID[faculty]
+      if (ret.type === 0){
+        console.log("Requested teacher is free"); // details of requetsted teacher snack and mail
+      }
+      else{
+        console.log("requested teacher not found assigned a random teacher", ret.val)
+        teach = ret.val
+      }
+      let teacherPromise = await GetUserInfo(teach);
+      let examDetails = await GetExamDetails(examID[dateSlot]);
+      let examName = examDetails.data().course['name'];
+      let requestedDateSlot = dateList[dateSlot];
+      let teacherFromName = displayName;
+      let teacherToEmail = teacherPromise.data().email;
+      let room = examDetails.data().room
+      let sessionMapping = {
+        '1' : "9:00 - 10:00",
+        '2' : "10:00 - 11:00",
+        '3' : "11:00 - 12:00",
+        '4' : "12:00 - 13:00",
+        '5' : "14:00 - 15:00",
+        '6' : "15:00 - 16:00"
+      }
+      sendConfirmationEmail(teacherToEmail, requestedDateSlot.substring(0,requestedDateSlot.length-2),sessionMapping[requestedDateSlot.substr(-1)], room ,teacherFromName, examName )
     }
     else if(ret.type === 1){
-      console.log("No free teacher found");
-    }
-    else if(ret.type === 2){
-      console.log("requested teacher not free, random teacher assigned", ret.val)
+      console.log("No free teacher found"); // add snack bar
     }
     handleClose()
   }
 
-  const userDetails = useContext(UserContext);
-  const {displayName, exams, uid} = userDetails;
   useEffect(() => {
     const HandleList = (temp, temp1) => {
       setDateList(temp)
@@ -120,9 +159,18 @@ export default function RequestChange() {
       for(let i=0;i<exams.length;i++){
         let details = await GetExamDetails(exams[i])
         let data = details.data();
-        console.log(data)
-        dateList.push(data.dateSlot);
-        examID.push(exams[i])
+        console.log(data);
+        let todayDate = new Date();
+        let dateSlot = data.dateSlot;
+        let [d,m,y] = dateSlot.split("/");// 2012-2
+        y = y.split("-")[0]
+        console.log([d,m,y]);
+        let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+        console.log(examDate);
+        if(examDate >= todayDate){
+          dateList.push(data.dateSlot);
+          examID.push(exams[i]);
+        }
       }
       HandleList(dateList, exams);
       let teacherDetails = await GetTeachersDetails();
