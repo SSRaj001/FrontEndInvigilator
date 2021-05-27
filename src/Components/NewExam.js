@@ -1,42 +1,49 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import 'date-fns';
 import React,{useState,useEffect} from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import {
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Button,
+  Dialog,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Slide,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
+  Paper,
+  Grid,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  TextField,
+  Checkbox,
+  Snackbar
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import {GetAllClasses, GetSubjects, AddExam, ExtractEmails, ExtractTeacherEmail, GetRoomLocation} from '../firebase';
 import AddIcon from '@material-ui/icons/Add';
-import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import firebase from "firebase/app";
-import 'firebase/firestore';
-import 'firebase/functions';
+import MuiAlert from '@material-ui/lab/Alert';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -99,9 +106,13 @@ export default function NewExam() {
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
   const [selectedClasses, setSelectedClasses] = React.useState([]);
-
   let [subjectList,setSubjectList] = useState([]);
   let [classList, setClassList] = useState([]);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [alert, setAlert] = useState("info");
+  const [error, setError] = useState(null);
+
+
   useEffect(() => {
     const DisplayDetails = async () => {
       let details = await GetSubjects()
@@ -131,7 +142,7 @@ export default function NewExam() {
       classes: classes //string
      })
     .then((result) => {
-      console.log("Done Email")
+      setSnackOpen(true)
       // Read result of the Cloud Function.
     });
   };
@@ -167,17 +178,25 @@ export default function NewExam() {
       let teacherEmail = teacherEmailData.data().email;
       emailList.push(teacherEmail);
       console.log(emailList,selectedClassString);
+      setError("Faculty and Room found and mail is sent")
+      setAlert("success")
       sendConfirmationEmail(emailList, date, sessionMapping[selectSession], ret.val[1], roomLoc, ret.val[0],selectedClassString, selectExam);
     }
     else{
       if(ret.type === 1){
-        console.log("TeacherNotFound");
+        setError("Teacher Not Free");
+        setAlert("warning")
+        setSnackOpen(true)
       }
       else if(ret.type === 2){
-        console.log("RoomNotFound");
+        setError("Room Not Free");
+        setAlert("warning")
+        setSnackOpen(true)
       }
       else{
-        console.log("Date allocated for one of the classes already. choose another date");
+        setError("Date allocated for one of the classes already. choose another date");
+        setAlert("warning")
+        setSnackOpen(true)
       }
     }
     handleClose();
@@ -328,6 +347,13 @@ export default function NewExam() {
     }
     }
 
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackOpen(false);
+  };
+
   return (
     <div>
       <ListItem button onClick={handleClickOpen}>
@@ -388,6 +414,11 @@ export default function NewExam() {
             )}
         </div>
       </Dialog>
+      <Snackbar open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
+        <Alert onClose={handleSnackClose} severity={alert}>
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
