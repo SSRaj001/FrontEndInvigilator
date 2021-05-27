@@ -297,10 +297,13 @@ export const DeleteAcceptedRequest = async(requestID) => {
   db.collection("requests").doc(requestID).delete();
 }
 
-export const ChangeFacultyForExam = async(examID, teacherToID) => {
+export const ChangeFacultyForExam = async(examID, teacherToID, teacherName) => {
   let examRef = db.collection("exams").doc(examID);
+  console.log(teacherToID, teacherName+"updateExams");
+  console.log("updated In exams");
   examRef.update({
     faculty : teacherToID,
+    facName : teacherName,
   })
 }
 
@@ -329,17 +332,19 @@ export const UpdateInTeachersCollections = async(dateSlot, teacherTo, teacherFro
 export const AcceptOrDenyRequest = async(request, requestID) => {
   let reqDetails = await GetRequestDetails(requestID);
   let requestedDate = reqDetails.data().dateSlot;
-  let teacherDetails = await GetUserInfo(reqDetails.data().from);
-  let teacherEmail = teacherDetails.data().email;
+  let teacherInfo = await GetUserInfo(reqDetails.data().from);
+  let teacherEmail = teacherInfo.data().email;
   if(request === 1){
     let details = await GetRequestDetails(requestID);
     let teacherDetails = await GetTeacherInfo(details.data().to);
+    let teacherDetailsTo = await GetUserInfo(details.data().to);
+    let teacherNameTo = teacherDetailsTo.data().displayName;
     if(!teacherDetails.data().dateSlot.includes(details.data().dateSlot)){
-      console.log(details);
-      DeleteAcceptedRequest(requestID);
-      ChangeFacultyForExam(details.data().exam, details.data().to);
-      RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);
-      UpdateInTeachersCollections(details.data().dateSlot, details.data().to,  details.data().from);
+      console.log(details+"FIREBASE");
+      DeleteAcceptedRequest(requestID);//works
+      ChangeFacultyForExam(details.data().exam, details.data().to, teacherNameTo);
+      RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);//works
+      UpdateInTeachersCollections(details.data().dateSlot, details.data().to,  details.data().from);//works
       return {type:1, val:"Accepted", date: requestedDate, mail : teacherEmail}
     }
     else{
