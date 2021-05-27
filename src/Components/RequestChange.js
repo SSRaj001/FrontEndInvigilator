@@ -1,30 +1,38 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React,{ useEffect, useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import StepContent from '@material-ui/core/StepContent';
-import Paper from '@material-ui/core/Paper';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import React,{ useState, useEffect, useContext } from 'react';
 import firebase from "firebase/app";
 import {GetExamDetails, GetTeachersDetails, RequestChangeExam, GetUserInfo} from '../firebase';
 import { UserContext } from "../providers/UserProvider";
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Button,
+  Dialog,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Slide,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
+  Paper,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Snackbar
+} from "@material-ui/core";
+import MuiAlert from '@material-ui/lab/Alert';
+import CloseIcon from '@material-ui/icons/Close';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -84,6 +92,9 @@ export default function RequestChange() {
   const [teacherID, setTeacherID] = React.useState([]);
   const [dateSlot, setDateSlot] = React.useState(0);
   const [faculty, setFaculty] = React.useState(0);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [alert, setAlert] = useState("info");
+  const [error, setError] = useState(null);
 
   const userDetails = useContext(UserContext);
   const {displayName, exams, uid} = userDetails;
@@ -100,7 +111,7 @@ export default function RequestChange() {
       classes: classes //string
      })
     .then((result) => {
-      console.log("Done Email")
+      setSnackOpen(true);
       // Read result of the Cloud Function.
     });
   };
@@ -114,11 +125,13 @@ export default function RequestChange() {
     let ret = await RequestChangeExam(uid, dateList[dateSlot], teacherID[faculty], examID[dateSlot]);
     if(ret.type === 0 || ret.type === 2){
       let teach = teacherID[faculty]
-      if (ret.type === 0){
-        console.log("Requested teacher is free"); // details of requetsted teacher snack and mail
+      if (ret.type === 0){ // details of requetsted teacher snack and mail
+        setError("Requested teacher is free and Mail is sent ");
+        setAlert("success");
       }
       else{
-        console.log("requested teacher not found assigned a random teacher", ret.val)
+        setError("Assigned a alternate teacher and Mail is sent ");
+        setAlert("success");
         teach = ret.val
       }
       let teacherPromise = await GetUserInfo(teach);
@@ -138,8 +151,10 @@ export default function RequestChange() {
       }
       sendConfirmationEmail(teacherToEmail, requestedDateSlot.substring(0,requestedDateSlot.length-2),sessionMapping[requestedDateSlot.substr(-1)], room ,teacherFromName, examName )
     }
-    else if(ret.type === 1){
-      console.log("No free teacher found"); // add snack bar
+    else if(ret.type === 1){ // add snack bar
+      setError("No Teacher are free at the given DateSlot");
+      setAlert("error");
+      setSnackOpen(true);
     }
     handleClose()
   }
@@ -266,6 +281,13 @@ export default function RequestChange() {
     }
   }
 
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackOpen(false);
+  };
+
   return (
     <div>
       <ListItem button onClick={handleClickOpen}>
@@ -326,6 +348,11 @@ export default function RequestChange() {
             )}
         </div>
       </Dialog>
+      <Snackbar open={snackOpen} autoHideDuration={2000} onClose={handleSnackClose}>
+        <Alert onClose={handleSnackClose} severity={alert}>
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
