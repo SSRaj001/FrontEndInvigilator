@@ -35,15 +35,15 @@ export default function Profile() {
   };
 
   const loadImage = () => {
-    storage.ref("images")
-    .child(user.uid)
-    .getDownloadURL()
-    .then(url => {
-      console.log(url);
-      setUrl(url);
-    }).catch(err => {
-      setUrl(profileLink)
-    });
+    // storage.ref("images")
+    // .child(user.uid)
+    // .getDownloadURL()
+    // .then(url => {
+    //   console.log(url);
+    //   setUrl(url);
+    // }).catch(err => {
+    //   setUrl(profileLink)
+    // });
   }
 
   const handleUpload = () => {
