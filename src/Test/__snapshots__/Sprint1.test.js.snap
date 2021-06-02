@@ -674,7 +674,7 @@ Array [
                         minDateMessage="Date should not be before minimal date"
                         onChange={[Function]}
                         openTo="date"
-                        value={2021-05-31T14:36:33.382Z}
+                        value={2021-06-02T17:04:17.025Z}
                         variant="inline"
                         views={
                           Array [
@@ -867,7 +867,7 @@ Array [
                   <br />
                   <WithStyles(ForwardRef(Typography))>
                     Entered details are : 
-                    31/5/2021-1
+                    2/6/2021-1
                      
                     1
                      
