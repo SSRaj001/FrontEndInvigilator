@@ -46,7 +46,9 @@
     "eject": "react-scripts eject",
     "electron": "electron .",
     "test": "react-scripts test",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "coverage:dev": "react-scripts test --coverage --watchAll",
+    "coverage:prod": "react-scripts test --coverage"
   },
   "eslintConfig": {
     "extends": [
@@ -77,5 +79,38 @@
     "jest": "26.6.0",
     "prop-types": "^15.7.2",
     "react-scripts": "4.0.3"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/.node/",
+      "/jest/",
+      "/src/Test",
+      "/src/providers",
+      "/src/Components/UpcomingExams",
+      "/src/Components/UpcomingTeacher",
+      "/src/electron-starter",
+      "/src/Login",
+      "src/Components/AdminRequest",
+      "src/Components/Students"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!coverage/**",
+      "!node_modules/**",
+      "!src/index.js",
+      "!src/setupTests.js",
+      "!public/**",
+      "!build/**"
+    ],
+    "coverageReporters": [
+      "text",
+      "text-summary",
+      "lcov",
+      "json",
+      "text",
+      "clover",
+      "cobertura"
+    ]
   }
 }

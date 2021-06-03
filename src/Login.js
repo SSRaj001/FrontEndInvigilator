@@ -28,7 +28,7 @@ class Login extends Component {
 
   onSubmitHandler = (e) =>{
     e.preventDefault()
-    console.log(this.emailRef.current && this.passwordRef.current)
+    //console.log(this.emailRef.current && this.passwordRef.current)
     if(this.emailRef.current && this.passwordRef.current){
       this.setState({Value:this.emailRef.current})
       this.show()

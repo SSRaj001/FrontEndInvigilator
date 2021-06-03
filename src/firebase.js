@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/storage";
@@ -49,7 +50,7 @@ export const GetClassRelatedExams = async (section) => {
   let examListStudent = [];
   (await db.collection("exams").where("classes","array-contains",section).get()).forEach((doc)=>{
       let details = doc.data()
-      console.log(details);
+      //console.log(details);
       details.id = doc.id;
       examListStudent.push(details);
     });
@@ -87,7 +88,7 @@ export const GetTeachers = async () =>{
   let teacherList = [];
   (await db.collection("users").where("usertype","==",'T').get()).forEach((doc)=>{
       let details = doc.data();
-      console.log(details);
+      //console.log(details);
       teacherList.push(details);
     });
   return teacherList;
@@ -140,7 +141,7 @@ export const GetAllClasses = async() => {
 
 //given subject get code
 export const GetSubjectCode = async(subject) => {
-  console.log(subject)
+  //console.log(subject)
   let subjectRef = db.collection("subjects").doc(subject);
   return subjectRef.get();
 }
@@ -207,7 +208,7 @@ export const CheckRequests = async(teacherID) => {
       requestList.push(details);
     }
   });
-  console.log(requestList);
+  //(requestList);
   return requestList;
 }
 
@@ -276,7 +277,7 @@ export const GetRequestsHistory = async() => {
   let requestHistory = [];
   (await db.collection("requestsHistory").get()).forEach((doc) =>{
     let details = doc.data();
-    console.log(details);
+    //console.log(details);
     requestHistory.push(details);
   })
   return requestHistory;
@@ -299,8 +300,8 @@ export const DeleteAcceptedRequest = async(requestID) => {
 
 export const ChangeFacultyForExam = async(examID, teacherToID, teacherName) => {
   let examRef = db.collection("exams").doc(examID);
-  console.log(teacherToID, teacherName+"updateExams");
-  console.log("updated In exams");
+  //console.log(teacherToID, teacherName+"updateExams");
+  //console.log("updated In exams");
   examRef.update({
     faculty : teacherToID,
     facName : teacherName,
@@ -340,7 +341,7 @@ export const AcceptOrDenyRequest = async(request, requestID) => {
     let teacherDetailsTo = await GetUserInfo(details.data().to);
     let teacherNameTo = teacherDetailsTo.data().displayName;
     if(!teacherDetails.data().dateSlot.includes(details.data().dateSlot)){
-      console.log(details+"FIREBASE");
+      //console.log(details+"FIREBASE");
       DeleteAcceptedRequest(requestID);//works
       ChangeFacultyForExam(details.data().exam, details.data().to, teacherNameTo);
       RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);//works
@@ -382,14 +383,14 @@ export const AddExam = async(classList,date,subject) => {
   var examRef = db.collection("exams").doc(autoID);
   let teacherRoom = await GetFreeTeacher(date);
   if(teacherRoom.type === 3){
-    console.log(teacherRoom.val);
+    //console.log(teacherRoom.val);
     let sc = await GetSubjectCode(subject);
     let subjectCode = sc.data().code;
-    console.log(subjectCode);
+    //console.log(subjectCode);
     let teacherPromise = await GetTeacherInfo(teacherRoom.val[0]);
     let timeTable = teacherPromise.data().timeTable;
     let teacherName = teacherPromise.data().name;
-    console.log(timeTable);
+    //console.log(timeTable);
 
     //adding the data to exam
     examRef.set({
@@ -460,7 +461,7 @@ export const GetFreeTeacher = async (dateSlot) => {
 
 
 export const generateUserDocument = async (user, displayName, userType) => {
-    console.log(userType+displayName+"signup");
+    //(userType+displayName+"signup");
     if (!user) return;
     let userRef = firestore.doc(`users/${user.uid}`);
     const snapshot = await userRef.get();

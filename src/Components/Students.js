@@ -129,7 +129,7 @@ export default function Students() {
   useEffect(() => {
     const HandleList = (temp) => {
       setStudentList(temp);
-      console.log(studentList);
+      //console.log(studentList);
     }
       const DisplayDetails = async () => {
         let students = await GetStudents();

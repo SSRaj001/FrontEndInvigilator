@@ -46,9 +46,9 @@ export default function PendingRequest() {
       setRequestList(temp);
       setTeacherName(temp1);
       setExamName(temp2);
-      console.log(requestList);
-      console.log(teacherName);
-      console.log(examName);
+      //console.log(requestList);
+      //console.log(teacherName);
+      //console.log(examName);
     }
     const DisplayDetails = async () => {
       //console.log(details);
@@ -66,22 +66,22 @@ export default function PendingRequest() {
   },[requestList,uid,teacherName,examName]);
 
   const handleAccept = async(requestID,index) => {
-    console.log("accept", requestID);
+    //console.log("accept", requestID);
     requestList.splice(index,1);
     setRequestList(requestList);
-    console.log(requestList);
+    //console.log(requestList);
     let ret = await AcceptOrDenyRequest(1,requestID);
     if(ret.type === 1 || ret.type === 2){
       if(ret.type === 1){
-        console.log("accepted");
+        //console.log("accepted");
         sendCNFMail(ret.mail, ret.date, "ACCEPTED")
       }
       else{
-        console.log("denied");
+        //console.log("denied");
       }
     }
     else if(ret.type === 3){
-      console.log("Same slot accessed recently");
+      //console.log("Same slot accessed recently");
     }
   }
 
@@ -93,16 +93,16 @@ export default function PendingRequest() {
       status : stat,
      })
     .then((result) => {
-      console.log("Done Email")
+      //console.log("Done Email")
       // Read result of the Cloud Function.
     });
   };
 
   const handleRejection = async(requestID,index) => {
-    console.log("Reject", requestID);
+    //console.log("Reject", requestID);
     requestList.splice(index,1);
     setRequestList(requestList);
-    console.log(requestList);
+    //console.log(requestList);
     let ret = await AcceptOrDenyRequest(0,requestID);
     if(ret.type === 1 || ret.type === 2){
       if(ret.type === 1){
@@ -110,11 +110,11 @@ export default function PendingRequest() {
         sendCNFMail(ret.mail, ret.date, "DENIED")
       }
       else{
-        console.log("denied");
+        //console.log("denied");
       }
     }
     else{
-      console.log("accpeted recently");
+      //console.log("accpeted recently");
     }
   }
 

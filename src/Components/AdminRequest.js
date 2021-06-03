@@ -213,16 +213,16 @@ export default function AdminRequest(){
     const HandleList = (temp, temp2) => {
       setOngoingRequests(temp);
       setPrevRequest(temp2);
-      console.log(ongoingRequests);
-      console.log(prevRequests);
+      //console.log(ongoingRequests);
+      //console.log(prevRequests);
     }
       const DisplayDetails = async () => {
         let ongoing = await GetUpcomingRequests();
         let history = await GetRequestsHistory();
-        console.log(history);
+        //console.log(history);
         ongoingRequests.push(...ongoing);
         prevRequests.push(...history);
-        console.log(prevRequests);
+        //console.log(prevRequests);
         HandleList(ongoingRequests, prevRequests);
       }
       DisplayDetails();

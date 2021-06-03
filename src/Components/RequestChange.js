@@ -117,10 +117,10 @@ export default function RequestChange() {
   };
 
   const AddDataToDb = async() => {
-    console.log(teacherID[faculty], teacherList[faculty])
-    console.log(uid) // From ID
-    console.log(dateList[dateSlot]) // dateslot
-    console.log(examID[dateSlot]) //examID
+    //console.log(teacherID[faculty], teacherList[faculty])
+    //console.log(uid) // From ID
+    //console.log(dateList[dateSlot]) // dateslot
+    //console.log(examID[dateSlot]) //examID
     
     let ret = await RequestChangeExam(uid, dateList[dateSlot], teacherID[faculty], examID[dateSlot]);
     if(ret.type === 0 || ret.type === 2){
@@ -163,25 +163,25 @@ export default function RequestChange() {
     const HandleList = (temp, temp1) => {
       setDateList(temp)
       setExamId(temp1)
-      console.log(dateList)
+      //console.log(dateList)
     }
     const HandleTeacherList = (temp, temp1) => {
       setTeacherList(temp);
       setTeacherID(temp1)
-      console.log(teacherList);
+      //console.log(teacherList);
     }
     const DisplayDetails = async () => {
       for(let i=0;i<exams.length;i++){
         let details = await GetExamDetails(exams[i])
         let data = details.data();
-        console.log(data);
+        //console.log(data);
         let todayDate = new Date();
         let dateSlot = data.dateSlot;
         let [d,m,y] = dateSlot.split("/");// 2012-2
         y = y.split("-")[0]
-        console.log([d,m,y]);
+        //console.log([d,m,y]);
         let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
-        console.log(examDate);
+        //console.log(examDate);
         if(examDate >= todayDate){
           dateList.push(data.dateSlot);
           examID.push(exams[i]);

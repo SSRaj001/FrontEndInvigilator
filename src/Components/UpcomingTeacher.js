@@ -227,13 +227,13 @@ export default function AdminRequest(){
         let dateSlot = data.dateSlot;
         let [d,m,y] = dateSlot.split("/");// 2012-2
         y = y.split("-")[0]
-        console.log([d,m,y]);
+        //console.log([d,m,y]);
         let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
-        console.log(examDate)
+        //console.log(examDate)
         if(examDate >= todayDate){
           let room = data.room
           let loc = await GetRoomLocation(room)
-          console.log(loc.data().location)
+          //console.log(loc.data().location)
           data.location = loc.data().location
           data.id = exams[i]
           examsList.push(data)
@@ -246,7 +246,7 @@ export default function AdminRequest(){
   
   const HandleList = (temp) => {
     setExamsList(temp)
-    console.log(examsList)
+    //console.log(examsList)
   }
   
   return (

@@ -222,9 +222,9 @@ export default function AdminRequest(){
         const {section} = userDetails;
         let details = await GetClassRelatedExams(section)
         for(let i=0;i<details.length;i++){
-          console.log(details[i].room);
+          //console.log(details[i].room);
           let loc = await GetRoomLocation(details[i].room);
-          console.log(loc.data());
+          //console.log(loc.data());
           details[i].location = loc.data().location;
         }
         examsList.push(...details)
@@ -246,7 +246,7 @@ export default function AdminRequest(){
   
   const HandleList = (temp) => {
     setExamsList(temp)
-    console.log(examsList)
+    //console.log(examsList)
   }
 
   return (
