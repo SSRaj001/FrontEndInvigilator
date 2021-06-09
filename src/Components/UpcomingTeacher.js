@@ -212,7 +212,7 @@ function SortingTable(props) {
   );
 }
 
-export default function AdminRequest(){
+export default function UpcomingTeacher(){
   const userDetails = useContext(UserContext);
   let [examsList,setExamsList] = useState([]);
   useEffect(() => {

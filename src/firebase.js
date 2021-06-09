@@ -202,7 +202,7 @@ export const CheckRequests = async(teacherID) => {
     let dateSlot = details.dateSlot;
     let [d,m,y] = dateSlot.split("/");// 2012-2
     let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
-    y = y.split("-")[0]
+    //y = y.split("-")[0]
     if(examDate >= todayDate){
       requestList.push(details);
     }
