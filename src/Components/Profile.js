@@ -29,6 +29,7 @@ export default function Profile() {
   const classes = useStyles();
   const [image,setImage] = useState(null);
   const [url,setUrl] = useState(String);
+  setUrl(profileLink)
   const handleChange = e => {
     if(e.target.files[0]){
       setImage(e.target.files[0]);

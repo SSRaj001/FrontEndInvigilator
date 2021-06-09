@@ -203,7 +203,6 @@ export const CheckRequests = async(teacherID) => {
     let dateSlot = details.dateSlot;
     let [d,m,y] = dateSlot.split("/");// 2012-2
     let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
-    y = y.split("-")[0]
     if(examDate >= todayDate){
       requestList.push(details);
     }
@@ -388,7 +387,6 @@ export const AddExam = async(classList,date,subject) => {
     let subjectCode = sc.data().code;
     //console.log(subjectCode);
     let teacherPromise = await GetTeacherInfo(teacherRoom.val[0]);
-    let timeTable = teacherPromise.data().timeTable;
     let teacherName = teacherPromise.data().name;
     //console.log(timeTable);
 
