@@ -157,7 +157,7 @@ export default function NewExam() {
       '6' : "15:00 - 16:00"
     }
     let dateSlot = `${selectedDate.getDate()}/${selectedDate.getMonth()+1}/${selectedDate.getFullYear()}-${selectSession}`;
-    console.log(selectExam);
+    //console.log(selectExam);
     let ret = await AddExam(selectedClasses,dateSlot,selectExam);
     console.log(ret);
     if(ret.type === 3){
@@ -177,7 +177,7 @@ export default function NewExam() {
       let teacherEmailData = await ExtractTeacherEmail(ret.val[2]);
       let teacherEmail = teacherEmailData.data().email;
       emailList.push(teacherEmail);
-      console.log(emailList,selectedClassString);
+      //console.log(emailList,selectedClassString);
       setError("Faculty and Room found and mail is sent")
       setAlert("success")
       sendConfirmationEmail(emailList, date, sessionMapping[selectSession], ret.val[1], roomLoc, ret.val[0],selectedClassString, selectExam);
@@ -208,7 +208,7 @@ export default function NewExam() {
 
   const HandleClassList = (temp) => {
     setClassList(temp);
-    console.log(classList);
+    //console.log(classList);
   }
 
   const handleDateChange = (date) => {

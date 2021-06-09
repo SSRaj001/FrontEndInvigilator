@@ -46,9 +46,9 @@ export default function PendingRequest() {
       setRequestList(temp);
       setTeacherName(temp1);
       setExamName(temp2);
-      console.log(requestList);
-      console.log(teacherName);
-      console.log(examName);
+      //console.log(requestList);
+      //console.log(teacherName);
+      //console.log(examName);
     }
     const DisplayDetails = async () => {
       //console.log(details);
@@ -66,10 +66,10 @@ export default function PendingRequest() {
   },[requestList,uid,teacherName,examName]);
 
   const handleAccept = async(requestID,index) => {
-    console.log("accept", requestID);
+    //console.log("accept", requestID);
     requestList.splice(index,1);
     setRequestList(requestList);
-    console.log(requestList);
+    //console.log(requestList);
     let ret = await AcceptOrDenyRequest(1,requestID);
     if(ret.type === 1 || ret.type === 2){
       if(ret.type === 1){
@@ -99,10 +99,10 @@ export default function PendingRequest() {
   };
 
   const handleRejection = async(requestID,index) => {
-    console.log("Reject", requestID);
+    //console.log("Reject", requestID);
     requestList.splice(index,1);
     setRequestList(requestList);
-    console.log(requestList);
+    //console.log(requestList);
     let ret = await AcceptOrDenyRequest(0,requestID);
     if(ret.type === 1 || ret.type === 2){
       if(ret.type === 1){
@@ -137,7 +137,6 @@ return (
             </TableRow>
           </TableHead>
           <TableBody>
-          {/* {console.log(examsList[0].dateSlot)} */}
           {(requestList).map((requestDetail, index) => (
               <TableRow key={requestDetail.requestID}>
               <TableCell>{teacherName[index]}</TableCell>

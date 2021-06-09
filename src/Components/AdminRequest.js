@@ -213,16 +213,30 @@ export default function AdminRequest(){
     const HandleList = (temp, temp2) => {
       setOngoingRequests(temp);
       setPrevRequest(temp2);
-      console.log(ongoingRequests);
-      console.log(prevRequests);
+      //console.log(ongoingRequests);
+      //console.log(prevRequests);
     }
       const DisplayDetails = async () => {
         let ongoing = await GetUpcomingRequests();
+        for(let i = 0;i <ongoing.length;i++){
+          let data = ongoing;
+          let todayDate = new Date();
+          let dateSlot = data[i].dateSlot;
+          let [d,m,y] = dateSlot.split("/");// 2012-2
+          y = y.split("-")[0]
+          let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+          if(examDate >= todayDate){
+            // let room = data[i].room
+            // let loc = await GetRoomLocation(room)
+            //data[i].location = loc.data().location
+            ongoingRequests.push(data[i])
+          }
+        }
         let history = await GetRequestsHistory();
-        console.log(history);
-        ongoingRequests.push(...ongoing);
+        //console.log(history);
+        //ongoingRequests.push(...ongoing);
         prevRequests.push(...history);
-        console.log(prevRequests);
+        //console.log(prevRequests);
         HandleList(ongoingRequests, prevRequests);
       }
       DisplayDetails();

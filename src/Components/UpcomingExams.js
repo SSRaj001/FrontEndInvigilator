@@ -222,12 +222,21 @@ export default function AdminRequest(){
         const {section} = userDetails;
         let details = await GetClassRelatedExams(section)
         for(let i=0;i<details.length;i++){
-          console.log(details[i].room);
-          let loc = await GetRoomLocation(details[i].room);
-          console.log(loc.data());
-          details[i].location = loc.data().location;
+          //let details = await GetExamDetails(exams[i])
+          console.log(details)
+          let data = details;
+          let todayDate = new Date();
+          let dateSlot = data[i].dateSlot;
+          let [d,m,y] = dateSlot.split("/");// 2012-2
+          y = y.split("-")[0]
+          let examDate = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+          if(examDate >= todayDate){
+            let room = data[i].room
+            let loc = await GetRoomLocation(room)
+            data[i].location = loc.data().location
+            examsList.push(data[i])
+          }
         }
-        examsList.push(...details)
       }
       else{
         let details = await GetAllExamDetails();
@@ -246,7 +255,7 @@ export default function AdminRequest(){
   
   const HandleList = (temp) => {
     setExamsList(temp)
-    console.log(examsList)
+    //console.log(examsList)
   }
 
   return (
@@ -255,7 +264,7 @@ export default function AdminRequest(){
             <IconButton><RefreshIcon/> Refresh</IconButton>
         </Link>
         <br></br>
-        <SortingTable studentList={examsList} headText={"Upcoming Exams"}/>
+        <SortingTable studentList={examsList} headText={"All Exams"}/>
       </>
   );
 }
