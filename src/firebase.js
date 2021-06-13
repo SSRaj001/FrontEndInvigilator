@@ -299,8 +299,8 @@ export const DeleteAcceptedRequest = async(requestID) => {
 
 export const ChangeFacultyForExam = async(examID, teacherToID, teacherName) => {
   let examRef = db.collection("exams").doc(examID);
-  //console.log(teacherToID, teacherName+"updateExams");
-  //console.log("updated In exams");
+  console.log(teacherToID, teacherName+"updateExams");
+  console.log("updated In exams");
   examRef.update({
     faculty : teacherToID,
     facName : teacherName,
@@ -308,6 +308,7 @@ export const ChangeFacultyForExam = async(examID, teacherToID, teacherName) => {
 }
 
 export const RemoveAndAddExamToFacultyUsers = async(examID, teacherTo, teacherFrom) => {
+  console.log(examID);
   let userRef = db.collection("users").doc(teacherFrom);
   userRef.update({
     exams : firebase.firestore.FieldValue.arrayRemove(examID),
@@ -330,12 +331,14 @@ export const UpdateInTeachersCollections = async(dateSlot, teacherTo, teacherFro
 }
 
 export const AcceptOrDenyRequest = async(request, requestID) => {
+  console.log(requestID);
   let reqDetails = await GetRequestDetails(requestID);
   let requestedDate = reqDetails.data().dateSlot;
   let teacherInfo = await GetUserInfo(reqDetails.data().from);
   let teacherEmail = teacherInfo.data().email;
   if(request === 1){
     let details = await GetRequestDetails(requestID);
+    console.log(details.data())
     let teacherDetails = await GetTeacherInfo(details.data().to);
     let teacherDetailsTo = await GetUserInfo(details.data().to);
     let teacherNameTo = teacherDetailsTo.data().displayName;
@@ -343,7 +346,7 @@ export const AcceptOrDenyRequest = async(request, requestID) => {
       //console.log(details+"FIREBASE");
       DeleteAcceptedRequest(requestID);//works
       ChangeFacultyForExam(details.data().exam, details.data().to, teacherNameTo);
-      RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);//works
+      RemoveAndAddExamToFacultyUsers(details.data().exam, details.data().to, details.data().from);
       UpdateInTeachersCollections(details.data().dateSlot, details.data().to,  details.data().from);//works
       return {type:1, val:"Accepted", date: requestedDate, mail : teacherEmail}
     }
